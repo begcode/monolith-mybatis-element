@@ -1,0 +1,4 @@
+https://github.com/Rudeus3Greyrat/vue3-element-admin,有imagecorper组件
+vue-image-crop-upload
+https://github.com/RainManGO/vue3-composition-admin
+https://hu-snail.gitee.io/vue3-admin-element-template/#/index，页面标签相对好看一些。

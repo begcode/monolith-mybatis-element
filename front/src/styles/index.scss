@@ -1,0 +1,20 @@
+@import './var.css';
+@import 'element-plus/theme-chalk/dark/css-vars.css';
+@import 'vxeTable.scss';
+
+// 解决抽屉弹出时，body宽度变化的问题
+.el-popup-parent--hidden {
+  width: 100% !important;
+}
+
+.bc-avatar-group > *:not(:first-child) {
+  margin-inline-start: -8px;
+}
+.bc-avatar-group .el-avatar {
+  border: 1px solid;
+  border-color: #ffffff !important;
+}
+
+.bc-avatar-group {
+  display: inline-flex;
+}

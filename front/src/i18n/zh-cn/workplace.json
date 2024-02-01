@@ -1,0 +1,25 @@
+{
+  "workplace": {
+    "goodMorning": "早安",
+    "happyDay": "祝你开心每一天!",
+    "toady": "今日晴",
+    "project": "项目数",
+    "access": "项目访问",
+    "toDo": "待办",
+    "introduction": "一个正经的简介",
+    "more": "更多",
+    "shortcutOperation": "快捷操作",
+    "operation": "操作",
+    "index": "指数",
+    "personal": "个人",
+    "team": "团队",
+    "quote": "引用",
+    "contribution": "贡献",
+    "hot": "热度",
+    "yield": "产量",
+    "dynamic": "动态",
+    "push": "推送",
+    "pushCode": "Archer 推送 代码到 Github",
+    "follow": "关注"
+  }
+}

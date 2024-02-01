@@ -1,0 +1,94 @@
+import { h } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import request from '@/axios';
+
+/**
+ * 导出文件xlsx的mime-type
+ */
+export const XLSX_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+/**
+ * 导出文件xlsx的文件后缀
+ */
+export const XLSX_FILE_SUFFIX = '.xlsx';
+
+export function useMethods() {
+  /**
+   * 导出xls
+   * @param name
+   * @param url
+   * @param params
+   * @param isXlsx
+   */
+  async function exportXls(name, url, params, isXlsx = false) {
+    const data = await request.get({ url: url, params: params, responseType: 'blob' }, { isTransformResponse: false });
+    if (!data) {
+      ElMessage.warning('文件下载失败');
+      return;
+    }
+    if (!name || typeof name != 'string') {
+      name = '导出文件';
+    }
+    const blobOptions = { type: 'application/vnd.ms-excel' };
+    let fileSuffix = '.xls';
+    if (isXlsx) {
+      blobOptions['type'] = XLSX_MIME_TYPE;
+      fileSuffix = XLSX_FILE_SUFFIX;
+    }
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(new Blob([data], blobOptions), name + fileSuffix);
+    } else {
+      const url = window.URL.createObjectURL(new Blob([data], blobOptions));
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.setAttribute('download', name + fileSuffix);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link); //下载完成移除元素
+      window.URL.revokeObjectURL(url); //释放掉blob对象
+    }
+  }
+
+  /**
+   * 导入xls
+   * @param data 导入的数据
+   * @param url
+   * @param success 成功后的回调
+   */
+  async function importXls(data, url, success) {
+    const isReturn = fileInfo => {
+      try {
+        if (fileInfo.code === 201) {
+          const {
+            message,
+            result: { msg, fileUrl, fileName },
+          } = fileInfo;
+          const href = '' + fileUrl;
+          ElMessageBox({
+            title: message,
+            message: h('div', null, [
+              h('span', null, msg),
+              h('br'),
+              h('span', null, ['具体详情请', h('a', { href: href, download: fileName }, '点击下载')]),
+            ]),
+          });
+        } else if (fileInfo.code === 500 || fileInfo.code === 510) {
+          ElMessage.error(fileInfo.message || `${data.file.name} 导入失败`);
+        } else {
+          ElMessage.success(fileInfo.message || `${data.file.name} 文件上传成功`);
+        }
+      } catch (error) {
+        console.log('导入的数据异常', error);
+      } finally {
+        typeof success === 'function' ? success(fileInfo) : '';
+      }
+    };
+    await request.uploadFile({ url }, { file: data.file }, { success: isReturn });
+  }
+
+  return {
+    handleExportXls: (name: string, url: string, params?: object) => exportXls(name, url, params),
+    handleImportXls: (data, url, success) => importXls(data, url, success),
+    handleExportXlsx: (name: string, url: string, params?: object) => exportXls(name, url, params, true),
+  };
+}
