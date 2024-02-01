@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { useDesign } from '@/hooks/web/useDesign';
 import { ElButton, ComponentSize, ButtonType } from 'element-plus';
-import { PropType, Component, computed, unref, inject } from 'vue';
+import { PropType, Component, computed, unref, inject, useAttrs } from 'vue';
 import { Icon } from '@/components/Icon';
 
 defineOptions({
   name: 'BaseButton',
-  extends: ElButton,
   inheritAttrs: false,
 });
 
@@ -110,16 +109,13 @@ const style = computed(() => {
   return '';
 });
 
-const buttonProps = { ...props };
-if (typeof buttonProps.icon === 'string' && !buttonProps.icon.startsWith('ep:')) {
-  delete buttonProps.icon;
-}
+const attrs = useAttrs();
 </script>
 
 <template>
-  <ElButton :class="`${prefixCls} color-#fff`" v-bind="{ ...buttonProps }" :color="color" :style="style" @click="onClick">
+  <ElButton :class="`${prefixCls} color-#fff`" v-bind="{ ...attrs, ...props }" :color="color" :style="style" @click="onClick">
     <slot></slot>
-    <slot name="icon" v-if="typeof props.icon === 'string' && !props.icon.startsWith('ep:')">
+    <slot name="icon" v-if="typeof props.icon === 'string'">
       <Icon :icon="props.icon" />
     </slot>
     <slot name="loading"></slot>
