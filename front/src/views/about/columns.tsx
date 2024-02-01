@@ -25,20 +25,8 @@ export function useColumns() {
       slots: {
         default: () => {
           return (
-            <a href="https://yiming_chang.gitee.io/pure-admin-doc" target="_blank">
+            <a href="https://www.begcode.com/" target="_blank">
               <span style="color: var(--el-color-primary)">文档地址</span>
-            </a>
-          );
-        },
-      },
-    },
-    {
-      label: '预览地址',
-      slots: {
-        default: () => {
-          return (
-            <a href="https://yiming_chang.gitee.io/vue-pure-admin" target="_blank">
-              <span style="color: var(--el-color-primary)">预览地址</span>
             </a>
           );
         },
@@ -49,20 +37,8 @@ export function useColumns() {
       slots: {
         default: () => {
           return (
-            <a href="https://github.com/pure-admin/vue-pure-admin" target="_blank">
+            <a href="https://github.com/begcode/monolith-mybatis-element" target="_blank">
               <span style="color: var(--el-color-primary)">Github</span>
-            </a>
-          );
-        },
-      },
-    },
-    {
-      label: 'QQ交流群',
-      slots: {
-        default: () => {
-          return (
-            <a href="https://jq.qq.com/?_wv=1027&k=E9fwmFGr" target="_blank">
-              <span style="color: var(--el-color-primary)">点击链接加入群聊【Pure Admin】</span>
             </a>
           );
         },
