@@ -1,5 +1,3 @@
-import IconSelect from '@/components/IconSelect/index.vue';
-
 export * from '@/components/AvatarGroup';
 export * from '@/components/Backtop';
 export * from '@/components/Button';
@@ -25,7 +23,6 @@ export * from '@/components/ImageViewer';
 export * from '@/components/Infotip';
 export * from '@/components/InputPassword';
 export * from '@/components/Map';
-export { IconSelect };
 export * from '@/components/Qrcode';
 export * from '@/components/Screenfull';
 export * from '@/components/SearchForm';
