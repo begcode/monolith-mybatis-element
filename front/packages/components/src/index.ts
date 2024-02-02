@@ -24,6 +24,7 @@ export * from '@/components/ImageCropping';
 export * from '@/components/ImageViewer';
 export * from '@/components/Infotip';
 export * from '@/components/InputPassword';
+export * from '@/components/Map';
 export { IconSelect };
 export * from '@/components/Qrcode';
 export * from '@/components/Screenfull';
