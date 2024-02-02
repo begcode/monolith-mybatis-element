@@ -28,6 +28,7 @@ export { IconSelect };
 export * from '@/components/Qrcode';
 export * from '@/components/Screenfull';
 export * from '@/components/SearchForm';
+export * from '@/components/SplitPane';
 export * from '@/components/VideoPlayer';
 export * from '@/components/VideoPlayerViewer';
 export * from '@/components/VxeTable';
