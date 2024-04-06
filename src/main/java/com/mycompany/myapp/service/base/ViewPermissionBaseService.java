@@ -16,7 +16,6 @@ import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.dto.ViewPermissionDTO;
 import com.mycompany.myapp.service.mapper.ViewPermissionMapper;
 import java.util.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -31,17 +30,18 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.ViewPermission}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class ViewPermissionBaseService<R extends ViewPermissionRepository, E extends ViewPermission>
     extends BaseServiceImpl<ViewPermissionRepository, ViewPermission> {
 
     private final Logger log = LoggerFactory.getLogger(ViewPermissionBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.domain.ViewPermission.class.getName() + ".parent",
         com.mycompany.myapp.domain.ViewPermission.class.getName() + ".children",
         com.mycompany.myapp.domain.Authority.class.getName() + ".viewPermissions"
     );
-    private final List<String> relationNames = Arrays.asList("children", "parent", "authorities");
+    private final List<String> relationNames = List.of("children", "parent", "authorities");
 
     protected final ViewPermissionRepository viewPermissionRepository;
 
@@ -84,11 +84,11 @@ public class ViewPermissionBaseService<R extends ViewPermissionRepository, E ext
     @Transactional(rollbackFor = Exception.class)
     public ViewPermissionDTO update(ViewPermissionDTO viewPermissionDTO) {
         log.debug("Request to update ViewPermission : {}", viewPermissionDTO);
-
         ViewPermission viewPermission = viewPermissionMapper.toEntity(viewPermissionDTO);
+        clearChildrenCache();
 
-        viewPermissionRepository.updateById(viewPermission);
-        return findOne(viewPermissionDTO.getId()).orElseThrow();
+        this.saveOrUpdate(viewPermission);
+        return findOne(viewPermission.getId()).orElseThrow();
     }
 
     /**

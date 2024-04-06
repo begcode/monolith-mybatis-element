@@ -7,6 +7,7 @@ import commonFieldDataService from '@/api/settings/common-field-data.service';
 import regionCodeService from '@/api/settings/region-code.service';
 import sysFillRuleService from '@/api/settings/sys-fill-rule.service';
 import fillRuleItemService from '@/api/settings/fill-rule-item.service';
+import formConfigService from '@/api/settings/form-config.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 export default {
@@ -19,5 +20,6 @@ export default {
   regionCodeService,
   sysFillRuleService,
   fillRuleItemService,
+  formConfigService,
   // jhipster-needle-add-entity-service-to-main-body - JHipster will import entities services here
 };

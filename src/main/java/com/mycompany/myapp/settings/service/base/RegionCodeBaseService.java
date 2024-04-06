@@ -12,7 +12,6 @@ import com.mycompany.myapp.settings.repository.RegionCodeRepository;
 import com.mycompany.myapp.settings.service.dto.RegionCodeDTO;
 import com.mycompany.myapp.settings.service.mapper.RegionCodeMapper;
 import java.util.*;
-import java.util.Arrays;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +24,17 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.RegionCode}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class RegionCodeBaseService<R extends RegionCodeRepository, E extends RegionCode>
     extends BaseServiceImpl<RegionCodeRepository, RegionCode> {
 
     private final Logger log = LoggerFactory.getLogger(RegionCodeBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.settings.domain.RegionCode.class.getName() + ".parent",
         com.mycompany.myapp.settings.domain.RegionCode.class.getName() + ".children"
     );
-    private final List<String> relationNames = Arrays.asList("children", "parent");
+    private final List<String> relationNames = List.of("children", "parent");
 
     protected final RegionCodeRepository regionCodeRepository;
 
@@ -73,11 +73,11 @@ public class RegionCodeBaseService<R extends RegionCodeRepository, E extends Reg
     @Transactional(rollbackFor = Exception.class)
     public RegionCodeDTO update(RegionCodeDTO regionCodeDTO) {
         log.debug("Request to update RegionCode : {}", regionCodeDTO);
-
         RegionCode regionCode = regionCodeMapper.toEntity(regionCodeDTO);
+        clearChildrenCache();
 
-        regionCodeRepository.updateById(regionCode);
-        return findOne(regionCodeDTO.getId()).orElseThrow();
+        this.saveOrUpdate(regionCode);
+        return findOne(regionCode.getId()).orElseThrow();
     }
 
     /**

@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -17,9 +16,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.domain.ResourceCategory}的DTO。
  */
 @Schema(description = "资源分类")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ResourceCategoryDTO implements Serializable {
 
@@ -91,6 +89,11 @@ public class ResourceCategoryDTO implements Serializable {
         return this;
     }
 
+    public ResourceCategoryDTO parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     // jhipster-needle-dto-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -98,11 +101,11 @@ public class ResourceCategoryDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ResourceCategoryDTO)) {
+
+        if (!(o instanceof ResourceCategoryDTO resourceCategoryDTO)) {
             return false;
         }
 
-        ResourceCategoryDTO resourceCategoryDTO = (ResourceCategoryDTO) o;
         if (this.id == null) {
             return false;
         }

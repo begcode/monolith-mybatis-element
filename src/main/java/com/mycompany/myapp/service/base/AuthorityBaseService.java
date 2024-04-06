@@ -16,7 +16,6 @@ import com.mycompany.myapp.repository.AuthorityRepository;
 import com.mycompany.myapp.service.dto.AuthorityDTO;
 import com.mycompany.myapp.service.mapper.AuthorityMapper;
 import java.util.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -31,12 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.Authority}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class AuthorityBaseService<R extends AuthorityRepository, E extends Authority>
     extends BaseServiceImpl<AuthorityRepository, Authority> {
 
     private final Logger log = LoggerFactory.getLogger(AuthorityBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.domain.Authority.class.getName() + ".parent",
         com.mycompany.myapp.domain.ViewPermission.class.getName() + ".authorities",
         com.mycompany.myapp.domain.ApiPermission.class.getName() + ".authorities",
@@ -44,14 +44,7 @@ public class AuthorityBaseService<R extends AuthorityRepository, E extends Autho
         com.mycompany.myapp.domain.User.class.getName() + ".authorities",
         com.mycompany.myapp.domain.Department.class.getName() + ".authorities"
     );
-    private final List<String> relationNames = Arrays.asList(
-        "children",
-        "viewPermissions",
-        "apiPermissions",
-        "parent",
-        "users",
-        "department"
-    );
+    private final List<String> relationNames = List.of("children", "viewPermissions", "apiPermissions", "parent", "users", "department");
 
     protected final AuthorityRepository authorityRepository;
 
@@ -90,11 +83,11 @@ public class AuthorityBaseService<R extends AuthorityRepository, E extends Autho
     @Transactional(rollbackFor = Exception.class)
     public AuthorityDTO update(AuthorityDTO authorityDTO) {
         log.debug("Request to update Authority : {}", authorityDTO);
-
         Authority authority = authorityMapper.toEntity(authorityDTO);
+        clearChildrenCache();
 
-        this.createOrUpdateN2NRelations(authority, Arrays.asList("viewPermissions", "apiPermissions"));
-        return findOne(authorityDTO.getId()).orElseThrow();
+        this.createOrUpdateAndRelatedRelations(authority, Arrays.asList("viewPermissions", "apiPermissions"));
+        return findOne(authority.getId()).orElseThrow();
     }
 
     /**

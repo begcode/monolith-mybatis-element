@@ -33,11 +33,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.oss.domain.OssConfig}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class OssConfigBaseService<R extends OssConfigRepository, E extends OssConfig>
     extends BaseServiceImpl<OssConfigRepository, OssConfig> {
 
     private final Logger log = LoggerFactory.getLogger(OssConfigBaseService.class);
-    private final List<String> relationNames = Arrays.asList();
+    private final List<String> relationNames = List.of();
 
     protected final FileStorageService fileStorageService;
 
@@ -84,12 +85,11 @@ public class OssConfigBaseService<R extends OssConfigRepository, E extends OssCo
     @Transactional(rollbackFor = Exception.class)
     public OssConfigDTO update(OssConfigDTO ossConfigDTO) {
         log.debug("Request to update OssConfig : {}", ossConfigDTO);
-
         OssConfig ossConfig = ossConfigMapper.toEntity(ossConfigDTO);
 
-        ossConfigRepository.updateById(ossConfig);
+        this.saveOrUpdate(ossConfig);
         this.initPlatforms();
-        return findOne(ossConfigDTO.getId()).orElseThrow();
+        return findOne(ossConfig.getId()).orElseThrow();
     }
 
     /**

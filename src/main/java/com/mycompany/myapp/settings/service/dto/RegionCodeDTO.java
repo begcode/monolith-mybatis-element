@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -17,9 +16,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.settings.domain.RegionCode}的DTO。
  */
 @Schema(description = "行政区划码")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class RegionCodeDTO implements Serializable {
 
@@ -155,6 +153,11 @@ public class RegionCodeDTO implements Serializable {
         return this;
     }
 
+    public RegionCodeDTO parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     // jhipster-needle-dto-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -162,11 +165,11 @@ public class RegionCodeDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RegionCodeDTO)) {
+
+        if (!(o instanceof RegionCodeDTO regionCodeDTO)) {
             return false;
         }
 
-        RegionCodeDTO regionCodeDTO = (RegionCodeDTO) o;
         if (this.id == null) {
             return false;
         }

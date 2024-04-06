@@ -18,7 +18,6 @@ import java.io.File;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.Arrays;
 import java.util.UUID;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -33,13 +32,14 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.UploadFile}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class UploadFileBaseService<R extends UploadFileRepository, E extends UploadFile>
     extends BaseServiceImpl<UploadFileRepository, UploadFile> {
 
     private final Logger log = LoggerFactory.getLogger(UploadFileBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(com.mycompany.myapp.domain.ResourceCategory.class.getName() + ".files");
-    private final List<String> relationNames = Arrays.asList("category");
+    private final List<String> relationCacheNames = List.of(com.mycompany.myapp.domain.ResourceCategory.class.getName() + ".files");
+    private final List<String> relationNames = List.of("category");
 
     protected final FileStorageService fileStorageService;
 
@@ -70,11 +70,10 @@ public class UploadFileBaseService<R extends UploadFileRepository, E extends Upl
     @Transactional(rollbackFor = Exception.class)
     public UploadFileDTO update(UploadFileDTO uploadFileDTO) {
         log.debug("Request to update UploadFile : {}", uploadFileDTO);
-
         UploadFile uploadFile = uploadFileMapper.toEntity(uploadFileDTO);
 
-        uploadFileRepository.updateById(uploadFile);
-        return findOne(uploadFileDTO.getId()).orElseThrow();
+        this.saveOrUpdate(uploadFile);
+        return findOne(uploadFile.getId()).orElseThrow();
     }
 
     /**

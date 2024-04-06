@@ -30,11 +30,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.taskjob.domain.TaskJobConfig}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E extends TaskJobConfig>
     extends BaseServiceImpl<TaskJobConfigRepository, TaskJobConfig> {
 
     private final Logger log = LoggerFactory.getLogger(TaskJobConfigBaseService.class);
-    private final List<String> relationNames = Arrays.asList();
+    private final List<String> relationNames = List.of();
 
     protected final Scheduler scheduler;
 
@@ -80,11 +81,10 @@ public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E exten
     @Transactional(rollbackFor = Exception.class)
     public TaskJobConfigDTO update(TaskJobConfigDTO taskJobConfigDTO) {
         log.debug("Request to update TaskJobConfig : {}", taskJobConfigDTO);
-
         TaskJobConfig taskJobConfig = taskJobConfigMapper.toEntity(taskJobConfigDTO);
 
-        taskJobConfigRepository.updateById(taskJobConfig);
-        return findOne(taskJobConfigDTO.getId()).orElseThrow();
+        this.saveOrUpdate(taskJobConfig);
+        return findOne(taskJobConfig.getId()).orElseThrow();
     }
 
     /**

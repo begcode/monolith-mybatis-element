@@ -1,4 +1,5 @@
 import { UploadApiResult } from '@/api/sys/model/uploadModel';
+import type { Fn } from '#/global.d';
 
 /**
  * 上传结果状态

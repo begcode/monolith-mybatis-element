@@ -47,7 +47,7 @@
     "frontOrBack": ["front", "back"],
     "gradleEnterpriseHost": null,
     "javaVersion": "17",
-    "jhipsterVersion": "8.1.10",
+    "jhipsterVersion": "8.2.0-beta.0",
     "jobScheduler": "quartz",
     "jwtSecretKey": "MjY0MDJmNThmY2M1MjMzM2Y1Y2ZlOTE0NjE5MzhhOWI2YzNkYzk3YjIyYzIwOGVlOTZjYWJhNDdmNDg5ODI1YmYxNTY3YTljNTA4NGU5OGQxZWM1Y2ZjMWUwMWI2ZjdhNzI4NTc5YjFiOGMwNWFjMDc5MjBkN2E2YWQzOWFhNDc=",
     "languages": ["zh-cn", "en"],

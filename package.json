@@ -34,7 +34,7 @@
     "java:war": "./mvnw -ntp verify -DskipTests --batch-mode -Pwar",
     "java:war:dev": "npm run java:war -- -Pdev,webapp",
     "java:war:prod": "npm run java:war -- -Pprod",
-    "prepare": "husky install",
+    "prepare": "husky",
     "services:up": "docker compose -f src/main/docker/services.yml up --wait",
     "start": "pnpm run webapp:dev",
     "webapp:build": "pnpm run clean-www && cd ./front/ && pnpm install && pnpm components:build && pnpm run webapp:build:dev",

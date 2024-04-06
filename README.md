@@ -1,6 +1,6 @@
 # testElement
 
-本应用程序由BegCode8.1.10生成, 你可以在 [https://www.begcode.com](https://www.begcode.com) 找到文档和帮助。
+本应用程序由BegCode8.2.0-beta.0生成, 你可以在 [https://www.begcode.com](https://www.begcode.com) 找到文档和帮助。
 
 ## 项目结构
 
@@ -24,7 +24,7 @@
 
 在构建此项目之前，您必须在计算机上安装并配置以下依赖项：
 
-1. [Node.js][]: 我们使用 Node 来运行开发 Web 服务器并构建项目。
+1. [Node.js](https://nodejs.org/): 我们使用 Node 来运行开发 Web 服务器并构建项目。
    根据您的系统，您可以从源代码安装 Node，也可以将 Node 安装为预打包的捆绑包。
 
 安装 Node 后，您应该能够运行以下命令来安装开发工具。
@@ -49,43 +49,6 @@ Npm 还用于管理此应用程序中使用的 CSS 和 JavaScript 依赖项。 �
 
 `pnpm run` 命令将列出可用于该项目运行的所有脚本。
 
-### PWA支持
-
-BegCode 附带 PWA（渐进式 Web 应用程序）支持，并且默认情况下处于关闭状态。 PWA 的主要组件之一是 Service Worker。
-
-默认情况下，Service Worker 初始化代码被注释掉。 要启用它，请在`front/src/index.html`中取消注释以下代码：
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(function () {
-      console.log('Service Worker Registered');
-    });
-  }
-</script>
-```
-
-Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-
-### 依赖管理
-
-例如，要将 [Leaflet][] 库添加为应用程序的运行时依赖项，您可以运行以下命令：
-
-```
-pnpm install --save --save-exact leaflet
-```
-
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
-
-```
-pnpm install --save-dev --save-exact @types/leaflet
-```
-
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows about them:
-注意：Leaflet 还需要做一些其他事情，我们在此不做详细介绍。
-
-有关如何使用 JHipster 进行开发的更多说明，请查看[Using JHipster in development][]
-
 ## 系统构建
 
 ### 创建Jar包
@@ -103,9 +66,9 @@ Then you would import the JS and CSS files specified in library's installation i
 java -jar target/*.jar
 ```
 
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+然后在浏览器打开：[http://localhost:8080](http://localhost:8080)。
 
-Refer to [Using JHipster in production][] for more details.
+请参阅[Using JHipster in production][] 了解更多详细信息。
 
 ### 创建War包
 
@@ -125,20 +88,20 @@ docker compose -f src/main/docker/jhipster-control-center.yml up
 
 ## 测试
 
-### Spring Boot tests
-
-To launch your application's tests, run:
-
-```
-./mvnw verify
-```
-
 ### Client tests
 
 Unit tests are run by [Jest][]. They're located in [front/src/test/javascript/](front/src/test/javascript/) and can be run with:
 
 ```
 pnpm test
+```
+
+### Spring Boot tests
+
+To launch your application's tests, run:
+
+```
+./mvnw verify
 ```
 
 ## 其他

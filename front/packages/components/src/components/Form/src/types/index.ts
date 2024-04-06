@@ -21,7 +21,8 @@ import {
   UploadProps,
 } from 'element-plus';
 import { IEditorConfig } from '@wangeditor/editor';
-import { CSSProperties } from 'vue';
+import { CSSProperties, VNode } from 'vue';
+import type { ElementPlusInfoType, Recordable } from '#/global.d';
 
 export interface PlaceholderModel {
   placeholder?: string;
@@ -86,10 +87,10 @@ export interface InputComponentProps extends Partial<InputProps> {
     input?: (value: string | number) => void;
   };
   slots?: {
-    prefix?: (...args: any[]) => JSX.Element | null;
-    suffix?: (...args: any[]) => JSX.Element | null;
-    prepend?: (...args: any[]) => JSX.Element | null;
-    append?: (...args: any[]) => JSX.Element | null;
+    prefix?: (...args: any[]) => VNode | null;
+    suffix?: (...args: any[]) => VNode | null;
+    prepend?: (...args: any[]) => VNode | null;
+    append?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -100,11 +101,11 @@ export interface AutocompleteComponentProps extends Partial<AutocompleteProps> {
     change?: (value: string | number) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    prefix?: (...args: any[]) => JSX.Element | null;
-    suffix?: (...args: any[]) => JSX.Element | null;
-    prepend?: (...args: any[]) => JSX.Element | null;
-    append?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    prefix?: (...args: any[]) => VNode | null;
+    suffix?: (...args: any[]) => VNode | null;
+    prepend?: (...args: any[]) => VNode | null;
+    append?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -146,11 +147,11 @@ export interface SelectComponentProps extends Omit<Partial<ISelectProps>, 'optio
     focus?: (event: FocusEvent) => void;
   };
   slots?: {
-    default?: (options: SelectOption[]) => JSX.Element[] | null;
-    optionGroupDefault?: (item: SelectOption) => JSX.Element;
-    optionDefault?: (option: SelectOption) => JSX.Element | null;
-    prefix?: (...args: any[]) => JSX.Element | null;
-    empty?: (...args: any[]) => JSX.Element | null;
+    default?: (options: SelectOption[]) => VNode[] | null;
+    optionGroupDefault?: (item: SelectOption) => VNode;
+    optionDefault?: (option: SelectOption) => VNode | null;
+    prefix?: (...args: any[]) => VNode | null;
+    empty?: (...args: any[]) => VNode | null;
   };
   options?: SelectOption[];
   style?: CSSProperties;
@@ -162,7 +163,7 @@ export interface SelectV2ComponentProps {
   valueKey?: string;
   size?: ComponentSize;
   clearable?: boolean;
-  clearIcon?: string | JSX.Element | null;
+  clearIcon?: string | VNode | null;
   collapseTags?: boolean;
   multipleLimit?: number;
   name?: string;
@@ -195,7 +196,7 @@ export interface SelectV2ComponentProps {
   };
   options?: SelectOption[];
   slots?: {
-    default?: (option: SelectOption) => JSX.Element | null;
+    default?: (option: SelectOption) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -228,8 +229,8 @@ export interface CascaderComponentProps {
     removeTag?: (value: CascaderNode['valueByOption']) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    empty?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    empty?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -263,9 +264,9 @@ export interface TransferComponentProps extends Partial<TransferProps> {
     rightCheckChange?: (value: any[]) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    leftFooter?: (...args: any[]) => JSX.Element | null;
-    rightFooter?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    leftFooter?: (...args: any[]) => VNode | null;
+    rightFooter?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -293,7 +294,7 @@ export interface RadioGroupComponentProps extends Partial<RadioGroupProps> {
     change?: (value: string | number | boolean) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element[] | null;
+    default?: (...args: any[]) => VNode[] | null;
   };
   style?: CSSProperties;
 }
@@ -312,7 +313,7 @@ export interface RadioButtonComponentProps extends Partial<RadioButtonProps> {
     change?: (value: string | number | boolean) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element[] | null;
+    default?: (...args: any[]) => VNode[] | null;
   };
   style?: CSSProperties;
 }
@@ -349,7 +350,7 @@ export interface CheckboxGroupComponentProps extends Partial<CheckboxGroupProps>
     change?: (value: string | number | boolean) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element[] | null;
+    default?: (...args: any[]) => VNode[] | null;
   };
   style?: CSSProperties;
 }
@@ -372,8 +373,8 @@ export interface DatePickerComponentProps extends Partial<DatePickerProps> {
     visibleChange?: (visibility: boolean) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    rangeSeparator?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    rangeSeparator?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -398,8 +399,8 @@ export interface DateTimePickerComponentProps {
   id?: string;
   name?: string;
   unlinkPanels?: boolean;
-  prefixIcon?: string | JSX.Element;
-  clearIcon?: string | JSX.Element;
+  prefixIcon?: string | VNode;
+  clearIcon?: string | VNode;
   shortcuts?: Array<{ text: string; value: Date | Function }>;
   disabledDate?: (date: Date) => boolean;
   cellClassName?: string | ((date: Date) => string | undefined);
@@ -412,8 +413,8 @@ export interface DateTimePickerComponentProps {
     visibleChange?: (visibility: boolean) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    rangeSeparator?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    rangeSeparator?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -436,8 +437,8 @@ export interface TimePickerComponentProps {
   id?: string;
   name?: string;
   label?: string;
-  prefixIcon?: string | JSX.Element;
-  clearIcon?: string | JSX.Element;
+  prefixIcon?: string | VNode;
+  clearIcon?: string | VNode;
   disabledHours?: (role: string, comparingDate?: any) => number[];
   disabledMinutes?: (hour: number, role: string, comparingDate?: any) => number[];
   disabledSeconds?: (hour: number, minute: number, role: string, comparingDate?: any) => number[];
@@ -460,8 +461,8 @@ export interface TimeSelectComponentProps {
   placeholder?: string;
   name?: string;
   effect?: string;
-  prefixIcon?: string | JSX.Element;
-  clearIcon?: string | JSX.Element;
+  prefixIcon?: string | VNode;
+  clearIcon?: string | VNode;
   start?: string;
   end?: string;
   step?: string;
@@ -500,18 +501,18 @@ export interface FormSetProps {
 export interface FormItemProps extends Partial<ElFormItemProps> {
   style?: CSSProperties;
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    label?: (...args: any[]) => JSX.Element | null;
-    error?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    label?: (...args: any[]) => VNode | null;
+    error?: (...args: any[]) => VNode | null;
   };
 }
 
 export interface UploadComponentProps extends Partial<UploadProps> {
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    trigger?: (...args: any[]) => JSX.Element | null;
-    tip?: (...args: any[]) => JSX.Element | null;
-    file?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    trigger?: (...args: any[]) => VNode | null;
+    tip?: (...args: any[]) => VNode | null;
+    file?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }
@@ -529,7 +530,7 @@ export interface TreeSelectComponentProps extends Omit<Partial<SelectComponentPr
   };
   renderAfterExpand?: boolean;
   load?: (...args: any[]) => Promise<any>;
-  renderContent?: (...args: any[]) => JSX.Element | null;
+  renderContent?: (...args: any[]) => VNode | null;
   highlightCurrent?: boolean;
   defaultExpandAll?: boolean;
   expandOnClickNode?: boolean;
@@ -543,7 +544,7 @@ export interface TreeSelectComponentProps extends Omit<Partial<SelectComponentPr
   filterNodeMethod?: (...args: any[]) => boolean;
   accordion?: boolean;
   indent?: number;
-  icon?: string | ((...args: any[]) => JSX.Element | null);
+  icon?: string | ((...args: any[]) => VNode | null);
   lazy?: boolean;
   draggable?: boolean;
   allowDrag?: (...args: any[]) => boolean;
@@ -570,11 +571,11 @@ export interface TreeSelectComponentProps extends Omit<Partial<SelectComponentPr
     nodeDrop?: (...args: any[]) => void;
   };
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    optionGroupDefault?: (item: SelectOption) => JSX.Element;
-    optionDefault?: (option: SelectOption) => JSX.Element | null;
-    prefix?: (...args: any[]) => JSX.Element | null;
-    empty?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    optionGroupDefault?: (item: SelectOption) => VNode;
+    optionDefault?: (option: SelectOption) => VNode | null;
+    prefix?: (...args: any[]) => VNode | null;
+    empty?: (...args: any[]) => VNode | null;
   };
   style?: CSSProperties;
 }

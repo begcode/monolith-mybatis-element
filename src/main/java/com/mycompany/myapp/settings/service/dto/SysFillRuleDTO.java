@@ -7,9 +7,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -18,9 +17,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.settings.domain.SysFillRule}的DTO。
  */
 @Schema(description = "填充规则")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class SysFillRuleDTO implements Serializable {
 
@@ -183,11 +181,11 @@ public class SysFillRuleDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SysFillRuleDTO)) {
+
+        if (!(o instanceof SysFillRuleDTO sysFillRuleDTO)) {
             return false;
         }
 
-        SysFillRuleDTO sysFillRuleDTO = (SysFillRuleDTO) o;
         if (this.id == null) {
             return false;
         }

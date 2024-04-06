@@ -25,11 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.system.domain.SmsTemplate}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class SmsTemplateBaseService<R extends SmsTemplateRepository, E extends SmsTemplate>
     extends BaseServiceImpl<SmsTemplateRepository, SmsTemplate> {
 
     private final Logger log = LoggerFactory.getLogger(SmsTemplateBaseService.class);
-    private final List<String> relationNames = Arrays.asList("supplier");
+    private final List<String> relationNames = List.of("supplier");
 
     protected final SmsSupplierService smsSupplierService;
 
@@ -75,11 +76,10 @@ public class SmsTemplateBaseService<R extends SmsTemplateRepository, E extends S
     @Transactional(rollbackFor = Exception.class)
     public SmsTemplateDTO update(SmsTemplateDTO smsTemplateDTO) {
         log.debug("Request to update SmsTemplate : {}", smsTemplateDTO);
-
         SmsTemplate smsTemplate = smsTemplateMapper.toEntity(smsTemplateDTO);
 
-        smsTemplateRepository.updateById(smsTemplate);
-        return findOne(smsTemplateDTO.getId()).orElseThrow();
+        this.saveOrUpdate(smsTemplate);
+        return findOne(smsTemplate.getId()).orElseThrow();
     }
 
     /**

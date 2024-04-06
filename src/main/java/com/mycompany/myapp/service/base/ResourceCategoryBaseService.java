@@ -14,7 +14,6 @@ import com.mycompany.myapp.repository.ResourceCategoryRepository;
 import com.mycompany.myapp.service.dto.ResourceCategoryDTO;
 import com.mycompany.myapp.service.mapper.ResourceCategoryMapper;
 import java.util.*;
-import java.util.Arrays;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +26,19 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.ResourceCategory}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class ResourceCategoryBaseService<R extends ResourceCategoryRepository, E extends ResourceCategory>
     extends BaseServiceImpl<ResourceCategoryRepository, ResourceCategory> {
 
     private final Logger log = LoggerFactory.getLogger(ResourceCategoryBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.domain.ResourceCategory.class.getName() + ".parent",
         com.mycompany.myapp.domain.ResourceCategory.class.getName() + ".children",
         com.mycompany.myapp.domain.UploadImage.class.getName() + ".category",
         com.mycompany.myapp.domain.UploadFile.class.getName() + ".category"
     );
-    private final List<String> relationNames = Arrays.asList("children", "parent", "images", "files");
+    private final List<String> relationNames = List.of("children", "parent", "images", "files");
 
     protected final ResourceCategoryRepository resourceCategoryRepository;
 
@@ -81,11 +81,11 @@ public class ResourceCategoryBaseService<R extends ResourceCategoryRepository, E
     @Transactional(rollbackFor = Exception.class)
     public ResourceCategoryDTO update(ResourceCategoryDTO resourceCategoryDTO) {
         log.debug("Request to update ResourceCategory : {}", resourceCategoryDTO);
-
         ResourceCategory resourceCategory = resourceCategoryMapper.toEntity(resourceCategoryDTO);
+        clearChildrenCache();
 
-        resourceCategoryRepository.updateById(resourceCategory);
-        return findOne(resourceCategoryDTO.getId()).orElseThrow();
+        this.saveOrUpdate(resourceCategory);
+        return findOne(resourceCategory.getId()).orElseThrow();
     }
 
     /**

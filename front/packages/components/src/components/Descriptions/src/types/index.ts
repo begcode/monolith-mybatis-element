@@ -1,3 +1,5 @@
+import { VNode } from 'vue';
+
 export interface DescriptionsSchema {
   span?: number; // 占多少分
   field: string; // 字段名
@@ -9,7 +11,7 @@ export interface DescriptionsSchema {
   className?: string;
   labelClassName?: string;
   slots?: {
-    default?: (...args: any[]) => JSX.Element | null;
-    label?: (...args: any[]) => JSX.Element | null;
+    default?: (...args: any[]) => VNode | null;
+    label?: (...args: any[]) => VNode | null;
   };
 }

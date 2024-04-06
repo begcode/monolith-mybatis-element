@@ -5,9 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -16,9 +15,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.system.domain.AnnouncementRecord}的DTO。
  */
 @Schema(description = "通告阅读记录")
-@Data
-@ToString
-@EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class AnnouncementRecordDTO extends AbstractAuditingEntity<Long, AnnouncementRecordDTO> {
 
@@ -126,11 +124,11 @@ public class AnnouncementRecordDTO extends AbstractAuditingEntity<Long, Announce
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AnnouncementRecordDTO)) {
+
+        if (!(o instanceof AnnouncementRecordDTO announcementRecordDTO)) {
             return false;
         }
 
-        AnnouncementRecordDTO announcementRecordDTO = (AnnouncementRecordDTO) o;
         if (this.id == null) {
             return false;
         }

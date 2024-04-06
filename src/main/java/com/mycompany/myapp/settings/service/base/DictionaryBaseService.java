@@ -21,7 +21,6 @@ import com.mycompany.myapp.settings.service.dto.DictionaryDTO;
 import com.mycompany.myapp.settings.service.mapper.DictionaryMapper;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -40,12 +39,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.Dictionary}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class DictionaryBaseService<R extends DictionaryRepository, E extends Dictionary>
     extends BaseServiceImpl<DictionaryRepository, Dictionary>
     implements DictionaryServiceExtProvider {
 
     private final Logger log = LoggerFactory.getLogger(DictionaryBaseService.class);
-    private final List<String> relationNames = Arrays.asList("items");
+    private final List<String> relationNames = List.of("items");
 
     protected final DictionaryRepository dictionaryRepository;
 
@@ -89,17 +89,16 @@ public class DictionaryBaseService<R extends DictionaryRepository, E extends Dic
     @Transactional(rollbackFor = Exception.class)
     public DictionaryDTO update(DictionaryDTO dictionaryDTO) {
         log.debug("Request to update Dictionary : {}", dictionaryDTO);
-
         Dictionary dictionary = dictionaryMapper.toEntity(dictionaryDTO);
 
-        this.updateEntityAndRelatedEntities(
+        this.createEntityAndRelatedEntities(
                 dictionary,
                 dictionary.getItems(),
                 CommonFieldData::setOwnerEntityId,
                 CommonFieldData::setOwnerEntityName,
                 "Dictionary"
             );
-        return findOne(dictionaryDTO.getId()).orElseThrow();
+        return findOne(dictionary.getId()).orElseThrow();
     }
 
     /**

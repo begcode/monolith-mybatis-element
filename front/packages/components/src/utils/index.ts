@@ -1,3 +1,5 @@
+import { Recordable } from '#/utils.d';
+import { TargetContext } from '#/types.d';
 /**
  *
  * @param component 需要注册的组件

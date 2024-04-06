@@ -3,6 +3,7 @@ import { reactive, getCurrentInstance, onBeforeMount, onUnmounted } from 'vue';
 import { deviceDetection } from '@/utils';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import car from '@/assets/imgs/car.png';
+import type { Fn } from '#/global.d';
 
 type mapType = {
   plateNumber: string;

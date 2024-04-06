@@ -27,10 +27,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.Position}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class PositionBaseService<R extends PositionRepository, E extends Position> extends BaseServiceImpl<PositionRepository, Position> {
 
     private final Logger log = LoggerFactory.getLogger(PositionBaseService.class);
-    private final List<String> relationNames = Arrays.asList("users");
+    private final List<String> relationNames = List.of("users");
 
     protected final PositionRepository positionRepository;
 
@@ -68,11 +69,10 @@ public class PositionBaseService<R extends PositionRepository, E extends Positio
     @Transactional(rollbackFor = Exception.class)
     public PositionDTO update(PositionDTO positionDTO) {
         log.debug("Request to update Position : {}", positionDTO);
-
         Position position = positionMapper.toEntity(positionDTO);
 
-        positionRepository.updateById(position);
-        return findOne(positionDTO.getId()).orElseThrow();
+        this.saveOrUpdate(position);
+        return findOne(position.getId()).orElseThrow();
     }
 
     /**

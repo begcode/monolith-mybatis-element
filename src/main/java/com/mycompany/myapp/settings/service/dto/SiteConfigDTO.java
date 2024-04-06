@@ -7,9 +7,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -18,9 +17,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.settings.domain.SiteConfig}的DTO。
  */
 @Schema(description = "网站配置")
-@Data
-@ToString
-@EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class SiteConfigDTO extends AbstractAuditingEntity<Long, SiteConfigDTO> {
 
@@ -152,11 +150,11 @@ public class SiteConfigDTO extends AbstractAuditingEntity<Long, SiteConfigDTO> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SiteConfigDTO)) {
+
+        if (!(o instanceof SiteConfigDTO siteConfigDTO)) {
             return false;
         }
 
-        SiteConfigDTO siteConfigDTO = (SiteConfigDTO) o;
         if (this.id == null) {
             return false;
         }

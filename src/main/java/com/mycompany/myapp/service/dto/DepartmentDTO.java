@@ -6,9 +6,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -17,9 +16,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.domain.Department}的DTO。
  */
 @Schema(description = "部门")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class DepartmentDTO implements Serializable {
 
@@ -155,6 +153,11 @@ public class DepartmentDTO implements Serializable {
         return this;
     }
 
+    public DepartmentDTO parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     // jhipster-needle-dto-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -162,11 +165,11 @@ public class DepartmentDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DepartmentDTO)) {
+
+        if (!(o instanceof DepartmentDTO departmentDTO)) {
             return false;
         }
 
-        DepartmentDTO departmentDTO = (DepartmentDTO) o;
         if (this.id == null) {
             return false;
         }

@@ -28,11 +28,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.system.domain.AnnouncementRecord}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class AnnouncementRecordBaseService<R extends AnnouncementRecordRepository, E extends AnnouncementRecord>
     extends BaseServiceImpl<AnnouncementRecordRepository, AnnouncementRecord> {
 
     private final Logger log = LoggerFactory.getLogger(AnnouncementRecordBaseService.class);
-    private final List<String> relationNames = Arrays.asList();
+    private final List<String> relationNames = List.of();
 
     protected final AnnouncementRecordRepository announcementRecordRepository;
 
@@ -74,11 +75,10 @@ public class AnnouncementRecordBaseService<R extends AnnouncementRecordRepositor
     @Transactional(rollbackFor = Exception.class)
     public AnnouncementRecordDTO update(AnnouncementRecordDTO announcementRecordDTO) {
         log.debug("Request to update AnnouncementRecord : {}", announcementRecordDTO);
-
         AnnouncementRecord announcementRecord = announcementRecordMapper.toEntity(announcementRecordDTO);
 
-        announcementRecordRepository.updateById(announcementRecord);
-        return findOne(announcementRecordDTO.getId()).orElseThrow();
+        this.saveOrUpdate(announcementRecord);
+        return findOne(announcementRecord.getId()).orElseThrow();
     }
 
     /**

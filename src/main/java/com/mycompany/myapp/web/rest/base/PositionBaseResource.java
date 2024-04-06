@@ -92,10 +92,10 @@ public class PositionBaseResource {
         if (positionDTO.getId() != null) {
             throw new BadRequestAlertException("A new position cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        PositionDTO result = positionService.save(positionDTO);
-        return ResponseEntity.created(new URI("/api/positions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        positionDTO = positionService.save(positionDTO);
+        return ResponseEntity.created(new URI("/api/positions/" + positionDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, positionDTO.getId().toString()))
+            .body(positionDTO);
     }
 
     /**
@@ -106,6 +106,7 @@ public class PositionBaseResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated positionDTO,
      * or with status {@code 400 (Bad Request)} if the positionDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the positionDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
     @Operation(tags = "更新岗位", description = "根据主键更新并返回一个更新后的岗位")
@@ -128,20 +129,19 @@ public class PositionBaseResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        PositionDTO result = null;
         if (CollectionUtils.isNotEmpty(batchFields) && CollectionUtils.isNotEmpty(batchIds)) {
             batchIds = new ArrayList<>(batchIds);
             if (!batchIds.contains(id)) {
                 batchIds.add(id);
             }
             positionService.updateBatch(positionDTO, batchFields, batchIds);
-            result = positionService.findOne(id).orElseThrow();
+            positionDTO = positionService.findOne(id).orElseThrow();
         } else {
-            result = positionService.update(positionDTO);
+            positionDTO = positionService.update(positionDTO);
         }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, positionDTO.getId().toString()))
-            .body(result);
+            .body(positionDTO);
     }
 
     /**
@@ -217,6 +217,7 @@ public class PositionBaseResource {
      * or with status {@code 400 (Bad Request)} if the positionDTO is not valid,
      * or with status {@code 404 (Not Found)} if the positionDTO is not found,
      * or with status {@code 500 (Internal Server Error)} if the positionDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     @Operation(tags = "部分更新岗位", description = "根据主键及实体信息实现部分更新，值为null的属性将忽略，并返回一个更新后的岗位")

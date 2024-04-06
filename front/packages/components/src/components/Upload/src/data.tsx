@@ -7,6 +7,7 @@ import { Icon } from '@/components/Icon';
 
 import { isImgTypeByName } from './helper';
 import UploadThumb from './components/UploadThumb.vue';
+import type { Fn } from '#/global.d';
 
 /**
  * 创建上传列

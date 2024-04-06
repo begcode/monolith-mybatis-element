@@ -23,11 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.UReportFile}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class UReportFileBaseService<R extends UReportFileRepository, E extends UReportFile>
     extends BaseServiceImpl<UReportFileRepository, UReportFile> {
 
     private final Logger log = LoggerFactory.getLogger(UReportFileBaseService.class);
-    private final List<String> relationNames = Arrays.asList();
+    private final List<String> relationNames = List.of();
 
     protected final UReportFileRepository uReportFileRepository;
 
@@ -69,11 +70,10 @@ public class UReportFileBaseService<R extends UReportFileRepository, E extends U
     @Transactional(rollbackFor = Exception.class)
     public UReportFileDTO update(UReportFileDTO uReportFileDTO) {
         log.debug("Request to update UReportFile : {}", uReportFileDTO);
-
         UReportFile uReportFile = uReportFileMapper.toEntity(uReportFileDTO);
 
-        uReportFileRepository.updateById(uReportFile);
-        return findOne(uReportFileDTO.getId()).orElseThrow();
+        this.saveOrUpdate(uReportFile);
+        return findOne(uReportFile.getId()).orElseThrow();
     }
 
     /**

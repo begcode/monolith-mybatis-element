@@ -13,7 +13,6 @@ import com.mycompany.myapp.repository.DepartmentRepository;
 import com.mycompany.myapp.service.dto.DepartmentDTO;
 import com.mycompany.myapp.service.mapper.DepartmentMapper;
 import java.util.*;
-import java.util.Arrays;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +25,19 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.Department}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class DepartmentBaseService<R extends DepartmentRepository, E extends Department>
     extends BaseServiceImpl<DepartmentRepository, Department> {
 
     private final Logger log = LoggerFactory.getLogger(DepartmentBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.domain.Department.class.getName() + ".parent",
         com.mycompany.myapp.domain.Authority.class.getName() + ".department",
         com.mycompany.myapp.domain.Department.class.getName() + ".children",
         com.mycompany.myapp.domain.User.class.getName() + ".department"
     );
-    private final List<String> relationNames = Arrays.asList("children", "authorities", "parent", "users");
+    private final List<String> relationNames = List.of("children", "authorities", "parent", "users");
 
     protected final DepartmentRepository departmentRepository;
 
@@ -76,11 +76,11 @@ public class DepartmentBaseService<R extends DepartmentRepository, E extends Dep
     @Transactional(rollbackFor = Exception.class)
     public DepartmentDTO update(DepartmentDTO departmentDTO) {
         log.debug("Request to update Department : {}", departmentDTO);
-
         Department department = departmentMapper.toEntity(departmentDTO);
+        clearChildrenCache();
 
-        this.createOrUpdateN2NRelations(department, Arrays.asList("authorities"));
-        return findOne(departmentDTO.getId()).orElseThrow();
+        this.createOrUpdateAndRelatedRelations(department, Arrays.asList("authorities"));
+        return findOne(department.getId()).orElseThrow();
     }
 
     /**

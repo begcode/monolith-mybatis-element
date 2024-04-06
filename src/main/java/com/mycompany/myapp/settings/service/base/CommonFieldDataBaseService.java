@@ -14,7 +14,6 @@ import com.mycompany.myapp.settings.repository.CommonFieldDataRepository;
 import com.mycompany.myapp.settings.service.dto.CommonFieldDataDTO;
 import com.mycompany.myapp.settings.service.mapper.CommonFieldDataMapper;
 import java.util.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,16 +28,17 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.CommonFieldData}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class CommonFieldDataBaseService<R extends CommonFieldDataRepository, E extends CommonFieldData>
     extends BaseServiceImpl<CommonFieldDataRepository, CommonFieldData> {
 
     private final Logger log = LoggerFactory.getLogger(CommonFieldDataBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.settings.domain.SiteConfig.class.getName() + ".items",
         com.mycompany.myapp.settings.domain.Dictionary.class.getName() + ".items"
     );
-    private final List<String> relationNames = Arrays.asList("siteConfig", "dictionary");
+    private final List<String> relationNames = List.of("siteConfig", "dictionary");
 
     protected final CommonFieldDataRepository commonFieldDataRepository;
 
@@ -80,11 +80,10 @@ public class CommonFieldDataBaseService<R extends CommonFieldDataRepository, E e
     @Transactional(rollbackFor = Exception.class)
     public CommonFieldDataDTO update(CommonFieldDataDTO commonFieldDataDTO) {
         log.debug("Request to update CommonFieldData : {}", commonFieldDataDTO);
-
         CommonFieldData commonFieldData = commonFieldDataMapper.toEntity(commonFieldDataDTO);
 
-        commonFieldDataRepository.updateById(commonFieldData);
-        return findOne(commonFieldDataDTO.getId()).orElseThrow();
+        this.saveOrUpdate(commonFieldData);
+        return findOne(commonFieldData.getId()).orElseThrow();
     }
 
     /**

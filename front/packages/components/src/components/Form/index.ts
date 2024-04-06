@@ -33,6 +33,7 @@ export type {
   InputPasswordComponentProps,
   TreeSelectComponentProps,
 } from './src/types';
+import type { Recordable } from '#/global.d';
 
 export interface FormExpose {
   setValues: (data: Recordable) => void;

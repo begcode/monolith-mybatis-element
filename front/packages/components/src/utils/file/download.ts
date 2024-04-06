@@ -1,5 +1,6 @@
 import { openWindow } from '../index';
 import { dataURLtoBlob, imgurlToBase64 } from './base64Conver';
+import type { TargetContext } from '#/types.d';
 
 /**
  * 下载远程图片到本地

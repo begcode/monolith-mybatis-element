@@ -14,7 +14,6 @@ import com.mycompany.myapp.settings.repository.FillRuleItemRepository;
 import com.mycompany.myapp.settings.service.dto.FillRuleItemDTO;
 import com.mycompany.myapp.settings.service.mapper.FillRuleItemMapper;
 import java.util.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -29,15 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.FillRuleItem}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class FillRuleItemBaseService<R extends FillRuleItemRepository, E extends FillRuleItem>
     extends BaseServiceImpl<FillRuleItemRepository, FillRuleItem> {
 
     private final Logger log = LoggerFactory.getLogger(FillRuleItemBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
-        com.mycompany.myapp.settings.domain.SysFillRule.class.getName() + ".ruleItems"
-    );
-    private final List<String> relationNames = Arrays.asList("fillRule");
+    private final List<String> relationCacheNames = List.of(com.mycompany.myapp.settings.domain.SysFillRule.class.getName() + ".ruleItems");
+    private final List<String> relationNames = List.of("fillRule");
 
     protected final FillRuleItemRepository fillRuleItemRepository;
 
@@ -79,11 +77,10 @@ public class FillRuleItemBaseService<R extends FillRuleItemRepository, E extends
     @Transactional(rollbackFor = Exception.class)
     public FillRuleItemDTO update(FillRuleItemDTO fillRuleItemDTO) {
         log.debug("Request to update FillRuleItem : {}", fillRuleItemDTO);
-
         FillRuleItem fillRuleItem = fillRuleItemMapper.toEntity(fillRuleItemDTO);
 
-        fillRuleItemRepository.updateById(fillRuleItem);
-        return findOne(fillRuleItemDTO.getId()).orElseThrow();
+        this.saveOrUpdate(fillRuleItem);
+        return findOne(fillRuleItem.getId()).orElseThrow();
     }
 
     /**

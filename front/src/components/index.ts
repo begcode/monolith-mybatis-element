@@ -2,8 +2,9 @@ import type { App } from 'vue';
 import { ElButton, ElSpace, ElCard, ElDivider, ElTree, ElCol, ElRow, ElInput, ElMenuItem, ElMenu, ElDropdown } from 'element-plus';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
-import { BaseButton, VXETablePluginElement, Icon } from '@begcode/components';
+import { BaseButton, Icon } from '@begcode/components';
 import { Permission } from './Permission';
+import { VXETablePluginElement } from './VxeTable';
 
 export const setupGlobCom = (app: App<Element>): void => {
   app.component('Icon', Icon);

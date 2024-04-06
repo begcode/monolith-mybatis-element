@@ -14,7 +14,6 @@ import com.mycompany.myapp.settings.repository.SysFillRuleRepository;
 import com.mycompany.myapp.settings.service.dto.SysFillRuleDTO;
 import com.mycompany.myapp.settings.service.mapper.SysFillRuleMapper;
 import java.util.*;
-import java.util.Arrays;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.SysFillRule}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class SysFillRuleBaseService<R extends SysFillRuleRepository, E extends SysFillRule>
     extends BaseServiceImpl<SysFillRuleRepository, SysFillRule>
     implements IFillRuleHandler {
 
     private final Logger log = LoggerFactory.getLogger(SysFillRuleBaseService.class);
-    private final List<String> relationNames = Arrays.asList("ruleItems");
+    private final List<String> relationNames = List.of("ruleItems");
 
     protected final SysFillRuleRepository sysFillRuleRepository;
 
@@ -73,11 +73,10 @@ public class SysFillRuleBaseService<R extends SysFillRuleRepository, E extends S
     @Transactional(rollbackFor = Exception.class)
     public SysFillRuleDTO update(SysFillRuleDTO sysFillRuleDTO) {
         log.debug("Request to update SysFillRule : {}", sysFillRuleDTO);
-
         SysFillRule sysFillRule = sysFillRuleMapper.toEntity(sysFillRuleDTO);
 
-        this.updateEntityAndRelatedEntities(sysFillRule, sysFillRule.getRuleItems(), FillRuleItem::setFillRuleId);
-        return findOne(sysFillRuleDTO.getId()).orElseThrow();
+        this.createEntityAndRelatedEntities(sysFillRule, sysFillRule.getRuleItems(), FillRuleItem::setFillRuleId);
+        return findOne(sysFillRule.getId()).orElseThrow();
     }
 
     /**

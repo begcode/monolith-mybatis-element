@@ -2,9 +2,25 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-// import monacoEditorPlugin from 'vite-plugin-monaco-editor';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import visualizer from 'rollup-plugin-visualizer';
+import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 import UnoCSS from 'unocss/vite';
+import dts from 'vite-plugin-dts';
 
+const configVisualizerConfig = () => {
+  if (process.env.REPORT === 'true') {
+    return [
+      visualizer({
+        filename: './node_modules/.cache/visualizer/stats.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+      }),
+    ];
+  }
+  return [];
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,12 +28,25 @@ export default defineConfig({
     vue(),
     vueJsx(),
     UnoCSS(),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+      // default
+      symbolId: 'icon-[dir]-[name]',
+    }),
+    dts({
+      outDir: ['typings'],
+      tsconfigPath: path.resolve(__dirname, 'tsconfig.json'),
+    }),
+    ...configVisualizerConfig(),
+    monacoEditorPlugin({
+      languageWorkers: ['editorWorkerService', 'typescript', 'json', 'html'],
+    }),
   ],
   publicDir: false,
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '#': path.resolve(__dirname, './types'),
+      '#': path.resolve(__dirname, './src/types'),
     },
   },
   build: {
@@ -35,7 +64,7 @@ export default defineConfig({
       transformMixedEsModules: true,
     },
     rollupOptions: {
-      external: ['vue', 'vue-i18n', 'ant-design-vue', 'vxe-table'],
+      external: ['vue', 'vue-i18n', 'ant-design-vue'],
       output: {
         banner: chunk => {
           if (chunk.name === 'index') {
@@ -46,7 +75,6 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           'vue-i18n': 'VueI18n',
-          'vxe-table': 'VxeTable',
           'ant-design-vue': 'AntDesignVue',
         },
       },

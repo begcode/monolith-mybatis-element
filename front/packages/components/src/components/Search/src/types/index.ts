@@ -1,4 +1,5 @@
 import { FormSchema } from '@/components/Form';
+import type { Recordable } from '#/global.d';
 
 export interface SearchProps {
   schema?: FormSchema[];

@@ -98,22 +98,22 @@
                     v-if="xGrid.isEditByRow(row) && xGrid.props.editConfig.mode === 'row'"
                     :key="operation.name"
                     :icon="operation.icon || 'step-forward-outlined'"
-                    :title="operation.title || '保存'"
+                    :title="getButtonTitle(operation.title || '保存', row)"
                     @click="rowClick('save', row)"
                   >
                     <Icon icon="ant-design:save-outlined" #icon v-if="!operation.link" />
-                    <span v-else>{{ operation.title || '保存' }}</span>
+                    <span v-else>{{ getButtonTitle(operation.title || '保存', row) }}</span>
                   </ElButton>
                   <ElButton
+                    v-else
                     :type="operation.type || 'primary'"
                     :link="operation.link"
-                    v-else
-                    :title="operation.title || '编辑'"
+                    :title="getButtonTitle(operation.title || '编辑', row)"
                     shape="circle"
                     @click="rowClick('edit', row)"
                   >
                     <Icon icon="ant-design:edit-outlined" #icon v-if="!operation.link" />
-                    <span v-else>{{ operation.title || '编辑' }}</span>
+                    <span v-else>{{ getButtonTitle(operation.title || '编辑', row) }}</span>
                   </ElButton>
                 </template>
                 <template v-else-if="operation.name === 'delete' && !operation.disabled">
@@ -121,12 +121,12 @@
                     :type="operation.type || 'danger'"
                     :link="operation.link"
                     :key="operation.name"
-                    :title="operation.title || '删除'"
+                    :title="getButtonTitle(operation.title || '删除', row)"
                     shape="circle"
                     @click="rowClick('delete', row)"
                   >
                     <Icon :icon="operation.icon || 'ant-design:delete-outlined'" #icon v-if="!operation.link" />
-                    <span v-else>{{ operation.title || '删除' }}</span>
+                    <span v-else>{{ getButtonTitle(operation.title || '删除', row) }}</span>
                   </ElButton>
                 </template>
                 <template v-else>
@@ -135,12 +135,12 @@
                     :link="operation.link"
                     v-if="!operation.disabled"
                     :key="operation.name"
-                    :title="operation.title || '操作'"
+                    :title="getButtonTitle(operation.title || '操作', row)"
                     shape="circle"
                     @click="rowClick(operation.name, row)"
                   >
                     <Icon :icon="operation.icon || 'ant-design:info-circle-outlined'" v-if="!operation.link" #icon />
-                    <span v-else>{{ operation.title || '操作' }}</span>
+                    <span v-else>{{ getButtonTitle(operation.title || '操作', row) }}</span>
                   </ElButton>
                 </template>
               </template>
@@ -149,10 +149,12 @@
                   <ElDropdownMenu @click="rowMoreClick($event, row)" style="border-radius: 25%">
                     <ElDropdownItem
                       :key="operation.name"
-                      v-for="operation in tableRowMoreOperations.filter(operation => !operation.disabled)"
+                      v-for="operation in tableRowMoreOperations.filter(
+                        operationItem => !operationItem.disabled && !(operationItem.hide && operationItem.hide(row)),
+                      )"
                     >
                       <Icon :icon="operation.icon" v-if="operation.icon" />
-                      <span v-if="operation.link">{{ operation.title }}</span>
+                      <span v-if="operation.link">{{ getButtonTitle(operation.title || '操作', row) }}</span>
                     </ElDropdownItem>
                   </ElDropdownMenu>
                 </template>
@@ -375,6 +377,7 @@ const drawerConfig = reactive<any>({
   entityId: '',
   modelValue: false,
 });
+const queryParams = ref<any>({ ...props.query });
 const gridOptions = reactive<VxeGridProps>({
   ...config.baseGridOptions(),
   customConfig: {
@@ -397,18 +400,17 @@ const gridOptions = reactive<VxeGridProps>({
       query: async ({ filters, page, sort, sorts }) => {
         console.log('filters', filters);
         console.log('sorts', sorts);
-        const queryParams: any = {};
-        queryParams.page = page?.currentPage > 0 ? page.currentPage - 1 : 0;
-        queryParams.size = page?.pageSize;
+        queryParams.value.page = page?.currentPage > 0 ? page.currentPage - 1 : 0;
+        queryParams.value.size = page?.pageSize;
         if (sort && sort.field) {
-          queryParams.sort = [sort.field + ',' + (sort.order === 'desc' ? 'DESC' : 'ASC')];
+          queryParams.value.sort = [sort.field + ',' + (sort.order === 'desc' ? 'DESC' : 'ASC')];
         }
         if (searchValue.value) {
-          queryParams['jhiCommonSearchKeywords'] = searchValue.value;
+          queryParams.value['jhiCommonSearchKeywords'] = searchValue.value;
         } else {
-          Object.assign(queryParams, getSearchQueryData(searchFormConfig));
+          Object.assign(queryParams.value, getSearchQueryData(searchFormConfig));
         }
-        return await apis.find(queryParams);
+        return await apis.find(queryParams.value);
       },
       queryAll: async () => await apis.find({ size: -1 }),
       delete: async records => await apis.deleteByIds(records.body.removeRecords.map(record => record.id)),
@@ -800,6 +802,16 @@ const rowClickHandler = (name, operation, row) => {
       }
   }
 };
+const getButtonTitle = (title: any, row: any) => {
+  if (typeof title === 'function') {
+    return title(row);
+  }
+  return title;
+};
+const getSelectRows = () => {
+  return toRaw(selectedRows);
+};
+defineExpose({ getSelectRows });
 </script>
 <style scoped>
 .card-header {

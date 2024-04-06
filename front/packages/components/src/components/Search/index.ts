@@ -2,6 +2,7 @@ import { FormSchema, FormSetProps } from '../Form';
 import Search from './src/Search.vue';
 
 export type { SearchProps } from './src/types';
+import type { Recordable } from '#/global.d';
 
 export interface SearchExpose {
   setValues: (data: Recordable) => void;

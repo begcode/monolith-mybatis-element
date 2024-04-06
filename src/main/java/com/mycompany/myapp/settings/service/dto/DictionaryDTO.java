@@ -6,9 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -17,9 +16,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.settings.domain.Dictionary}的DTO。
  */
 @Schema(description = "数据字典")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class DictionaryDTO implements Serializable {
 
@@ -118,11 +116,11 @@ public class DictionaryDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof DictionaryDTO)) {
+
+        if (!(o instanceof DictionaryDTO dictionaryDTO)) {
             return false;
         }
 
-        DictionaryDTO dictionaryDTO = (DictionaryDTO) o;
         if (this.id == null) {
             return false;
         }

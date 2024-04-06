@@ -16,7 +16,6 @@ import com.mycompany.myapp.settings.repository.SiteConfigRepository;
 import com.mycompany.myapp.settings.service.dto.SiteConfigDTO;
 import com.mycompany.myapp.settings.service.mapper.SiteConfigMapper;
 import java.util.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -30,11 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.settings.domain.SiteConfig}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class SiteConfigBaseService<R extends SiteConfigRepository, E extends SiteConfig>
     extends BaseServiceImpl<SiteConfigRepository, SiteConfig> {
 
     private final Logger log = LoggerFactory.getLogger(SiteConfigBaseService.class);
-    private final List<String> relationNames = Arrays.asList("items");
+    private final List<String> relationNames = List.of("items");
 
     protected final SiteConfigRepository siteConfigRepository;
 
@@ -78,17 +78,16 @@ public class SiteConfigBaseService<R extends SiteConfigRepository, E extends Sit
     @Transactional(rollbackFor = Exception.class)
     public SiteConfigDTO update(SiteConfigDTO siteConfigDTO) {
         log.debug("Request to update SiteConfig : {}", siteConfigDTO);
-
         SiteConfig siteConfig = siteConfigMapper.toEntity(siteConfigDTO);
 
-        this.updateEntityAndRelatedEntities(
+        this.createEntityAndRelatedEntities(
                 siteConfig,
                 siteConfig.getItems(),
                 CommonFieldData::setOwnerEntityId,
                 CommonFieldData::setOwnerEntityName,
                 "SiteConfig"
             );
-        return findOne(siteConfigDTO.getId()).orElseThrow();
+        return findOne(siteConfig.getId()).orElseThrow();
     }
 
     /**

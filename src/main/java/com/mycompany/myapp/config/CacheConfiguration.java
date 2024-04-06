@@ -87,6 +87,7 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.system.domain.AnnouncementRecord.class.getName());
             createCache(cm, com.mycompany.myapp.taskjob.domain.TaskJobConfig.class.getName());
             createCache(cm, com.mycompany.myapp.log.domain.SysLog.class.getName());
+            createCache(cm, com.mycompany.myapp.system.domain.FormConfig.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

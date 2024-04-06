@@ -41,12 +41,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.system.domain.SmsSupplier}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends SmsSupplier>
     extends BaseServiceImpl<SmsSupplierRepository, SmsSupplier>
     implements SmsReadConfig {
 
     private final Logger log = LoggerFactory.getLogger(SmsSupplierBaseService.class);
-    private final List<String> relationNames = Arrays.asList();
+    private final List<String> relationNames = List.of();
 
     protected final SmsSupplierRepository smsSupplierRepository;
 
@@ -89,12 +90,11 @@ public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends S
     @Transactional(rollbackFor = Exception.class)
     public SmsSupplierDTO update(SmsSupplierDTO smsSupplierDTO) {
         log.debug("Request to update SmsSupplier : {}", smsSupplierDTO);
-
         SmsSupplier smsSupplier = smsSupplierMapper.toEntity(smsSupplierDTO);
 
-        smsSupplierRepository.updateById(smsSupplier);
+        this.saveOrUpdate(smsSupplier);
         SmsFactory.createSmsBlend(this, smsSupplier.getId().toString());
-        return findOne(smsSupplierDTO.getId()).orElseThrow();
+        return findOne(smsSupplier.getId()).orElseThrow();
     }
 
     /**

@@ -5,7 +5,7 @@
   "description": "Description for testElement",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=8192 vite build && esno ./build/script/postBuild.ts",
+    "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=8192 vite build",
     "build:analyze": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build --mode analyze",
     "build:docker": "vite build --mode docker",
     "clean-www": "rimraf target/classes/static/app/{src,target/}",
@@ -148,7 +148,7 @@
     "vue-tsc": "1.8.27"
   },
   "engines": {
-    "node": ">=20.11.0"
+    "node": ">=20.11.1"
   },
   "cacheDirectories": [
     "node_modules"

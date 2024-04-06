@@ -1,7 +1,7 @@
 import { VueTypeValidableDef, VueTypesInterface, createTypes, toValidableType } from 'vue-types';
-import { CSSProperties, VNodeChild } from 'vue';
+import { CSSProperties, VNodeChild, VNode } from 'vue';
 
-export type VueNode = VNodeChild | JSX.Element;
+export type VueNode = VNodeChild | VNode;
 
 // 自定义扩展vue-types
 type PropTypes = VueTypesInterface & {

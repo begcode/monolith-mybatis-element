@@ -28,6 +28,7 @@ import { Editor } from '@/components/Editor';
 import { CodeEditor } from '@/components/CodeEditor';
 import { IconPicker } from '@/components/IconPicker';
 import { ImageUpload } from '@/components/Upload';
+import type { Recordable } from '#/global.d';
 
 const componentMap: Recordable<Component, ComponentName> = {
   RadioGroup: ElRadioGroup,

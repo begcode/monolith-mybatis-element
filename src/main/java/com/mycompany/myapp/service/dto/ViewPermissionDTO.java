@@ -8,9 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 // jhipster-needle-add-import - JHipster will add getters and setters here, do not remove
 
@@ -19,9 +18,8 @@ import lombok.ToString;
  * {@link com.mycompany.myapp.domain.ViewPermission}的DTO。
  */
 @Schema(description = "可视权限\n权限分为菜单权限、按钮权限等\n")
-@Data
-@ToString
-@EqualsAndHashCode
+@Setter
+@Getter
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class ViewPermissionDTO implements Serializable {
 
@@ -281,6 +279,11 @@ public class ViewPermissionDTO implements Serializable {
         return this;
     }
 
+    public ViewPermissionDTO parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     // jhipster-needle-dto-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -288,11 +291,11 @@ public class ViewPermissionDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ViewPermissionDTO)) {
+
+        if (!(o instanceof ViewPermissionDTO viewPermissionDTO)) {
             return false;
         }
 
-        ViewPermissionDTO viewPermissionDTO = (ViewPermissionDTO) o;
         if (this.id == null) {
             return false;
         }

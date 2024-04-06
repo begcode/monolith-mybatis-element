@@ -16,7 +16,6 @@ import com.mycompany.myapp.security.annotation.PermissionDefine;
 import com.mycompany.myapp.service.dto.ApiPermissionDTO;
 import com.mycompany.myapp.service.mapper.ApiPermissionMapper;
 import java.util.*;
-import java.util.Arrays;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +33,18 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 /**
  * Service Implementation for managing {@link com.mycompany.myapp.domain.ApiPermission}.
  */
+@SuppressWarnings("UnusedReturnValue")
 public class ApiPermissionBaseService<R extends ApiPermissionRepository, E extends ApiPermission>
     extends BaseServiceImpl<ApiPermissionRepository, ApiPermission> {
 
     private final Logger log = LoggerFactory.getLogger(ApiPermissionBaseService.class);
 
-    private final List<String> relationCacheNames = Arrays.asList(
+    private final List<String> relationCacheNames = List.of(
         com.mycompany.myapp.domain.ApiPermission.class.getName() + ".parent",
         com.mycompany.myapp.domain.ApiPermission.class.getName() + ".children",
         com.mycompany.myapp.domain.Authority.class.getName() + ".apiPermissions"
     );
-    private final List<String> relationNames = Arrays.asList("children", "parent", "authorities");
+    private final List<String> relationNames = List.of("children", "parent", "authorities");
 
     protected final ApiPermissionRepository apiPermissionRepository;
 
@@ -91,11 +91,11 @@ public class ApiPermissionBaseService<R extends ApiPermissionRepository, E exten
     @Transactional(rollbackFor = Exception.class)
     public ApiPermissionDTO update(ApiPermissionDTO apiPermissionDTO) {
         log.debug("Request to update ApiPermission : {}", apiPermissionDTO);
-
         ApiPermission apiPermission = apiPermissionMapper.toEntity(apiPermissionDTO);
+        clearChildrenCache();
 
-        apiPermissionRepository.updateById(apiPermission);
-        return findOne(apiPermissionDTO.getId()).orElseThrow();
+        this.saveOrUpdate(apiPermission);
+        return findOne(apiPermission.getId()).orElseThrow();
     }
 
     /**
