@@ -1,7 +1,7 @@
 package com.mycompany.myapp.system.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -114,8 +114,7 @@ public class SmsMessageBaseService<R extends SmsMessageRepository, E extends Sms
      */
     public Optional<SmsMessageDTO> findOne(Long id) {
         log.debug("Request to get SmsMessage : {}", id);
-        return Optional
-            .ofNullable(smsMessageRepository.selectById(id))
+        return Optional.ofNullable(smsMessageRepository.selectById(id))
             .map(smsMessage -> {
                 Binder.bindRelations(smsMessage);
                 return smsMessage;
@@ -145,23 +144,25 @@ public class SmsMessageBaseService<R extends SmsMessageRepository, E extends Sms
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<SmsMessage> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeSmsMessageDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeSmsMessageDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<SmsMessage> smsMessageList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(smsMessageList)) {
                 smsMessageList.forEach(smsMessage -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            smsMessage,
-                            relationName,
-                            BeanUtil.getFieldValue(smsMessageMapper.toEntity(changeSmsMessageDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                smsMessage,
+                                relationName,
+                                BeanUtil.getFieldValue(smsMessageMapper.toEntity(changeSmsMessageDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(smsMessage, relationshipNames);
                 });

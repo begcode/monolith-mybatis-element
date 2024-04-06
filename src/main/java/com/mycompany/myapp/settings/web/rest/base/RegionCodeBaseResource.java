@@ -87,8 +87,7 @@ public class RegionCodeBaseResource {
             throw new BadRequestAlertException("A new regionCode cannot already have an ID", ENTITY_NAME, "idexists");
         }
         RegionCodeDTO result = regionCodeService.save(regionCodeDTO);
-        return ResponseEntity
-            .created(new URI("/api/region-codes/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/region-codes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class RegionCodeBaseResource {
         } else {
             result = regionCodeService.update(regionCodeDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, regionCodeDTO.getId().toString()))
             .body(result);
     }
@@ -272,8 +270,7 @@ public class RegionCodeBaseResource {
         log.debug("REST request to delete RegionCode : {}", id);
 
         regionCodeService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -361,8 +358,7 @@ public class RegionCodeBaseResource {
         if (ids != null) {
             ids.forEach(regionCodeService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

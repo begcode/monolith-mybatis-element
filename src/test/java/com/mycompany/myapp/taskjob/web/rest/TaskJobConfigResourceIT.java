@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.JobStatus;
 import com.mycompany.myapp.taskjob.domain.TaskJobConfig;
 import com.mycompany.myapp.taskjob.repository.TaskJobConfigRepository;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class TaskJobConfigResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -1052,10 +1052,12 @@ public class TaskJobConfigResourceIT {
 
         partialUpdatedTaskJobConfig
             .name(UPDATED_NAME)
-            .cronExpression(UPDATED_CRON_EXPRESSION)
+            .jobClassName(UPDATED_JOB_CLASS_NAME)
             .description(UPDATED_DESCRIPTION)
             .jobStatus(UPDATED_JOB_STATUS)
-            .createdDate(UPDATED_CREATED_DATE);
+            .createdDate(UPDATED_CREATED_DATE)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
 
         restTaskJobConfigMockMvc
             .perform(
@@ -1070,15 +1072,15 @@ public class TaskJobConfigResourceIT {
         assertThat(taskJobConfigList).hasSize(databaseSizeBeforeUpdate);
         TaskJobConfig testTaskJobConfig = taskJobConfigList.get(taskJobConfigList.size() - 1);
         assertThat(testTaskJobConfig.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testTaskJobConfig.getJobClassName()).isEqualTo(DEFAULT_JOB_CLASS_NAME);
-        assertThat(testTaskJobConfig.getCronExpression()).isEqualTo(UPDATED_CRON_EXPRESSION);
+        assertThat(testTaskJobConfig.getJobClassName()).isEqualTo(UPDATED_JOB_CLASS_NAME);
+        assertThat(testTaskJobConfig.getCronExpression()).isEqualTo(DEFAULT_CRON_EXPRESSION);
         assertThat(testTaskJobConfig.getParameter()).isEqualTo(DEFAULT_PARAMETER);
         assertThat(testTaskJobConfig.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testTaskJobConfig.getJobStatus()).isEqualTo(UPDATED_JOB_STATUS);
         assertThat(testTaskJobConfig.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testTaskJobConfig.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
-        assertThat(testTaskJobConfig.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
-        assertThat(testTaskJobConfig.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testTaskJobConfig.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testTaskJobConfig.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
     }
 
     @Test

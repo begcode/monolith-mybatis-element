@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.ResourceCategory;
 import com.mycompany.myapp.domain.UploadImage;
 import com.mycompany.myapp.repository.UploadImageRepository;
@@ -32,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class UploadImageResourceIT {
 
     private static final String DEFAULT_URL = "AAAAAAAAAA";
@@ -2086,18 +2086,15 @@ public class UploadImageResourceIT {
         partialUpdatedUploadImage.setId(uploadImage.getId());
 
         partialUpdatedUploadImage
+            .url(UPDATED_URL)
             .fullName(UPDATED_FULL_NAME)
-            .ext(UPDATED_EXT)
             .type(UPDATED_TYPE)
             .folder(UPDATED_FOLDER)
             .businessTitle(UPDATED_BUSINESS_TITLE)
-            .createAt(UPDATED_CREATE_AT)
-            .fileSize(UPDATED_FILE_SIZE)
+            .businessDesc(UPDATED_BUSINESS_DESC)
             .smartUrl(UPDATED_SMART_URL)
             .mediumUrl(UPDATED_MEDIUM_URL)
-            .createdDate(UPDATED_CREATED_DATE)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
 
         restUploadImageMockMvc
             .perform(
@@ -2111,27 +2108,27 @@ public class UploadImageResourceIT {
         List<UploadImage> uploadImageList = uploadImageRepository.findAll();
         assertThat(uploadImageList).hasSize(databaseSizeBeforeUpdate);
         UploadImage testUploadImage = uploadImageList.get(uploadImageList.size() - 1);
-        assertThat(testUploadImage.getUrl()).isEqualTo(DEFAULT_URL);
+        assertThat(testUploadImage.getUrl()).isEqualTo(UPDATED_URL);
         assertThat(testUploadImage.getFullName()).isEqualTo(UPDATED_FULL_NAME);
         assertThat(testUploadImage.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testUploadImage.getExt()).isEqualTo(UPDATED_EXT);
+        assertThat(testUploadImage.getExt()).isEqualTo(DEFAULT_EXT);
         assertThat(testUploadImage.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testUploadImage.getPath()).isEqualTo(DEFAULT_PATH);
         assertThat(testUploadImage.getFolder()).isEqualTo(UPDATED_FOLDER);
         assertThat(testUploadImage.getOwnerEntityName()).isEqualTo(DEFAULT_OWNER_ENTITY_NAME);
         assertThat(testUploadImage.getOwnerEntityId()).isEqualTo(DEFAULT_OWNER_ENTITY_ID);
         assertThat(testUploadImage.getBusinessTitle()).isEqualTo(UPDATED_BUSINESS_TITLE);
-        assertThat(testUploadImage.getBusinessDesc()).isEqualTo(DEFAULT_BUSINESS_DESC);
+        assertThat(testUploadImage.getBusinessDesc()).isEqualTo(UPDATED_BUSINESS_DESC);
         assertThat(testUploadImage.getBusinessStatus()).isEqualTo(DEFAULT_BUSINESS_STATUS);
-        assertThat(testUploadImage.getCreateAt()).isEqualTo(UPDATED_CREATE_AT);
-        assertThat(testUploadImage.getFileSize()).isEqualTo(UPDATED_FILE_SIZE);
+        assertThat(testUploadImage.getCreateAt()).isEqualTo(DEFAULT_CREATE_AT);
+        assertThat(testUploadImage.getFileSize()).isEqualTo(DEFAULT_FILE_SIZE);
         assertThat(testUploadImage.getSmartUrl()).isEqualTo(UPDATED_SMART_URL);
         assertThat(testUploadImage.getMediumUrl()).isEqualTo(UPDATED_MEDIUM_URL);
         assertThat(testUploadImage.getReferenceCount()).isEqualTo(DEFAULT_REFERENCE_COUNT);
         assertThat(testUploadImage.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
-        assertThat(testUploadImage.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
+        assertThat(testUploadImage.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testUploadImage.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
-        assertThat(testUploadImage.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testUploadImage.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
     }
 
     @Test

@@ -5,6 +5,7 @@ import static com.mycompany.myapp.domain.UploadImageTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.web.rest.TestUtil;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 
 class UploadImageTest {

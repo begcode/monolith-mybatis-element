@@ -1,7 +1,7 @@
 package com.mycompany.myapp.settings.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -122,8 +122,7 @@ public class SysFillRuleBaseService<R extends SysFillRuleRepository, E extends S
      */
     public Optional<SysFillRuleDTO> findOne(Long id) {
         log.debug("Request to get SysFillRule : {}", id);
-        return Optional
-            .ofNullable(sysFillRuleRepository.selectById(id))
+        return Optional.ofNullable(sysFillRuleRepository.selectById(id))
             .map(sysFillRule -> {
                 Binder.bindRelations(sysFillRule);
                 return sysFillRule;
@@ -158,23 +157,25 @@ public class SysFillRuleBaseService<R extends SysFillRuleRepository, E extends S
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<SysFillRule> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeSysFillRuleDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeSysFillRuleDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<SysFillRule> sysFillRuleList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(sysFillRuleList)) {
                 sysFillRuleList.forEach(sysFillRule -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            sysFillRule,
-                            relationName,
-                            BeanUtil.getFieldValue(sysFillRuleMapper.toEntity(changeSysFillRuleDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                sysFillRule,
+                                relationName,
+                                BeanUtil.getFieldValue(sysFillRuleMapper.toEntity(changeSysFillRuleDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(sysFillRule, relationshipNames);
                 });

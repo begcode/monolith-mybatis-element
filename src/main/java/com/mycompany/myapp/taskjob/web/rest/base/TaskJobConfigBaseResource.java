@@ -87,8 +87,7 @@ public class TaskJobConfigBaseResource {
             throw new BadRequestAlertException("A new taskJobConfig cannot already have an ID", ENTITY_NAME, "idexists");
         }
         TaskJobConfigDTO result = taskJobConfigService.save(taskJobConfigDTO);
-        return ResponseEntity
-            .created(new URI("/api/task-job-configs/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/task-job-configs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class TaskJobConfigBaseResource {
         } else {
             result = taskJobConfigService.update(taskJobConfigDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, taskJobConfigDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class TaskJobConfigBaseResource {
         log.debug("REST request to delete TaskJobConfig : {}", id);
 
         taskJobConfigService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -325,8 +322,7 @@ public class TaskJobConfigBaseResource {
         if (ids != null) {
             ids.forEach(taskJobConfigService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

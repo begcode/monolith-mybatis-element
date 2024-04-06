@@ -1,4 +1,4 @@
-@import "./iconfont/iconfont.css";
+@import './iconfont/iconfont.css';
 
 .splitter-pane-resizer {
   box-sizing: border-box;
@@ -17,8 +17,8 @@
 }
 
 .splitter-pane-resizer.horizontal:before {
-  content: "\eda3";
-  font-family: "iconfont";
+  content: '\eda3';
+  font-family: 'iconfont';
   font-size: 13px;
   color: #000;
   position: absolute;
@@ -35,8 +35,8 @@
 }
 
 .splitter-pane-resizer.vertical:before {
-  content: "\e647";
-  font-family: "iconfont";
+  content: '\e647';
+  font-family: 'iconfont';
   font-size: 13px;
   color: #000;
   position: absolute;

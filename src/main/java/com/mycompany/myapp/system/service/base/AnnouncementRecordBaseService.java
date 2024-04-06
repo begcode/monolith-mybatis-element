@@ -2,8 +2,8 @@ package com.mycompany.myapp.system.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -123,8 +123,7 @@ public class AnnouncementRecordBaseService<R extends AnnouncementRecordRepositor
      */
     public Optional<AnnouncementRecordDTO> findOne(Long id) {
         log.debug("Request to get AnnouncementRecord : {}", id);
-        return Optional
-            .ofNullable(announcementRecordRepository.selectById(id))
+        return Optional.ofNullable(announcementRecordRepository.selectById(id))
             .map(announcementRecord -> {
                 Binder.bindRelations(announcementRecord);
                 return announcementRecord;
@@ -184,23 +183,25 @@ public class AnnouncementRecordBaseService<R extends AnnouncementRecordRepositor
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<AnnouncementRecord> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeAnnouncementRecordDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeAnnouncementRecordDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<AnnouncementRecord> announcementRecordList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(announcementRecordList)) {
                 announcementRecordList.forEach(announcementRecord -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            announcementRecord,
-                            relationName,
-                            BeanUtil.getFieldValue(announcementRecordMapper.toEntity(changeAnnouncementRecordDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                announcementRecord,
+                                relationName,
+                                BeanUtil.getFieldValue(announcementRecordMapper.toEntity(changeAnnouncementRecordDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(announcementRecord, relationshipNames);
                 });

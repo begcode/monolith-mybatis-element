@@ -42,7 +42,6 @@ watch(
     immediate: true,
   },
 );
-
 // 多语言相关
 const localeStore = useLocaleStore();
 

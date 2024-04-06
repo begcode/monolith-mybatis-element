@@ -3,7 +3,7 @@ package com.mycompany.myapp.service.base;
 import cn.hutool.core.bean.BeanUtil;
 import cn.xuyanwu.spring.file.storage.FileInfo;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -119,8 +119,7 @@ public class UploadFileBaseService<R extends UploadFileRepository, E extends Upl
      */
     public Optional<UploadFileDTO> findOne(Long id) {
         log.debug("Request to get UploadFile : {}", id);
-        return Optional
-            .ofNullable(uploadFileRepository.selectById(id))
+        return Optional.ofNullable(uploadFileRepository.selectById(id))
             .map(uploadFile -> {
                 Binder.bindRelations(uploadFile);
                 return uploadFile;
@@ -182,23 +181,25 @@ public class UploadFileBaseService<R extends UploadFileRepository, E extends Upl
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<UploadFile> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeUploadFileDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeUploadFileDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<UploadFile> uploadFileList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(uploadFileList)) {
                 uploadFileList.forEach(uploadFile -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            uploadFile,
-                            relationName,
-                            BeanUtil.getFieldValue(uploadFileMapper.toEntity(changeUploadFileDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                uploadFile,
+                                relationName,
+                                BeanUtil.getFieldValue(uploadFileMapper.toEntity(changeUploadFileDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(uploadFile, relationshipNames);
                 });

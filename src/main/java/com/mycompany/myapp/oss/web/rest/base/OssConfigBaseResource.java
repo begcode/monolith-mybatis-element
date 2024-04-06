@@ -89,8 +89,7 @@ public class OssConfigBaseResource {
             throw new BadRequestAlertException("A new ossConfig cannot already have an ID", ENTITY_NAME, "idexists");
         }
         OssConfigDTO result = ossConfigService.save(ossConfigDTO);
-        return ResponseEntity
-            .created(new URI("/api/oss-configs/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/oss-configs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -136,8 +135,7 @@ public class OssConfigBaseResource {
         } else {
             result = ossConfigService.update(ossConfigDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, ossConfigDTO.getId().toString()))
             .body(result);
     }
@@ -274,8 +272,7 @@ public class OssConfigBaseResource {
         log.debug("REST request to delete OssConfig : {}", id);
 
         ossConfigService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -330,8 +327,7 @@ public class OssConfigBaseResource {
         if (ids != null) {
             ids.forEach(ossConfigService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

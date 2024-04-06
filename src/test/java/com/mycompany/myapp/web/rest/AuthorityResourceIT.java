@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.ApiPermission;
 import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.Authority;
@@ -31,7 +32,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class AuthorityResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -786,7 +786,7 @@ public class AuthorityResourceIT {
         Authority partialUpdatedAuthority = new Authority();
         partialUpdatedAuthority.setId(authority.getId());
 
-        partialUpdatedAuthority.info(UPDATED_INFO).order(UPDATED_ORDER);
+        partialUpdatedAuthority.code(UPDATED_CODE).info(UPDATED_INFO).order(UPDATED_ORDER).display(UPDATED_DISPLAY);
 
         restAuthorityMockMvc
             .perform(
@@ -801,10 +801,10 @@ public class AuthorityResourceIT {
         assertThat(authorityList).hasSize(databaseSizeBeforeUpdate);
         Authority testAuthority = authorityList.get(authorityList.size() - 1);
         assertThat(testAuthority.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testAuthority.getCode()).isEqualTo(DEFAULT_CODE);
+        assertThat(testAuthority.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAuthority.getInfo()).isEqualTo(UPDATED_INFO);
         assertThat(testAuthority.getOrder()).isEqualTo(UPDATED_ORDER);
-        assertThat(testAuthority.getDisplay()).isEqualTo(DEFAULT_DISPLAY);
+        assertThat(testAuthority.getDisplay()).isEqualTo(UPDATED_DISPLAY);
     }
 
     @Test

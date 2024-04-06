@@ -1,7 +1,7 @@
 package com.mycompany.myapp.taskjob.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -129,8 +129,7 @@ public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E exten
      */
     public Optional<TaskJobConfigDTO> findOne(Long id) {
         log.debug("Request to get TaskJobConfig : {}", id);
-        return Optional
-            .ofNullable(taskJobConfigRepository.selectById(id))
+        return Optional.ofNullable(taskJobConfigRepository.selectById(id))
             .map(taskJobConfig -> {
                 Binder.bindRelations(taskJobConfig);
                 return taskJobConfig;
@@ -230,13 +229,11 @@ public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E exten
         String ymd = yyyyMMddHHmmss.format(startDate.toInstant());
         String identity = jobName + ymd;
         startDate.setTime(startDate.getTime() + 100L);
-        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder
-            .newTrigger()
+        SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
             .withIdentity(identity, "immediate_group")
             .startAt(startDate)
             .build();
-        JobDetail jobDetail = JobBuilder
-            .newJob(getClass(jobName).getClass())
+        JobDetail jobDetail = JobBuilder.newJob(getClass(jobName).getClass())
             .withIdentity(identity)
             .usingJobData("parameter", taskJobConfig.getParameter())
             .build();
@@ -265,8 +262,7 @@ public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E exten
             scheduler.start();
 
             // 构建job信息
-            JobDetail jobDetail = JobBuilder
-                .newJob(getClass(jobClassName).getClass())
+            JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
                 .withIdentity(id)
                 .usingJobData("parameter", parameter)
                 .build();
@@ -318,23 +314,25 @@ public class TaskJobConfigBaseService<R extends TaskJobConfigRepository, E exten
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<TaskJobConfig> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeTaskJobConfigDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeTaskJobConfigDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<TaskJobConfig> taskJobConfigList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(taskJobConfigList)) {
                 taskJobConfigList.forEach(taskJobConfig -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            taskJobConfig,
-                            relationName,
-                            BeanUtil.getFieldValue(taskJobConfigMapper.toEntity(changeTaskJobConfigDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                taskJobConfig,
+                                relationName,
+                                BeanUtil.getFieldValue(taskJobConfigMapper.toEntity(changeTaskJobConfigDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(taskJobConfig, relationshipNames);
                 });

@@ -89,8 +89,7 @@ public class UReportFileBaseResource {
             throw new BadRequestAlertException("A new uReportFile cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UReportFileDTO result = uReportFileService.save(uReportFileDTO);
-        return ResponseEntity
-            .created(new URI("/api/u-report-files/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/u-report-files/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -136,8 +135,7 @@ public class UReportFileBaseResource {
         } else {
             result = uReportFileService.update(uReportFileDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uReportFileDTO.getId().toString()))
             .body(result);
     }
@@ -271,8 +269,7 @@ public class UReportFileBaseResource {
         log.debug("REST request to delete UReportFile : {}", id);
 
         uReportFileService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -327,8 +324,7 @@ public class UReportFileBaseResource {
         if (ids != null) {
             ids.forEach(uReportFileService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

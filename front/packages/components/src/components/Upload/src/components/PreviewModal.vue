@@ -6,7 +6,6 @@
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :class="prefixCls"
-    @register="register"
     :showCancelBtn="false"
     :showConfirmBtn="false"
   >
@@ -81,8 +80,8 @@ export default defineComponent({
     }
 
     return {
-      register,
-      closeModal,
+      // register,
+      // closeModal,
       fileListRef,
       columns: createPreviewColumns() as FileBasicColumn[],
       actionColumn: createPreviewActionColumn({ handleRemove, handleDownload }) as FileBasicColumn,

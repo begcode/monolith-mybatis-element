@@ -15,14 +15,12 @@ import lombok.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    @TableField(value = "id")
     private Long id;
 
     /**
@@ -180,6 +178,11 @@ public class Department implements Serializable {
         return this;
     }
 
+    public Department parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     public Department users(List<User> users) {
         this.users = users;
         return this;
@@ -202,5 +205,21 @@ public class Department implements Serializable {
     public int hashCode() {
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "Department{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", code='" + getCode() + "'" +
+            ", address='" + getAddress() + "'" +
+            ", phoneNum='" + getPhoneNum() + "'" +
+            ", logo='" + getLogo() + "'" +
+            ", contact='" + getContact() + "'" +
+            ", createUserId=" + getCreateUserId() +
+            ", createTime='" + getCreateTime() + "'" +
+            "}";
     }
 }

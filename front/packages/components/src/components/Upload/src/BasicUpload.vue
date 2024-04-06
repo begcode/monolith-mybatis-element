@@ -41,20 +41,20 @@
     </ElTooltip>
   </ElButtonGroup>
 
-<!--  <UploadModal-->
-<!--    v-bind="getBindValues"-->
-<!--    :prefixCls="`${prefixCls}-upload-modal`"-->
-<!--    @register="registerUploadModal"-->
-<!--    @change="handleChange"-->
-<!--    @delete="handleDelete"-->
-<!--  />-->
+  <!--  <UploadModal-->
+  <!--    v-bind="getBindValues"-->
+  <!--    :prefixCls="`${prefixCls}-upload-modal`"-->
+  <!--    @register="registerUploadModal"-->
+  <!--    @change="handleChange"-->
+  <!--    @delete="handleDelete"-->
+  <!--  />-->
 
-<!--  <UploadPreviewModal-->
-<!--    :prefixCls="`${prefixCls}-preview-modal`"-->
-<!--    @register="registerPreviewModal"-->
-<!--    @list-change="handlePreviewChange"-->
-<!--    @delete="handlePreviewDelete"-->
-<!--  />-->
+  <!--  <UploadPreviewModal-->
+  <!--    :prefixCls="`${prefixCls}-preview-modal`"-->
+  <!--    @register="registerPreviewModal"-->
+  <!--    @list-change="handlePreviewChange"-->
+  <!--    @delete="handlePreviewDelete"-->
+  <!--  />-->
 </template>
 
 <script lang="ts">

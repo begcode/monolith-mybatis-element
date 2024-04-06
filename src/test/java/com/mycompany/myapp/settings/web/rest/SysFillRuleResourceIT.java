@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.ResetFrequency;
 import com.mycompany.myapp.settings.domain.SysFillRule;
 import com.mycompany.myapp.settings.repository.SysFillRuleRepository;
@@ -26,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SysFillRuleResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -1285,11 +1285,11 @@ public class SysFillRuleResourceIT {
 
         partialUpdatedSysFillRule
             .name(UPDATED_NAME)
+            .desc(UPDATED_DESC)
             .enabled(UPDATED_ENABLED)
-            .seqValue(UPDATED_SEQ_VALUE)
-            .fillValue(UPDATED_FILL_VALUE)
             .params(UPDATED_PARAMS)
             .resetStartTime(UPDATED_RESET_START_TIME)
+            .resetEndTime(UPDATED_RESET_END_TIME)
             .resetTime(UPDATED_RESET_TIME);
 
         restSysFillRuleMockMvc
@@ -1306,15 +1306,15 @@ public class SysFillRuleResourceIT {
         SysFillRule testSysFillRule = sysFillRuleList.get(sysFillRuleList.size() - 1);
         assertThat(testSysFillRule.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSysFillRule.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testSysFillRule.getDesc()).isEqualTo(DEFAULT_DESC);
+        assertThat(testSysFillRule.getDesc()).isEqualTo(UPDATED_DESC);
         assertThat(testSysFillRule.getEnabled()).isEqualTo(UPDATED_ENABLED);
         assertThat(testSysFillRule.getResetFrequency()).isEqualTo(DEFAULT_RESET_FREQUENCY);
-        assertThat(testSysFillRule.getSeqValue()).isEqualTo(UPDATED_SEQ_VALUE);
-        assertThat(testSysFillRule.getFillValue()).isEqualTo(UPDATED_FILL_VALUE);
+        assertThat(testSysFillRule.getSeqValue()).isEqualTo(DEFAULT_SEQ_VALUE);
+        assertThat(testSysFillRule.getFillValue()).isEqualTo(DEFAULT_FILL_VALUE);
         assertThat(testSysFillRule.getImplClass()).isEqualTo(DEFAULT_IMPL_CLASS);
         assertThat(testSysFillRule.getParams()).isEqualTo(UPDATED_PARAMS);
         assertThat(testSysFillRule.getResetStartTime()).isEqualTo(UPDATED_RESET_START_TIME);
-        assertThat(testSysFillRule.getResetEndTime()).isEqualTo(DEFAULT_RESET_END_TIME);
+        assertThat(testSysFillRule.getResetEndTime()).isEqualTo(UPDATED_RESET_END_TIME);
         assertThat(testSysFillRule.getResetTime()).isEqualTo(UPDATED_RESET_TIME);
     }
 

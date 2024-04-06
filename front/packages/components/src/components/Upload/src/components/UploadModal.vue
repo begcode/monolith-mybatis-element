@@ -37,16 +37,16 @@
 </template>
 
 <script lang="ts">
-import type {FileItem} from '../typing';
-import {UploadResultStatus} from '../typing';
+import type { FileItem } from '../typing';
+import { UploadResultStatus } from '../typing';
 
-import {computed, defineComponent, ref, toRefs, unref} from 'vue';
-import {ElAlert, ElButton, ElMessage, ElUpload} from 'element-plus';
+import { computed, defineComponent, ref, toRefs, unref } from 'vue';
+import { ElAlert, ElButton, ElMessage, ElUpload } from 'element-plus';
 import { Dialog } from '@/components/Dialog';
-import {get} from 'lodash-es';
-import {uploadProps} from '../props';
-import {createActionColumn, createTableColumns} from '../data';
-import {checkFileExtType, checkImgType, getBase64WithFile, useUploadType} from '../helper';
+import { get } from 'lodash-es';
+import { uploadProps } from '../props';
+import { createActionColumn, createTableColumns } from '../data';
+import { checkFileExtType, checkImgType, getBase64WithFile, useUploadType } from '../helper';
 import FileList from './FileList.vue';
 
 export default defineComponent({

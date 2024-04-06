@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.UReportFile;
 import com.mycompany.myapp.repository.UReportFileRepository;
 import com.mycompany.myapp.service.dto.UReportFileDTO;
@@ -23,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class UReportFileResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -621,7 +621,7 @@ public class UReportFileResourceIT {
         UReportFile partialUpdatedUReportFile = new UReportFile();
         partialUpdatedUReportFile.setId(uReportFile.getId());
 
-        partialUpdatedUReportFile.updateAt(UPDATED_UPDATE_AT);
+        partialUpdatedUReportFile.name(UPDATED_NAME).content(UPDATED_CONTENT).updateAt(UPDATED_UPDATE_AT);
 
         restUReportFileMockMvc
             .perform(
@@ -635,8 +635,8 @@ public class UReportFileResourceIT {
         List<UReportFile> uReportFileList = uReportFileRepository.findAll();
         assertThat(uReportFileList).hasSize(databaseSizeBeforeUpdate);
         UReportFile testUReportFile = uReportFileList.get(uReportFileList.size() - 1);
-        assertThat(testUReportFile.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testUReportFile.getContent()).isEqualTo(DEFAULT_CONTENT);
+        assertThat(testUReportFile.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testUReportFile.getContent()).isEqualTo(UPDATED_CONTENT);
         assertThat(testUReportFile.getCreateAt()).isEqualTo(DEFAULT_CREATE_AT);
         assertThat(testUReportFile.getUpdateAt()).isEqualTo(UPDATED_UPDATE_AT);
     }

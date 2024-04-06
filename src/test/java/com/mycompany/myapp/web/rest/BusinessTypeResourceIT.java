@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.BusinessType;
 import com.mycompany.myapp.repository.BusinessTypeRepository;
 import com.mycompany.myapp.service.dto.BusinessTypeDTO;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class BusinessTypeResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -609,8 +609,6 @@ public class BusinessTypeResourceIT {
         BusinessType partialUpdatedBusinessType = new BusinessType();
         partialUpdatedBusinessType.setId(businessType.getId());
 
-        partialUpdatedBusinessType.icon(UPDATED_ICON);
-
         restBusinessTypeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedBusinessType.getId())
@@ -626,7 +624,7 @@ public class BusinessTypeResourceIT {
         assertThat(testBusinessType.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testBusinessType.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testBusinessType.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testBusinessType.getIcon()).isEqualTo(UPDATED_ICON);
+        assertThat(testBusinessType.getIcon()).isEqualTo(DEFAULT_ICON);
     }
 
     @Test

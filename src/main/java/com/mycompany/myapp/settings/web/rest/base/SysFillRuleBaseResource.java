@@ -87,8 +87,7 @@ public class SysFillRuleBaseResource {
             throw new BadRequestAlertException("A new sysFillRule cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SysFillRuleDTO result = sysFillRuleService.save(sysFillRuleDTO);
-        return ResponseEntity
-            .created(new URI("/api/sys-fill-rules/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/sys-fill-rules/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class SysFillRuleBaseResource {
         } else {
             result = sysFillRuleService.update(sysFillRuleDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, sysFillRuleDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class SysFillRuleBaseResource {
         log.debug("REST request to delete SysFillRule : {}", id);
 
         sysFillRuleService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -325,8 +322,7 @@ public class SysFillRuleBaseResource {
         if (ids != null) {
             ids.forEach(sysFillRuleService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

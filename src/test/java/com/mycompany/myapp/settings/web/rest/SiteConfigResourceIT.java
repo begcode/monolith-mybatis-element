@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.settings.domain.SiteConfig;
 import com.mycompany.myapp.settings.repository.SiteConfigRepository;
 import com.mycompany.myapp.settings.service.dto.SiteConfigDTO;
@@ -22,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SiteConfigResourceIT {
 
     private static final String DEFAULT_CATEGORY_NAME = "AAAAAAAAAA";
@@ -1004,11 +1004,7 @@ public class SiteConfigResourceIT {
         SiteConfig partialUpdatedSiteConfig = new SiteConfig();
         partialUpdatedSiteConfig.setId(siteConfig.getId());
 
-        partialUpdatedSiteConfig
-            .categoryName(UPDATED_CATEGORY_NAME)
-            .sortValue(UPDATED_SORT_VALUE)
-            .builtIn(UPDATED_BUILT_IN)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
+        partialUpdatedSiteConfig.categoryKey(UPDATED_CATEGORY_KEY).sortValue(UPDATED_SORT_VALUE);
 
         restSiteConfigMockMvc
             .perform(
@@ -1022,14 +1018,14 @@ public class SiteConfigResourceIT {
         List<SiteConfig> siteConfigList = siteConfigRepository.findAll();
         assertThat(siteConfigList).hasSize(databaseSizeBeforeUpdate);
         SiteConfig testSiteConfig = siteConfigList.get(siteConfigList.size() - 1);
-        assertThat(testSiteConfig.getCategoryName()).isEqualTo(UPDATED_CATEGORY_NAME);
-        assertThat(testSiteConfig.getCategoryKey()).isEqualTo(DEFAULT_CATEGORY_KEY);
+        assertThat(testSiteConfig.getCategoryName()).isEqualTo(DEFAULT_CATEGORY_NAME);
+        assertThat(testSiteConfig.getCategoryKey()).isEqualTo(UPDATED_CATEGORY_KEY);
         assertThat(testSiteConfig.getDisabled()).isEqualTo(DEFAULT_DISABLED);
         assertThat(testSiteConfig.getSortValue()).isEqualTo(UPDATED_SORT_VALUE);
-        assertThat(testSiteConfig.getBuiltIn()).isEqualTo(UPDATED_BUILT_IN);
+        assertThat(testSiteConfig.getBuiltIn()).isEqualTo(DEFAULT_BUILT_IN);
         assertThat(testSiteConfig.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testSiteConfig.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
-        assertThat(testSiteConfig.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testSiteConfig.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testSiteConfig.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
     }
 

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.MessageSendType;
 import com.mycompany.myapp.domain.enumeration.SendStatus;
 import com.mycompany.myapp.system.domain.SmsMessage;
@@ -28,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SmsMessageResourceIT {
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
@@ -1317,14 +1317,10 @@ public class SmsMessageResourceIT {
         partialUpdatedSmsMessage.setId(smsMessage.getId());
 
         partialUpdatedSmsMessage
-            .title(UPDATED_TITLE)
-            .sendType(UPDATED_SEND_TYPE)
-            .receiver(UPDATED_RECEIVER)
-            .params(UPDATED_PARAMS)
+            .content(UPDATED_CONTENT)
             .sendTime(UPDATED_SEND_TIME)
-            .retryNum(UPDATED_RETRY_NUM)
+            .sendStatus(UPDATED_SEND_STATUS)
             .remark(UPDATED_REMARK)
-            .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
             .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
 
@@ -1340,17 +1336,17 @@ public class SmsMessageResourceIT {
         List<SmsMessage> smsMessageList = smsMessageRepository.findAll();
         assertThat(smsMessageList).hasSize(databaseSizeBeforeUpdate);
         SmsMessage testSmsMessage = smsMessageList.get(smsMessageList.size() - 1);
-        assertThat(testSmsMessage.getTitle()).isEqualTo(UPDATED_TITLE);
-        assertThat(testSmsMessage.getSendType()).isEqualTo(UPDATED_SEND_TYPE);
-        assertThat(testSmsMessage.getReceiver()).isEqualTo(UPDATED_RECEIVER);
-        assertThat(testSmsMessage.getParams()).isEqualTo(UPDATED_PARAMS);
-        assertThat(testSmsMessage.getContent()).isEqualTo(DEFAULT_CONTENT);
+        assertThat(testSmsMessage.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testSmsMessage.getSendType()).isEqualTo(DEFAULT_SEND_TYPE);
+        assertThat(testSmsMessage.getReceiver()).isEqualTo(DEFAULT_RECEIVER);
+        assertThat(testSmsMessage.getParams()).isEqualTo(DEFAULT_PARAMS);
+        assertThat(testSmsMessage.getContent()).isEqualTo(UPDATED_CONTENT);
         assertThat(testSmsMessage.getSendTime()).isEqualTo(UPDATED_SEND_TIME);
-        assertThat(testSmsMessage.getSendStatus()).isEqualTo(DEFAULT_SEND_STATUS);
-        assertThat(testSmsMessage.getRetryNum()).isEqualTo(UPDATED_RETRY_NUM);
+        assertThat(testSmsMessage.getSendStatus()).isEqualTo(UPDATED_SEND_STATUS);
+        assertThat(testSmsMessage.getRetryNum()).isEqualTo(DEFAULT_RETRY_NUM);
         assertThat(testSmsMessage.getFailResult()).isEqualTo(DEFAULT_FAIL_RESULT);
         assertThat(testSmsMessage.getRemark()).isEqualTo(UPDATED_REMARK);
-        assertThat(testSmsMessage.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testSmsMessage.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testSmsMessage.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testSmsMessage.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testSmsMessage.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);

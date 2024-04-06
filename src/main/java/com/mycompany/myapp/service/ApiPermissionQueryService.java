@@ -6,7 +6,7 @@ import static tech.jhipster.service.mybatis.AggregateUtil.buildAggregate;
 import static tech.jhipster.service.mybatis.AggregateUtil.buildGroupBy;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -76,12 +76,10 @@ public class ApiPermissionQueryService implements QueryService<ApiPermission> {
     public IPage<ApiPermissionDTO> findByCriteria(ApiPermissionCriteria criteria, Page<ApiPermission> page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final QueryWrapper<ApiPermission> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, ApiPermission.class, page)
-            .convert(apiPermission -> {
-                Binder.bindRelations(apiPermission, new String[] { "children" });
-                return apiPermissionMapper.toDto(apiPermission);
-            });
+        return Binder.joinQueryPage(queryWrapper, ApiPermission.class, page).convert(apiPermission -> {
+            Binder.bindRelations(apiPermission, new String[] { "children" });
+            return apiPermissionMapper.toDto(apiPermission);
+        });
     }
 
     /**
@@ -105,12 +103,10 @@ public class ApiPermissionQueryService implements QueryService<ApiPermission> {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         criteria.parentId().setSpecified(false);
         final QueryWrapper<ApiPermission> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, ApiPermission.class, page)
-            .convert(apiPermission -> {
-                Binder.bindRelations(apiPermission, new String[] { "parent" });
-                return apiPermissionMapper.toDto(apiPermission);
-            });
+        return Binder.joinQueryPage(queryWrapper, ApiPermission.class, page).convert(apiPermission -> {
+            Binder.bindRelations(apiPermission, new String[] { "parent" });
+            return apiPermissionMapper.toDto(apiPermission);
+        });
     }
 
     /**
@@ -189,37 +185,35 @@ public class ApiPermissionQueryService implements QueryService<ApiPermission> {
                 useOr = false;
             }
             Map<QueryWrapper<ApiPermission>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapper(criteria, ApiPermission.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<ApiPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<ApiPermission> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<ApiPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<ApiPermission> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);
@@ -265,37 +259,35 @@ public class ApiPermissionQueryService implements QueryService<ApiPermission> {
                 criteria,
                 ApiPermission.class
             );
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<ApiPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<ApiPermission> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<ApiPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<ApiPermission> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.MessageSendType;
 import com.mycompany.myapp.domain.enumeration.SmsTemplateType;
 import com.mycompany.myapp.system.domain.SmsSupplier;
@@ -32,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SmsTemplateResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -1197,12 +1197,11 @@ public class SmsTemplateResourceIT {
 
         partialUpdatedSmsTemplate
             .name(UPDATED_NAME)
-            .testJson(UPDATED_TEST_JSON)
+            .sendType(UPDATED_SEND_TYPE)
+            .type(UPDATED_TYPE)
             .enabled(UPDATED_ENABLED)
-            .createdBy(UPDATED_CREATED_BY)
             .createdDate(UPDATED_CREATED_DATE)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
-            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
 
         restSmsTemplateMockMvc
             .perform(
@@ -1218,16 +1217,16 @@ public class SmsTemplateResourceIT {
         SmsTemplate testSmsTemplate = smsTemplateList.get(smsTemplateList.size() - 1);
         assertThat(testSmsTemplate.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testSmsTemplate.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testSmsTemplate.getSendType()).isEqualTo(DEFAULT_SEND_TYPE);
+        assertThat(testSmsTemplate.getSendType()).isEqualTo(UPDATED_SEND_TYPE);
         assertThat(testSmsTemplate.getContent()).isEqualTo(DEFAULT_CONTENT);
-        assertThat(testSmsTemplate.getTestJson()).isEqualTo(UPDATED_TEST_JSON);
-        assertThat(testSmsTemplate.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testSmsTemplate.getTestJson()).isEqualTo(DEFAULT_TEST_JSON);
+        assertThat(testSmsTemplate.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testSmsTemplate.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testSmsTemplate.getEnabled()).isEqualTo(UPDATED_ENABLED);
-        assertThat(testSmsTemplate.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testSmsTemplate.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testSmsTemplate.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
         assertThat(testSmsTemplate.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
-        assertThat(testSmsTemplate.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
+        assertThat(testSmsTemplate.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
     }
 
     @Test

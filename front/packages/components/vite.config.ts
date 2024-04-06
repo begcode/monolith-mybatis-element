@@ -2,22 +2,9 @@ import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
-import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
-import visualizer from 'rollup-plugin-visualizer';
-import monacoEditorPlugin from 'vite-plugin-monaco-editor';
+// import monacoEditorPlugin from 'vite-plugin-monaco-editor';
 import UnoCSS from 'unocss/vite';
 
-const configVisualizerConfig = () => {
-  if (process.env.REPORT === 'true') {
-    return visualizer({
-      filename: './node_modules/.cache/visualizer/stats.html',
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-    });
-  }
-  return [];
-};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -25,13 +12,6 @@ export default defineConfig({
     vue(),
     vueJsx(),
     UnoCSS(),
-    createSvgIconsPlugin({
-      iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
-      // default
-      symbolId: 'icon-[dir]-[name]',
-    }),
-    configVisualizerConfig(),
-    monacoEditorPlugin(),
   ],
   publicDir: false,
   resolve: {
@@ -66,6 +46,7 @@ export default defineConfig({
         globals: {
           vue: 'Vue',
           'vue-i18n': 'VueI18n',
+          'vxe-table': 'VxeTable',
           'ant-design-vue': 'AntDesignVue',
         },
       },

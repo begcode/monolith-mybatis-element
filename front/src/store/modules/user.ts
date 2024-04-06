@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
+import { ElMessageBox } from 'element-plus';
 import { store } from '../index';
 import { useI18n } from '@/hooks/web/useI18n';
-import { ElMessageBox } from 'element-plus';
 import { useTagsViewStore } from '@/store/modules/tagsView';
 import router from '@/router';
 
@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', {
     },
   },
   actions: {
-    setUserInfo(userInfo: Object) {
+    setUserInfo(userInfo: any) {
       this.userInfo = userInfo;
     },
     setToken(token: string) {
@@ -34,16 +34,16 @@ export const useUserStore = defineStore('user', {
       this.token = '';
     },
     logoutConfirm() {
-      const { t } = useI18n()
+      const { t } = useI18n();
       ElMessageBox.confirm(t('common.loginOutMessage'), t('common.reminder'), {
         confirmButtonText: t('common.ok'),
         cancelButtonText: t('common.cancel'),
-        type: 'warning'
+        type: 'warning',
       })
         .then(() => {
           this.reset();
         })
-        .catch(() => {})
+        .catch(() => {});
     },
     reset() {
       const tagsViewStore = useTagsViewStore();

@@ -6,7 +6,7 @@ import static tech.jhipster.service.mybatis.AggregateUtil.buildAggregate;
 import static tech.jhipster.service.mybatis.AggregateUtil.buildGroupBy;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -74,12 +74,10 @@ public class UploadImageQueryService implements QueryService<UploadImage> {
     public IPage<UploadImageDTO> findByCriteria(UploadImageCriteria criteria, Page<UploadImage> page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final QueryWrapper<UploadImage> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, UploadImage.class, page)
-            .convert(uploadImage -> {
-                Binder.bindRelations(uploadImage, new String[] {});
-                return uploadImageMapper.toDto(uploadImage);
-            });
+        return Binder.joinQueryPage(queryWrapper, UploadImage.class, page).convert(uploadImage -> {
+            Binder.bindRelations(uploadImage, new String[] {});
+            return uploadImageMapper.toDto(uploadImage);
+        });
     }
 
     /**
@@ -163,37 +161,35 @@ public class UploadImageQueryService implements QueryService<UploadImage> {
                 useOr = false;
             }
             Map<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapper(criteria, UploadImage.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<UploadImage> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<UploadImage> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);
@@ -236,37 +232,35 @@ public class UploadImageQueryService implements QueryService<UploadImage> {
                 useOr = false;
             }
             Map<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapperNoJoin(criteria, UploadImage.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<UploadImage> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<UploadImage>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<UploadImage> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);

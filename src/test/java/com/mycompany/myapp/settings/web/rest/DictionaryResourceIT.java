@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.settings.domain.Dictionary;
 import com.mycompany.myapp.settings.repository.DictionaryRepository;
 import com.mycompany.myapp.settings.service.dto.DictionaryDTO;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class DictionaryResourceIT {
 
     private static final String DEFAULT_DICT_NAME = "AAAAAAAAAA";
@@ -746,11 +746,7 @@ public class DictionaryResourceIT {
         Dictionary partialUpdatedDictionary = new Dictionary();
         partialUpdatedDictionary.setId(dictionary.getId());
 
-        partialUpdatedDictionary
-            .dictKey(UPDATED_DICT_KEY)
-            .disabled(UPDATED_DISABLED)
-            .sortValue(UPDATED_SORT_VALUE)
-            .syncEnum(UPDATED_SYNC_ENUM);
+        partialUpdatedDictionary.dictKey(UPDATED_DICT_KEY).disabled(UPDATED_DISABLED).builtIn(UPDATED_BUILT_IN);
 
         restDictionaryMockMvc
             .perform(
@@ -767,9 +763,9 @@ public class DictionaryResourceIT {
         assertThat(testDictionary.getDictName()).isEqualTo(DEFAULT_DICT_NAME);
         assertThat(testDictionary.getDictKey()).isEqualTo(UPDATED_DICT_KEY);
         assertThat(testDictionary.getDisabled()).isEqualTo(UPDATED_DISABLED);
-        assertThat(testDictionary.getSortValue()).isEqualTo(UPDATED_SORT_VALUE);
-        assertThat(testDictionary.getBuiltIn()).isEqualTo(DEFAULT_BUILT_IN);
-        assertThat(testDictionary.getSyncEnum()).isEqualTo(UPDATED_SYNC_ENUM);
+        assertThat(testDictionary.getSortValue()).isEqualTo(DEFAULT_SORT_VALUE);
+        assertThat(testDictionary.getBuiltIn()).isEqualTo(UPDATED_BUILT_IN);
+        assertThat(testDictionary.getSyncEnum()).isEqualTo(DEFAULT_SYNC_ENUM);
     }
 
     @Test

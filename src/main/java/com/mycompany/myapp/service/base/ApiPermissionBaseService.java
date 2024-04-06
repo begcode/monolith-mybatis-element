@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -140,8 +140,7 @@ public class ApiPermissionBaseService<R extends ApiPermissionRepository, E exten
      */
     public Optional<ApiPermissionDTO> findOne(Long id) {
         log.debug("Request to get ApiPermission : {}", id);
-        return Optional
-            .ofNullable(apiPermissionRepository.selectById(id))
+        return Optional.ofNullable(apiPermissionRepository.selectById(id))
             .map(apiPermission -> {
                 Binder.bindRelations(apiPermission);
                 return apiPermission;
@@ -299,23 +298,25 @@ public class ApiPermissionBaseService<R extends ApiPermissionRepository, E exten
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<ApiPermission> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeApiPermissionDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeApiPermissionDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<ApiPermission> apiPermissionList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(apiPermissionList)) {
                 apiPermissionList.forEach(apiPermission -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            apiPermission,
-                            relationName,
-                            BeanUtil.getFieldValue(apiPermissionMapper.toEntity(changeApiPermissionDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                apiPermission,
+                                relationName,
+                                BeanUtil.getFieldValue(apiPermissionMapper.toEntity(changeApiPermissionDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(apiPermission, relationshipNames);
                 });

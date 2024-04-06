@@ -91,8 +91,7 @@ public class AuthorityBaseResource {
             throw new BadRequestAlertException("A new authority cannot already have an ID", ENTITY_NAME, "idexists");
         }
         AuthorityDTO result = authorityService.save(authorityDTO);
-        return ResponseEntity
-            .created(new URI("/api/authorities/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/authorities/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -138,8 +137,7 @@ public class AuthorityBaseResource {
         } else {
             result = authorityService.update(authorityDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, authorityDTO.getId().toString()))
             .body(result);
     }
@@ -309,8 +307,7 @@ public class AuthorityBaseResource {
         log.debug("REST request to delete Authority : {}", id);
 
         authorityService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -398,8 +395,7 @@ public class AuthorityBaseResource {
         if (ids != null) {
             ids.forEach(authorityService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

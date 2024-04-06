@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -125,8 +125,7 @@ public class DepartmentBaseService<R extends DepartmentRepository, E extends Dep
      */
     public Optional<DepartmentDTO> findOne(Long id) {
         log.debug("Request to get Department : {}", id);
-        return Optional
-            .ofNullable(departmentRepository.selectById(id))
+        return Optional.ofNullable(departmentRepository.selectById(id))
             .map(department -> {
                 Binder.bindRelations(department);
                 return department;
@@ -165,23 +164,25 @@ public class DepartmentBaseService<R extends DepartmentRepository, E extends Dep
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<Department> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeDepartmentDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeDepartmentDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<Department> departmentList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(departmentList)) {
                 departmentList.forEach(department -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            department,
-                            relationName,
-                            BeanUtil.getFieldValue(departmentMapper.toEntity(changeDepartmentDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                department,
+                                relationName,
+                                BeanUtil.getFieldValue(departmentMapper.toEntity(changeDepartmentDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(department, relationshipNames);
                 });

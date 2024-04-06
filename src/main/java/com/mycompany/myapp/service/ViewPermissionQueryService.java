@@ -6,7 +6,7 @@ import static tech.jhipster.service.mybatis.AggregateUtil.buildAggregate;
 import static tech.jhipster.service.mybatis.AggregateUtil.buildGroupBy;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -76,12 +76,10 @@ public class ViewPermissionQueryService implements QueryService<ViewPermission> 
     public IPage<ViewPermissionDTO> findByCriteria(ViewPermissionCriteria criteria, Page<ViewPermission> page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final QueryWrapper<ViewPermission> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, ViewPermission.class, page)
-            .convert(viewPermission -> {
-                Binder.bindRelations(viewPermission, new String[] { "children", "authorities" });
-                return viewPermissionMapper.toDto(viewPermission);
-            });
+        return Binder.joinQueryPage(queryWrapper, ViewPermission.class, page).convert(viewPermission -> {
+            Binder.bindRelations(viewPermission, new String[] { "children", "authorities" });
+            return viewPermissionMapper.toDto(viewPermission);
+        });
     }
 
     /**
@@ -105,12 +103,10 @@ public class ViewPermissionQueryService implements QueryService<ViewPermission> 
         log.debug("find by criteria : {}, page: {}", criteria, page);
         criteria.parentId().setSpecified(false);
         final QueryWrapper<ViewPermission> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, ViewPermission.class, page)
-            .convert(viewPermission -> {
-                Binder.bindRelations(viewPermission, new String[] { "parent", "authorities" });
-                return viewPermissionMapper.toDto(viewPermission);
-            });
+        return Binder.joinQueryPage(queryWrapper, ViewPermission.class, page).convert(viewPermission -> {
+            Binder.bindRelations(viewPermission, new String[] { "parent", "authorities" });
+            return viewPermissionMapper.toDto(viewPermission);
+        });
     }
 
     /**
@@ -194,37 +190,35 @@ public class ViewPermissionQueryService implements QueryService<ViewPermission> 
                 useOr = false;
             }
             Map<QueryWrapper<ViewPermission>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapper(criteria, ViewPermission.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<ViewPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<ViewPermission> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<ViewPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<ViewPermission> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);
@@ -270,37 +264,35 @@ public class ViewPermissionQueryService implements QueryService<ViewPermission> 
                 criteria,
                 ViewPermission.class
             );
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<ViewPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<ViewPermission> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<ViewPermission>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<ViewPermission> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);

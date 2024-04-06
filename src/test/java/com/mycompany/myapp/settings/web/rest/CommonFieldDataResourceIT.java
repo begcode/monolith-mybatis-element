@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.CommonFieldType;
 import com.mycompany.myapp.settings.domain.CommonFieldData;
 import com.mycompany.myapp.settings.repository.CommonFieldDataRepository;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class CommonFieldDataResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -998,12 +998,7 @@ public class CommonFieldDataResourceIT {
         CommonFieldData partialUpdatedCommonFieldData = new CommonFieldData();
         partialUpdatedCommonFieldData.setId(commonFieldData.getId());
 
-        partialUpdatedCommonFieldData
-            .name(UPDATED_NAME)
-            .label(UPDATED_LABEL)
-            .remark(UPDATED_REMARK)
-            .sortValue(UPDATED_SORT_VALUE)
-            .ownerEntityName(UPDATED_OWNER_ENTITY_NAME);
+        partialUpdatedCommonFieldData.valueType(UPDATED_VALUE_TYPE).sortValue(UPDATED_SORT_VALUE).ownerEntityId(UPDATED_OWNER_ENTITY_ID);
 
         restCommonFieldDataMockMvc
             .perform(
@@ -1017,15 +1012,15 @@ public class CommonFieldDataResourceIT {
         List<CommonFieldData> commonFieldDataList = commonFieldDataRepository.findAll();
         assertThat(commonFieldDataList).hasSize(databaseSizeBeforeUpdate);
         CommonFieldData testCommonFieldData = commonFieldDataList.get(commonFieldDataList.size() - 1);
-        assertThat(testCommonFieldData.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCommonFieldData.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCommonFieldData.getValue()).isEqualTo(DEFAULT_VALUE);
-        assertThat(testCommonFieldData.getLabel()).isEqualTo(UPDATED_LABEL);
-        assertThat(testCommonFieldData.getValueType()).isEqualTo(DEFAULT_VALUE_TYPE);
-        assertThat(testCommonFieldData.getRemark()).isEqualTo(UPDATED_REMARK);
+        assertThat(testCommonFieldData.getLabel()).isEqualTo(DEFAULT_LABEL);
+        assertThat(testCommonFieldData.getValueType()).isEqualTo(UPDATED_VALUE_TYPE);
+        assertThat(testCommonFieldData.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testCommonFieldData.getSortValue()).isEqualTo(UPDATED_SORT_VALUE);
         assertThat(testCommonFieldData.getDisabled()).isEqualTo(DEFAULT_DISABLED);
-        assertThat(testCommonFieldData.getOwnerEntityName()).isEqualTo(UPDATED_OWNER_ENTITY_NAME);
-        assertThat(testCommonFieldData.getOwnerEntityId()).isEqualTo(DEFAULT_OWNER_ENTITY_ID);
+        assertThat(testCommonFieldData.getOwnerEntityName()).isEqualTo(DEFAULT_OWNER_ENTITY_NAME);
+        assertThat(testCommonFieldData.getOwnerEntityId()).isEqualTo(UPDATED_OWNER_ENTITY_ID);
     }
 
     @Test

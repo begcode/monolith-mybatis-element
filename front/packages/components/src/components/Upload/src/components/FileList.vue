@@ -35,7 +35,6 @@ export default defineComponent({
     },
   },
   setup(props) {
-
     watch(
       () => props.dataSource,
       () => {

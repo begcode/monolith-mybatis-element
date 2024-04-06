@@ -87,8 +87,7 @@ public class DepartmentBaseResource {
             throw new BadRequestAlertException("A new department cannot already have an ID", ENTITY_NAME, "idexists");
         }
         DepartmentDTO result = departmentService.save(departmentDTO);
-        return ResponseEntity
-            .created(new URI("/api/departments/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/departments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class DepartmentBaseResource {
         } else {
             result = departmentService.update(departmentDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, departmentDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class DepartmentBaseResource {
         log.debug("REST request to delete Department : {}", id);
 
         departmentService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -358,8 +355,7 @@ public class DepartmentBaseResource {
         if (ids != null) {
             ids.forEach(departmentService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

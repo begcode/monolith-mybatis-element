@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.ResourceCategory;
 import com.mycompany.myapp.domain.ResourceCategory;
 import com.mycompany.myapp.repository.ResourceCategoryRepository;
@@ -27,7 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class ResourceCategoryResourceIT {
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
@@ -608,7 +608,7 @@ public class ResourceCategoryResourceIT {
         ResourceCategory partialUpdatedResourceCategory = new ResourceCategory();
         partialUpdatedResourceCategory.setId(resourceCategory.getId());
 
-        partialUpdatedResourceCategory.title(UPDATED_TITLE).orderNumber(UPDATED_ORDER_NUMBER);
+        partialUpdatedResourceCategory.title(UPDATED_TITLE).code(UPDATED_CODE).orderNumber(UPDATED_ORDER_NUMBER);
 
         restResourceCategoryMockMvc
             .perform(
@@ -623,7 +623,7 @@ public class ResourceCategoryResourceIT {
         assertThat(resourceCategoryList).hasSize(databaseSizeBeforeUpdate);
         ResourceCategory testResourceCategory = resourceCategoryList.get(resourceCategoryList.size() - 1);
         assertThat(testResourceCategory.getTitle()).isEqualTo(UPDATED_TITLE);
-        assertThat(testResourceCategory.getCode()).isEqualTo(DEFAULT_CODE);
+        assertThat(testResourceCategory.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testResourceCategory.getOrderNumber()).isEqualTo(UPDATED_ORDER_NUMBER);
     }
 

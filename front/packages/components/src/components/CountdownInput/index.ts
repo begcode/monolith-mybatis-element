@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils'
-import countdownInput from './src/CountdownInput.vue'
+import countdownInput from './src/CountdownInput.vue';
+import { withInstall } from '@/utils';
 
-export const CountdownInput = withInstall(countdownInput)
+export const CountdownInput = withInstall(countdownInput);

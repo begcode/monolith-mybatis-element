@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.ApiPermission;
 import com.mycompany.myapp.domain.ApiPermission;
 import com.mycompany.myapp.domain.Authority;
@@ -30,7 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class ApiPermissionResourceIT {
 
     private static final String DEFAULT_SERVICE_NAME = "AAAAAAAAAA";
@@ -929,7 +929,7 @@ public class ApiPermissionResourceIT {
         ApiPermission partialUpdatedApiPermission = new ApiPermission();
         partialUpdatedApiPermission.setId(apiPermission.getId());
 
-        partialUpdatedApiPermission.serviceName(UPDATED_SERVICE_NAME).code(UPDATED_CODE).description(UPDATED_DESCRIPTION).url(UPDATED_URL);
+        partialUpdatedApiPermission.name(UPDATED_NAME).description(UPDATED_DESCRIPTION).method(UPDATED_METHOD).status(UPDATED_STATUS);
 
         restApiPermissionMockMvc
             .perform(
@@ -943,14 +943,14 @@ public class ApiPermissionResourceIT {
         List<ApiPermission> apiPermissionList = apiPermissionRepository.findAll();
         assertThat(apiPermissionList).hasSize(databaseSizeBeforeUpdate);
         ApiPermission testApiPermission = apiPermissionList.get(apiPermissionList.size() - 1);
-        assertThat(testApiPermission.getServiceName()).isEqualTo(UPDATED_SERVICE_NAME);
-        assertThat(testApiPermission.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testApiPermission.getCode()).isEqualTo(UPDATED_CODE);
+        assertThat(testApiPermission.getServiceName()).isEqualTo(DEFAULT_SERVICE_NAME);
+        assertThat(testApiPermission.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testApiPermission.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testApiPermission.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testApiPermission.getType()).isEqualTo(DEFAULT_TYPE);
-        assertThat(testApiPermission.getMethod()).isEqualTo(DEFAULT_METHOD);
-        assertThat(testApiPermission.getUrl()).isEqualTo(UPDATED_URL);
-        assertThat(testApiPermission.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testApiPermission.getMethod()).isEqualTo(UPDATED_METHOD);
+        assertThat(testApiPermission.getUrl()).isEqualTo(DEFAULT_URL);
+        assertThat(testApiPermission.getStatus()).isEqualTo(UPDATED_STATUS);
     }
 
     @Test

@@ -7,8 +7,10 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max-old-space-size=8192 vite build && esno ./build/script/postBuild.ts",
     "build:analyze": "cross-env NODE_OPTIONS=--max-old-space-size=8192 vite build --mode analyze",
+    "build:docker": "vite build --mode docker",
     "clean-www": "rimraf target/classes/static/app/{src,target/}",
     "cleanup": "rimraf target/classes/static/",
+    "components:build": "pnpm --filter ./packages/** build",
     "gen:icon": "esno ./build/generate/icon/index.ts",
     "icon": "esno ./scripts/icon.ts",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --no-cache --config jest.conf.js",
@@ -25,13 +27,11 @@
     "test-ci": "pnpm run lint && pnpm run jest:update",
     "test:watch": "pnpm run jest -- --watch",
     "webapp:build": "pnpm run clean-www && pnpm run webapp:build:dev",
-    "webapp:build:dev": "pnpm run webpack -- --config webpack/webpack.dev.js --progress=profile --env stats=minimal",
-    "webapp:build:prod": "pnpm run webpack -- --config webpack/webpack.prod.js --progress=profile --env stats=minimal",
-    "webapp:dev": "pnpm run webpack-dev-server -- --config webpack/webpack.dev.js --progress=profile --inline --env stats=normal",
+    "webapp:build:dev": "cross-env NODE_ENV=development NODE_OPTIONS=--max-old-space-size=8192 vite build",
+    "webapp:build:prod": "pnpm run build",
+    "webapp:dev": "pnpm run start",
     "webapp:prod": "pnpm run clean-www && pnpm run webapp:build:prod",
-    "webapp:test": "pnpm run test",
-    "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js",
-    "webpack-dev-server": "webpack serve"
+    "webapp:test": "pnpm run test"
   },
   "config": {
     "default_environment": "prod"
@@ -57,9 +57,10 @@
     "cron-parser": "^3.5.0",
     "cropperjs": "1.6.1",
     "dayjs": "1.11.10",
+    "driver.js": "^1.3.1",
     "echarts": "^5.4.2",
     "echarts-wordcloud": "^2.1.0",
-    "element-plus": "2.5.1",
+    "element-plus": "2.6.1",
     "exceljs": "^4.3.0",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",

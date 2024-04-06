@@ -198,11 +198,24 @@ export function dateFormat(date, block) {
 }
 
 export function openWindow(url: string, opt?: { target?: TargetContext | string; noopener?: boolean; noreferrer?: boolean }) {
-  const { target = '__blank', noopener = true, noreferrer = true } = opt || {}
-  const feature: string[] = []
+  const { target = '__blank', noopener = true, noreferrer = true } = opt || {};
+  const feature: string[] = [];
 
-  noopener && feature.push('noopener=yes')
-  noreferrer && feature.push('noreferrer=yes')
+  noopener && feature.push('noopener=yes');
+  noreferrer && feature.push('noreferrer=yes');
 
-  window.open(url, target, feature.join(','))
+  window.open(url, target, feature.join(','));
+}
+
+export function deviceDetection() {
+  // @ts-ignore
+  let t = navigator.userAgent.toLowerCase(),
+    n = t.match(/midp/i) == 'midp',
+    e = t.match(/ucweb/i) == 'ucweb',
+    r = t.match(/android/i) == 'android',
+    o = t.match(/iphone os/i) == 'iphone os',
+    s = t.match(/windows ce/i) == 'windows ce',
+    a = t.match(/rv:1.2.3.4/i) == 'rv:1.2.3.4',
+    c = t.match(/windows mobile/i) == 'windows mobile';
+  return n || e || r || o || s || a || c;
 }

@@ -2,7 +2,7 @@ package com.mycompany.myapp.settings.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -128,8 +128,7 @@ public class FillRuleItemBaseService<R extends FillRuleItemRepository, E extends
      */
     public Optional<FillRuleItemDTO> findOne(Long id) {
         log.debug("Request to get FillRuleItem : {}", id);
-        return Optional
-            .ofNullable(fillRuleItemRepository.selectById(id))
+        return Optional.ofNullable(fillRuleItemRepository.selectById(id))
             .map(fillRuleItem -> {
                 Binder.bindRelations(fillRuleItem);
                 return fillRuleItem;
@@ -159,23 +158,25 @@ public class FillRuleItemBaseService<R extends FillRuleItemRepository, E extends
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<FillRuleItem> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeFillRuleItemDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeFillRuleItemDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<FillRuleItem> fillRuleItemList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(fillRuleItemList)) {
                 fillRuleItemList.forEach(fillRuleItem -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            fillRuleItem,
-                            relationName,
-                            BeanUtil.getFieldValue(fillRuleItemMapper.toEntity(changeFillRuleItemDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                fillRuleItem,
+                                relationName,
+                                BeanUtil.getFieldValue(fillRuleItemMapper.toEntity(changeFillRuleItemDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(fillRuleItem, relationshipNames);
                 });
@@ -204,131 +205,119 @@ public class FillRuleItemBaseService<R extends FillRuleItemRepository, E extends
         SortValueOperateType type
     ) {
         switch (type) {
-            case VALUE:
-                {
-                    if (ObjectUtils.isNotEmpty(changeSortValue)) {
-                        return lambdaUpdate().set(FillRuleItem::getSortValue, changeSortValue).eq(FillRuleItem::getId, id).update();
-                    } else {
-                        return false;
-                    }
+            case VALUE: {
+                if (ObjectUtils.isNotEmpty(changeSortValue)) {
+                    return lambdaUpdate().set(FillRuleItem::getSortValue, changeSortValue).eq(FillRuleItem::getId, id).update();
+                } else {
+                    return false;
                 }
-            case STEP:
-                {
-                    if (ObjectUtils.allNotNull(id, beforeId)) {
-                        Set<Long> ids = new HashSet<>();
-                        ids.add(id);
-                        ids.add(beforeId);
-                        Map<Long, Integer> idSortValueMap = listByIds(ids)
-                            .stream()
-                            .filter(fillRuleItem -> fillRuleItem.getSortValue() != null)
-                            .collect(Collectors.toMap(FillRuleItem::getId, FillRuleItem::getSortValue));
-                        return (
-                            lambdaUpdate()
-                                .set(FillRuleItem::getSortValue, idSortValueMap.get(beforeId))
-                                .eq(FillRuleItem::getId, id)
-                                .update() &&
-                            lambdaUpdate()
-                                .set(FillRuleItem::getSortValue, idSortValueMap.get(id))
-                                .eq(FillRuleItem::getId, beforeId)
-                                .update()
-                        );
-                    } else if (ObjectUtils.allNotNull(id, afterId)) {
-                        Set<Long> ids = new HashSet<>();
-                        ids.add(id);
-                        ids.add(afterId);
-                        Map<Long, Integer> idSortValueMap = listByIds(ids)
-                            .stream()
-                            .filter(fillRuleItem -> fillRuleItem.getSortValue() != null)
-                            .collect(Collectors.toMap(FillRuleItem::getId, FillRuleItem::getSortValue));
-                        return (
-                            lambdaUpdate()
-                                .set(FillRuleItem::getSortValue, idSortValueMap.get(afterId))
-                                .eq(FillRuleItem::getId, id)
-                                .update() &&
-                            lambdaUpdate().set(FillRuleItem::getSortValue, idSortValueMap.get(id)).eq(FillRuleItem::getId, afterId).update()
-                        );
-                    } else {
-                        return false;
-                    }
-                }
-            case DROP:
-                {
+            }
+            case STEP: {
+                if (ObjectUtils.allNotNull(id, beforeId)) {
                     Set<Long> ids = new HashSet<>();
                     ids.add(id);
-                    if (ObjectUtils.isNotEmpty(beforeId)) {
-                        ids.add(beforeId);
-                    }
-                    if (ObjectUtils.isNotEmpty(afterId)) {
-                        ids.add(afterId);
-                    }
+                    ids.add(beforeId);
                     Map<Long, Integer> idSortValueMap = listByIds(ids)
                         .stream()
                         .filter(fillRuleItem -> fillRuleItem.getSortValue() != null)
                         .collect(Collectors.toMap(FillRuleItem::getId, FillRuleItem::getSortValue));
-                    if (ObjectUtils.allNotNull(beforeId, afterId)) {
-                        // 计算中间值
-                        Integer beforeSortValue = idSortValueMap.get(beforeId);
-                        Integer afterSortValue = idSortValueMap.get(afterId);
-                        Integer newSortValue = (beforeSortValue + afterSortValue) / 2;
-                        if (!newSortValue.equals(afterSortValue) && !newSortValue.equals(beforeSortValue)) {
-                            // 正常值，保存到数据库。
-                            return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
-                        } else {
-                            // 没有排序值插入空间了，重新对相关的所有记录的排序值进行计算。然后再插入相关的值。
-                            // 需要确定相应的记录范围
-                            List<FillRuleItem> list = this.list(queryWrapper.orderByAsc("sort_value"));
-                            Integer newBeforeSortValue = 0;
-                            Integer newAfterSortValue = 0;
-                            for (int i = 0; i < list.size(); i++) {
-                                list.get(i).setSortValue(100 * (i + 1));
-                                if (afterId.equals(list.get(i).getId())) {
-                                    newBeforeSortValue = list.get(i).getSortValue();
-                                }
-                                if (beforeId.equals(list.get(i).getId())) {
-                                    newAfterSortValue = list.get(i).getSortValue();
-                                }
-                            }
-                            newSortValue = (newBeforeSortValue + newAfterSortValue) / 2;
-                            updateBatchById(list);
-                            return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
-                        }
-                    } else if (ObjectUtils.isNotEmpty(beforeId)) {
-                        // 计算比beforeId实体大的排序值
-                        Integer beforeSortValue = idSortValueMap.get(beforeId);
-                        Integer newSortValue = (beforeSortValue + 100) - ((beforeSortValue + 100) % 100);
+                    return (
+                        lambdaUpdate().set(FillRuleItem::getSortValue, idSortValueMap.get(beforeId)).eq(FillRuleItem::getId, id).update() &&
+                        lambdaUpdate().set(FillRuleItem::getSortValue, idSortValueMap.get(id)).eq(FillRuleItem::getId, beforeId).update()
+                    );
+                } else if (ObjectUtils.allNotNull(id, afterId)) {
+                    Set<Long> ids = new HashSet<>();
+                    ids.add(id);
+                    ids.add(afterId);
+                    Map<Long, Integer> idSortValueMap = listByIds(ids)
+                        .stream()
+                        .filter(fillRuleItem -> fillRuleItem.getSortValue() != null)
+                        .collect(Collectors.toMap(FillRuleItem::getId, FillRuleItem::getSortValue));
+                    return (
+                        lambdaUpdate().set(FillRuleItem::getSortValue, idSortValueMap.get(afterId)).eq(FillRuleItem::getId, id).update() &&
+                        lambdaUpdate().set(FillRuleItem::getSortValue, idSortValueMap.get(id)).eq(FillRuleItem::getId, afterId).update()
+                    );
+                } else {
+                    return false;
+                }
+            }
+            case DROP: {
+                Set<Long> ids = new HashSet<>();
+                ids.add(id);
+                if (ObjectUtils.isNotEmpty(beforeId)) {
+                    ids.add(beforeId);
+                }
+                if (ObjectUtils.isNotEmpty(afterId)) {
+                    ids.add(afterId);
+                }
+                Map<Long, Integer> idSortValueMap = listByIds(ids)
+                    .stream()
+                    .filter(fillRuleItem -> fillRuleItem.getSortValue() != null)
+                    .collect(Collectors.toMap(FillRuleItem::getId, FillRuleItem::getSortValue));
+                if (ObjectUtils.allNotNull(beforeId, afterId)) {
+                    // 计算中间值
+                    Integer beforeSortValue = idSortValueMap.get(beforeId);
+                    Integer afterSortValue = idSortValueMap.get(afterId);
+                    Integer newSortValue = (beforeSortValue + afterSortValue) / 2;
+                    if (!newSortValue.equals(afterSortValue) && !newSortValue.equals(beforeSortValue)) {
                         // 正常值，保存到数据库。
                         return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
-                    } else if (ObjectUtils.isNotEmpty(afterId)) {
-                        // 计算比afterId实体小的排序值
-                        Integer afterSortValue = idSortValueMap.get(afterId);
-                        Integer newSortValue = (afterSortValue - 100) - ((afterSortValue - 100) % 100);
-                        if (newSortValue <= 0) {
-                            // 没有排序值插入空间了，重新对相关的所有记录的排序值进行计算。然后再插入相关的值。
-                            // 需要确定相应的记录范围
-                            List<FillRuleItem> list = this.list(queryWrapper.orderByAsc("sort_value"));
-                            Integer newBeforeSortValue = 0;
-                            Integer newAfterSortValue = 0;
-                            for (int i = 0; i < list.size(); i++) {
-                                list.get(i).setSortValue(100 * (i + 1));
-                                if (afterId.equals(list.get(i).getId())) {
-                                    newBeforeSortValue = list.get(i).getSortValue();
-                                }
-                                if (beforeId.equals(list.get(i).getId())) {
-                                    newAfterSortValue = list.get(i).getSortValue();
-                                }
-                            }
-                            newSortValue = (newBeforeSortValue + newAfterSortValue) / 2;
-                            updateBatchById(list);
-                            return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
-                        } else {
-                            // 正常值，保存到数据库。
-                            return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
-                        }
                     } else {
-                        // todo 异常
-                        return false;
+                        // 没有排序值插入空间了，重新对相关的所有记录的排序值进行计算。然后再插入相关的值。
+                        // 需要确定相应的记录范围
+                        List<FillRuleItem> list = this.list(queryWrapper.orderByAsc("sort_value"));
+                        Integer newBeforeSortValue = 0;
+                        Integer newAfterSortValue = 0;
+                        for (int i = 0; i < list.size(); i++) {
+                            list.get(i).setSortValue(100 * (i + 1));
+                            if (afterId.equals(list.get(i).getId())) {
+                                newBeforeSortValue = list.get(i).getSortValue();
+                            }
+                            if (beforeId.equals(list.get(i).getId())) {
+                                newAfterSortValue = list.get(i).getSortValue();
+                            }
+                        }
+                        newSortValue = (newBeforeSortValue + newAfterSortValue) / 2;
+                        updateBatchById(list);
+                        return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
                     }
+                } else if (ObjectUtils.isNotEmpty(beforeId)) {
+                    // 计算比beforeId实体大的排序值
+                    Integer beforeSortValue = idSortValueMap.get(beforeId);
+                    Integer newSortValue = (beforeSortValue + 100) - ((beforeSortValue + 100) % 100);
+                    // 正常值，保存到数据库。
+                    return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
+                } else if (ObjectUtils.isNotEmpty(afterId)) {
+                    // 计算比afterId实体小的排序值
+                    Integer afterSortValue = idSortValueMap.get(afterId);
+                    Integer newSortValue = (afterSortValue - 100) - ((afterSortValue - 100) % 100);
+                    if (newSortValue <= 0) {
+                        // 没有排序值插入空间了，重新对相关的所有记录的排序值进行计算。然后再插入相关的值。
+                        // 需要确定相应的记录范围
+                        List<FillRuleItem> list = this.list(queryWrapper.orderByAsc("sort_value"));
+                        Integer newBeforeSortValue = 0;
+                        Integer newAfterSortValue = 0;
+                        for (int i = 0; i < list.size(); i++) {
+                            list.get(i).setSortValue(100 * (i + 1));
+                            if (afterId.equals(list.get(i).getId())) {
+                                newBeforeSortValue = list.get(i).getSortValue();
+                            }
+                            if (beforeId.equals(list.get(i).getId())) {
+                                newAfterSortValue = list.get(i).getSortValue();
+                            }
+                        }
+                        newSortValue = (newBeforeSortValue + newAfterSortValue) / 2;
+                        updateBatchById(list);
+                        return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
+                    } else {
+                        // 正常值，保存到数据库。
+                        return lambdaUpdate().set(FillRuleItem::getSortValue, newSortValue).eq(FillRuleItem::getId, id).update();
+                    }
+                } else {
+                    // todo 异常
+                    return false;
                 }
+            }
             default:
                 return false;
         }

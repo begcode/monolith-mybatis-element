@@ -1,9 +1,31 @@
 <script setup lang="ts">
 import { reactive, getCurrentInstance, onBeforeMount, onUnmounted } from 'vue';
-import { deviceDetection } from '@pureadmin/utils';
+import { deviceDetection } from '@/utils';
 import AMapLoader from '@amap/amap-jsapi-loader';
-import { mapJson } from '@/api/mock';
-import car from '@/assets/car.png';
+import car from '@/assets/imgs/car.png';
+
+type mapType = {
+  plateNumber: string;
+  driver: string;
+  'orientation|1-360': number;
+  'lng|113-114.1-10': number;
+  'lat|34-35.1-10': number;
+};
+
+// http://mockjs.com/examples.html#Object
+const mapList = (): Array<mapType> => {
+  const result: Array<mapType> = [];
+  for (let index = 0; index < 200; index++) {
+    result.push({
+      plateNumber: "豫A@natural(11111, 99999)@character('upper')",
+      driver: '@cname()',
+      'orientation|1-360': 100,
+      'lng|113-114.1-10': 1,
+      'lat|34-35.1-10': 1,
+    });
+  }
+  return result;
+};
 
 export interface MapConfigureInter {
   on: Fn;
@@ -89,20 +111,13 @@ onBeforeMount(() => {
       });
 
       // 获取模拟车辆信息
-      mapJson()
-        .then(({ data }) => {
-          const points: object = data.map(v => {
-            return {
-              lnglat: [v.lng, v.lat],
-              ...v,
-            };
-          });
-          if (MarkerCluster) MarkerCluster.setData(points);
-        })
-        .catch(err => {
-          console.log('err:', err);
-        });
-
+      const points: object = mapList().map(v => {
+        return {
+          lnglat: [v.lng, v.lat],
+          ...v,
+        };
+      });
+      if (MarkerCluster) MarkerCluster.setData(points);
       complete();
     })
     .catch(() => {

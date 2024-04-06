@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.Department;
 import com.mycompany.myapp.domain.Department;
@@ -30,7 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class DepartmentResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -977,12 +977,10 @@ public class DepartmentResourceIT {
         partialUpdatedDepartment.setId(department.getId());
 
         partialUpdatedDepartment
-            .name(UPDATED_NAME)
-            .code(UPDATED_CODE)
             .address(UPDATED_ADDRESS)
             .phoneNum(UPDATED_PHONE_NUM)
-            .logo(UPDATED_LOGO)
-            .contact(UPDATED_CONTACT);
+            .contact(UPDATED_CONTACT)
+            .createTime(UPDATED_CREATE_TIME);
 
         restDepartmentMockMvc
             .perform(
@@ -996,14 +994,14 @@ public class DepartmentResourceIT {
         List<Department> departmentList = departmentRepository.findAll();
         assertThat(departmentList).hasSize(databaseSizeBeforeUpdate);
         Department testDepartment = departmentList.get(departmentList.size() - 1);
-        assertThat(testDepartment.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testDepartment.getCode()).isEqualTo(UPDATED_CODE);
+        assertThat(testDepartment.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testDepartment.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testDepartment.getAddress()).isEqualTo(UPDATED_ADDRESS);
         assertThat(testDepartment.getPhoneNum()).isEqualTo(UPDATED_PHONE_NUM);
-        assertThat(testDepartment.getLogo()).isEqualTo(UPDATED_LOGO);
+        assertThat(testDepartment.getLogo()).isEqualTo(DEFAULT_LOGO);
         assertThat(testDepartment.getContact()).isEqualTo(UPDATED_CONTACT);
         assertThat(testDepartment.getCreateUserId()).isEqualTo(DEFAULT_CREATE_USER_ID);
-        assertThat(testDepartment.getCreateTime()).isEqualTo(DEFAULT_CREATE_TIME);
+        assertThat(testDepartment.getCreateTime()).isEqualTo(UPDATED_CREATE_TIME);
     }
 
     @Test

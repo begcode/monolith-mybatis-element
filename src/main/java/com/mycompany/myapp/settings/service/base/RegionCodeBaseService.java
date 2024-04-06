@@ -1,7 +1,7 @@
 package com.mycompany.myapp.settings.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -122,8 +122,7 @@ public class RegionCodeBaseService<R extends RegionCodeRepository, E extends Reg
      */
     public Optional<RegionCodeDTO> findOne(Long id) {
         log.debug("Request to get RegionCode : {}", id);
-        return Optional
-            .ofNullable(regionCodeRepository.selectById(id))
+        return Optional.ofNullable(regionCodeRepository.selectById(id))
             .map(regionCode -> {
                 Binder.bindRelations(regionCode);
                 return regionCode;
@@ -159,23 +158,25 @@ public class RegionCodeBaseService<R extends RegionCodeRepository, E extends Reg
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<RegionCode> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeRegionCodeDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeRegionCodeDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<RegionCode> regionCodeList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(regionCodeList)) {
                 regionCodeList.forEach(regionCode -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            regionCode,
-                            relationName,
-                            BeanUtil.getFieldValue(regionCodeMapper.toEntity(changeRegionCodeDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                regionCode,
+                                relationName,
+                                BeanUtil.getFieldValue(regionCodeMapper.toEntity(changeRegionCodeDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(regionCode, relationshipNames);
                 });

@@ -114,8 +114,7 @@ public class UploadFileBaseResource {
         } else {
             result = uploadFileService.update(uploadFileDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uploadFileDTO.getId().toString()))
             .body(result);
     }
@@ -249,8 +248,7 @@ public class UploadFileBaseResource {
         log.debug("REST request to delete UploadFile : {}", id);
 
         uploadFileService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -305,8 +303,7 @@ public class UploadFileBaseResource {
         if (ids != null) {
             ids.forEach(uploadFileService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }
@@ -342,8 +339,7 @@ public class UploadFileBaseResource {
         }
         uploadFileDTO.setFile(file);
         UploadFileDTO result = uploadFileService.save(uploadFileDTO);
-        return ResponseEntity
-            .created(new URI("/api/upload-files/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/upload-files/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }

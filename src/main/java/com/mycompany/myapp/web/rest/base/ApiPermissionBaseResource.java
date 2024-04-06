@@ -87,8 +87,7 @@ public class ApiPermissionBaseResource {
             throw new BadRequestAlertException("A new apiPermission cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ApiPermissionDTO result = apiPermissionService.save(apiPermissionDTO);
-        return ResponseEntity
-            .created(new URI("/api/api-permissions/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/api-permissions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class ApiPermissionBaseResource {
         } else {
             result = apiPermissionService.update(apiPermissionDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, apiPermissionDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class ApiPermissionBaseResource {
         log.debug("REST request to delete ApiPermission : {}", id);
 
         apiPermissionService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -358,8 +355,7 @@ public class ApiPermissionBaseResource {
         if (ids != null) {
             ids.forEach(apiPermissionService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

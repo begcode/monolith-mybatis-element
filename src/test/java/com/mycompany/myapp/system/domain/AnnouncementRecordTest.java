@@ -4,6 +4,7 @@ import static com.mycompany.myapp.system.domain.AnnouncementRecordTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.web.rest.TestUtil;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 
 class AnnouncementRecordTest {

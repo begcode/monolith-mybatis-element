@@ -7,8 +7,5 @@ export const hasPermi = (value: string) => {
   if (!value) {
     throw new Error(t('permission.hasPermission'));
   }
-  if (permission.includes(value)) {
-    return true;
-  }
-  return false;
+  return permission.includes(value);
 };

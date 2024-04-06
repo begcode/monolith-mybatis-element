@@ -6,7 +6,7 @@ import static tech.jhipster.service.mybatis.AggregateUtil.buildAggregate;
 import static tech.jhipster.service.mybatis.AggregateUtil.buildGroupBy;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.*;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -76,12 +76,10 @@ public class AuthorityQueryService implements QueryService<Authority> {
     public IPage<AuthorityDTO> findByCriteria(AuthorityCriteria criteria, Page<Authority> page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final QueryWrapper<Authority> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, Authority.class, page)
-            .convert(authority -> {
-                Binder.bindRelations(authority, new String[] { "children", "department" });
-                return authorityMapper.toDto(authority);
-            });
+        return Binder.joinQueryPage(queryWrapper, Authority.class, page).convert(authority -> {
+            Binder.bindRelations(authority, new String[] { "children", "department" });
+            return authorityMapper.toDto(authority);
+        });
     }
 
     /**
@@ -105,12 +103,10 @@ public class AuthorityQueryService implements QueryService<Authority> {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         criteria.parentId().setSpecified(false);
         final QueryWrapper<Authority> queryWrapper = createQueryWrapper(criteria);
-        return Binder
-            .joinQueryPage(queryWrapper, Authority.class, page)
-            .convert(authority -> {
-                Binder.bindRelations(authority, new String[] { "parent", "department" });
-                return authorityMapper.toDto(authority);
-            });
+        return Binder.joinQueryPage(queryWrapper, Authority.class, page).convert(authority -> {
+            Binder.bindRelations(authority, new String[] { "parent", "department" });
+            return authorityMapper.toDto(authority);
+        });
     }
 
     /**
@@ -183,37 +179,35 @@ public class AuthorityQueryService implements QueryService<Authority> {
                 useOr = false;
             }
             Map<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapper(criteria, Authority.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<Authority> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<Authority> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);
@@ -256,37 +250,35 @@ public class AuthorityQueryService implements QueryService<Authority> {
                 useOr = false;
             }
             Map<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapMap = criteriaToWrapperNoJoin(criteria, Authority.class);
-            if (MapUtils.isNotEmpty(queryWrapperMapMap)) {
-                Map.Entry<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
-                    .entrySet()
-                    .stream()
-                    .findFirst()
-                    .get();
-                Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
-                if (MapUtils.isNotEmpty(fieldMap)) {
-                    if (queryWrapper == null) {
-                        queryWrapper = queryWrapperMapEntry.getKey();
-                    }
-                    QueryWrapper<Authority> finalQueryWrapper = queryWrapper;
-                    Boolean finalUseOr = useOr;
-                    fieldMap.forEach((fieldName, filter) -> {
-                        if (filter instanceof StringFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof RangeFilter) {
-                            CriteriaUtil.build(
-                                finalUseOr,
-                                finalQueryWrapper,
-                                buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
-                            );
-                        } else if (filter instanceof Filter) {
-                            CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
-                        }
-                    });
+            Map.Entry<QueryWrapper<Authority>, Map<String, Object>> queryWrapperMapEntry = queryWrapperMapMap
+                .entrySet()
+                .stream()
+                .findFirst()
+                .orElseThrow();
+            Map<String, Object> fieldMap = queryWrapperMapEntry.getValue();
+            if (MapUtils.isNotEmpty(fieldMap)) {
+                if (queryWrapper == null) {
+                    queryWrapper = queryWrapperMapEntry.getKey();
                 }
+                QueryWrapper<Authority> finalQueryWrapper = queryWrapper;
+                Boolean finalUseOr = useOr;
+                fieldMap.forEach((fieldName, filter) -> {
+                    if (filter instanceof StringFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildStringSpecification((StringFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof RangeFilter) {
+                        CriteriaUtil.build(
+                            finalUseOr,
+                            finalQueryWrapper,
+                            buildRangeSpecification((RangeFilter) filter, fieldName, finalUseOr)
+                        );
+                    } else if (filter instanceof Filter) {
+                        CriteriaUtil.build(finalUseOr, finalQueryWrapper, buildSpecification((Filter) filter, fieldName, finalUseOr));
+                    }
+                });
             }
             if (criteria.getAnd() != null) {
                 Map<String, Object> stringObjectMap = BeanUtil.beanToMap(criteria.getAnd(), false, true);

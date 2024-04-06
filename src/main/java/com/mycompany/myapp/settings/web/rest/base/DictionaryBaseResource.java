@@ -93,8 +93,7 @@ public class DictionaryBaseResource {
             throw new BadRequestAlertException("A new dictionary cannot already have an ID", ENTITY_NAME, "idexists");
         }
         DictionaryDTO result = dictionaryService.save(dictionaryDTO);
-        return ResponseEntity
-            .created(new URI("/api/dictionaries/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/dictionaries/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -140,8 +139,7 @@ public class DictionaryBaseResource {
         } else {
             result = dictionaryService.update(dictionaryDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, dictionaryDTO.getId().toString()))
             .body(result);
     }
@@ -311,8 +309,7 @@ public class DictionaryBaseResource {
         log.debug("REST request to delete Dictionary : {}", id);
 
         dictionaryService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -367,8 +364,7 @@ public class DictionaryBaseResource {
         if (ids != null) {
             ids.forEach(dictionaryService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

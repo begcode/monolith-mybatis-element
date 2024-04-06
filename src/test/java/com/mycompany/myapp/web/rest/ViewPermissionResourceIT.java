@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.ViewPermission;
 import com.mycompany.myapp.domain.ViewPermission;
@@ -30,7 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class ViewPermissionResourceIT {
 
     private static final String DEFAULT_TEXT = "AAAAAAAAAA";
@@ -1727,15 +1727,19 @@ public class ViewPermissionResourceIT {
         partialUpdatedViewPermission.setId(viewPermission.getId());
 
         partialUpdatedViewPermission
+            .text(UPDATED_TEXT)
             .type(UPDATED_TYPE)
-            .externalLink(UPDATED_EXTERNAL_LINK)
+            .i18n(UPDATED_I_18_N)
+            .link(UPDATED_LINK)
             .target(UPDATED_TARGET)
-            .icon(UPDATED_ICON)
+            .disabled(UPDATED_DISABLED)
+            .hide(UPDATED_HIDE)
             .hideInBreadcrumb(UPDATED_HIDE_IN_BREADCRUMB)
-            .shortcut(UPDATED_SHORTCUT)
+            .shortcutRoot(UPDATED_SHORTCUT_ROOT)
+            .reuse(UPDATED_REUSE)
             .code(UPDATED_CODE)
             .order(UPDATED_ORDER)
-            .apiPermissionCodes(UPDATED_API_PERMISSION_CODES);
+            .redirect(UPDATED_REDIRECT);
 
         restViewPermissionMockMvc
             .perform(
@@ -1749,26 +1753,26 @@ public class ViewPermissionResourceIT {
         List<ViewPermission> viewPermissionList = viewPermissionRepository.findAll();
         assertThat(viewPermissionList).hasSize(databaseSizeBeforeUpdate);
         ViewPermission testViewPermission = viewPermissionList.get(viewPermissionList.size() - 1);
-        assertThat(testViewPermission.getText()).isEqualTo(DEFAULT_TEXT);
+        assertThat(testViewPermission.getText()).isEqualTo(UPDATED_TEXT);
         assertThat(testViewPermission.getType()).isEqualTo(UPDATED_TYPE);
-        assertThat(testViewPermission.getI18n()).isEqualTo(DEFAULT_I_18_N);
+        assertThat(testViewPermission.getI18n()).isEqualTo(UPDATED_I_18_N);
         assertThat(testViewPermission.getGroup()).isEqualTo(DEFAULT_GROUP);
-        assertThat(testViewPermission.getLink()).isEqualTo(DEFAULT_LINK);
-        assertThat(testViewPermission.getExternalLink()).isEqualTo(UPDATED_EXTERNAL_LINK);
+        assertThat(testViewPermission.getLink()).isEqualTo(UPDATED_LINK);
+        assertThat(testViewPermission.getExternalLink()).isEqualTo(DEFAULT_EXTERNAL_LINK);
         assertThat(testViewPermission.getTarget()).isEqualTo(UPDATED_TARGET);
-        assertThat(testViewPermission.getIcon()).isEqualTo(UPDATED_ICON);
-        assertThat(testViewPermission.getDisabled()).isEqualTo(DEFAULT_DISABLED);
-        assertThat(testViewPermission.getHide()).isEqualTo(DEFAULT_HIDE);
+        assertThat(testViewPermission.getIcon()).isEqualTo(DEFAULT_ICON);
+        assertThat(testViewPermission.getDisabled()).isEqualTo(UPDATED_DISABLED);
+        assertThat(testViewPermission.getHide()).isEqualTo(UPDATED_HIDE);
         assertThat(testViewPermission.getHideInBreadcrumb()).isEqualTo(UPDATED_HIDE_IN_BREADCRUMB);
-        assertThat(testViewPermission.getShortcut()).isEqualTo(UPDATED_SHORTCUT);
-        assertThat(testViewPermission.getShortcutRoot()).isEqualTo(DEFAULT_SHORTCUT_ROOT);
-        assertThat(testViewPermission.getReuse()).isEqualTo(DEFAULT_REUSE);
+        assertThat(testViewPermission.getShortcut()).isEqualTo(DEFAULT_SHORTCUT);
+        assertThat(testViewPermission.getShortcutRoot()).isEqualTo(UPDATED_SHORTCUT_ROOT);
+        assertThat(testViewPermission.getReuse()).isEqualTo(UPDATED_REUSE);
         assertThat(testViewPermission.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testViewPermission.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testViewPermission.getOrder()).isEqualTo(UPDATED_ORDER);
-        assertThat(testViewPermission.getApiPermissionCodes()).isEqualTo(UPDATED_API_PERMISSION_CODES);
+        assertThat(testViewPermission.getApiPermissionCodes()).isEqualTo(DEFAULT_API_PERMISSION_CODES);
         assertThat(testViewPermission.getComponentFile()).isEqualTo(DEFAULT_COMPONENT_FILE);
-        assertThat(testViewPermission.getRedirect()).isEqualTo(DEFAULT_REDIRECT);
+        assertThat(testViewPermission.getRedirect()).isEqualTo(UPDATED_REDIRECT);
     }
 
     @Test

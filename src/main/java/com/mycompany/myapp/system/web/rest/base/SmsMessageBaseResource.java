@@ -87,8 +87,7 @@ public class SmsMessageBaseResource {
             throw new BadRequestAlertException("A new smsMessage cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SmsMessageDTO result = smsMessageService.save(smsMessageDTO);
-        return ResponseEntity
-            .created(new URI("/api/sms-messages/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/sms-messages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class SmsMessageBaseResource {
         } else {
             result = smsMessageService.update(smsMessageDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, smsMessageDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class SmsMessageBaseResource {
         log.debug("REST request to delete SmsMessage : {}", id);
 
         smsMessageService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -325,8 +322,7 @@ public class SmsMessageBaseResource {
         if (ids != null) {
             ids.forEach(smsMessageService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

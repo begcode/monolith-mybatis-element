@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.FieldParamType;
 import com.mycompany.myapp.settings.domain.FillRuleItem;
 import com.mycompany.myapp.settings.domain.SysFillRule;
@@ -29,7 +30,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class FillRuleItemResourceIT {
 
     private static final Integer DEFAULT_SORT_VALUE = 1;
@@ -973,8 +973,8 @@ public class FillRuleItemResourceIT {
         partialUpdatedFillRuleItem.setId(fillRuleItem.getId());
 
         partialUpdatedFillRuleItem
-            .sortValue(UPDATED_SORT_VALUE)
-            .fieldParamType(UPDATED_FIELD_PARAM_TYPE)
+            .fieldParamValue(UPDATED_FIELD_PARAM_VALUE)
+            .datePattern(UPDATED_DATE_PATTERN)
             .seqLength(UPDATED_SEQ_LENGTH)
             .seqIncrement(UPDATED_SEQ_INCREMENT);
 
@@ -990,10 +990,10 @@ public class FillRuleItemResourceIT {
         List<FillRuleItem> fillRuleItemList = fillRuleItemRepository.findAll();
         assertThat(fillRuleItemList).hasSize(databaseSizeBeforeUpdate);
         FillRuleItem testFillRuleItem = fillRuleItemList.get(fillRuleItemList.size() - 1);
-        assertThat(testFillRuleItem.getSortValue()).isEqualTo(UPDATED_SORT_VALUE);
-        assertThat(testFillRuleItem.getFieldParamType()).isEqualTo(UPDATED_FIELD_PARAM_TYPE);
-        assertThat(testFillRuleItem.getFieldParamValue()).isEqualTo(DEFAULT_FIELD_PARAM_VALUE);
-        assertThat(testFillRuleItem.getDatePattern()).isEqualTo(DEFAULT_DATE_PATTERN);
+        assertThat(testFillRuleItem.getSortValue()).isEqualTo(DEFAULT_SORT_VALUE);
+        assertThat(testFillRuleItem.getFieldParamType()).isEqualTo(DEFAULT_FIELD_PARAM_TYPE);
+        assertThat(testFillRuleItem.getFieldParamValue()).isEqualTo(UPDATED_FIELD_PARAM_VALUE);
+        assertThat(testFillRuleItem.getDatePattern()).isEqualTo(UPDATED_DATE_PATTERN);
         assertThat(testFillRuleItem.getSeqLength()).isEqualTo(UPDATED_SEQ_LENGTH);
         assertThat(testFillRuleItem.getSeqIncrement()).isEqualTo(UPDATED_SEQ_INCREMENT);
         assertThat(testFillRuleItem.getSeqStartValue()).isEqualTo(DEFAULT_SEQ_START_VALUE);

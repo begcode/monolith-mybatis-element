@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.AnnoBusinessType;
 import com.mycompany.myapp.domain.enumeration.AnnoCategory;
 import com.mycompany.myapp.domain.enumeration.AnnoOpenType;
@@ -32,7 +33,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class AnnouncementResourceIT {
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
@@ -1773,15 +1773,17 @@ public class AnnouncementResourceIT {
         partialUpdatedAnnouncement.setId(announcement.getId());
 
         partialUpdatedAnnouncement
-            .summary(UPDATED_SUMMARY)
+            .title(UPDATED_TITLE)
             .startTime(UPDATED_START_TIME)
-            .receiverType(UPDATED_RECEIVER_TYPE)
-            .sendTime(UPDATED_SEND_TIME)
-            .cancelTime(UPDATED_CANCEL_TIME)
+            .endTime(UPDATED_END_TIME)
+            .senderId(UPDATED_SENDER_ID)
+            .priority(UPDATED_PRIORITY)
+            .category(UPDATED_CATEGORY)
+            .sendStatus(UPDATED_SEND_STATUS)
+            .businessType(UPDATED_BUSINESS_TYPE)
             .openType(UPDATED_OPEN_TYPE)
             .openPage(UPDATED_OPEN_PAGE)
-            .createdBy(UPDATED_CREATED_BY)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .receiverIds(UPDATED_RECEIVER_IDS)
             .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
 
         restAnnouncementMockMvc
@@ -1796,26 +1798,26 @@ public class AnnouncementResourceIT {
         List<Announcement> announcementList = announcementRepository.findAll();
         assertThat(announcementList).hasSize(databaseSizeBeforeUpdate);
         Announcement testAnnouncement = announcementList.get(announcementList.size() - 1);
-        assertThat(testAnnouncement.getTitle()).isEqualTo(DEFAULT_TITLE);
-        assertThat(testAnnouncement.getSummary()).isEqualTo(UPDATED_SUMMARY);
+        assertThat(testAnnouncement.getTitle()).isEqualTo(UPDATED_TITLE);
+        assertThat(testAnnouncement.getSummary()).isEqualTo(DEFAULT_SUMMARY);
         assertThat(testAnnouncement.getContent()).isEqualTo(DEFAULT_CONTENT);
         assertThat(testAnnouncement.getStartTime()).isEqualTo(UPDATED_START_TIME);
-        assertThat(testAnnouncement.getEndTime()).isEqualTo(DEFAULT_END_TIME);
-        assertThat(testAnnouncement.getSenderId()).isEqualTo(DEFAULT_SENDER_ID);
-        assertThat(testAnnouncement.getPriority()).isEqualTo(DEFAULT_PRIORITY);
-        assertThat(testAnnouncement.getCategory()).isEqualTo(DEFAULT_CATEGORY);
-        assertThat(testAnnouncement.getReceiverType()).isEqualTo(UPDATED_RECEIVER_TYPE);
-        assertThat(testAnnouncement.getSendStatus()).isEqualTo(DEFAULT_SEND_STATUS);
-        assertThat(testAnnouncement.getSendTime()).isEqualTo(UPDATED_SEND_TIME);
-        assertThat(testAnnouncement.getCancelTime()).isEqualTo(UPDATED_CANCEL_TIME);
-        assertThat(testAnnouncement.getBusinessType()).isEqualTo(DEFAULT_BUSINESS_TYPE);
+        assertThat(testAnnouncement.getEndTime()).isEqualTo(UPDATED_END_TIME);
+        assertThat(testAnnouncement.getSenderId()).isEqualTo(UPDATED_SENDER_ID);
+        assertThat(testAnnouncement.getPriority()).isEqualTo(UPDATED_PRIORITY);
+        assertThat(testAnnouncement.getCategory()).isEqualTo(UPDATED_CATEGORY);
+        assertThat(testAnnouncement.getReceiverType()).isEqualTo(DEFAULT_RECEIVER_TYPE);
+        assertThat(testAnnouncement.getSendStatus()).isEqualTo(UPDATED_SEND_STATUS);
+        assertThat(testAnnouncement.getSendTime()).isEqualTo(DEFAULT_SEND_TIME);
+        assertThat(testAnnouncement.getCancelTime()).isEqualTo(DEFAULT_CANCEL_TIME);
+        assertThat(testAnnouncement.getBusinessType()).isEqualTo(UPDATED_BUSINESS_TYPE);
         assertThat(testAnnouncement.getBusinessId()).isEqualTo(DEFAULT_BUSINESS_ID);
         assertThat(testAnnouncement.getOpenType()).isEqualTo(UPDATED_OPEN_TYPE);
         assertThat(testAnnouncement.getOpenPage()).isEqualTo(UPDATED_OPEN_PAGE);
-        assertThat(testAnnouncement.getReceiverIds()).isEqualTo(DEFAULT_RECEIVER_IDS);
-        assertThat(testAnnouncement.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
+        assertThat(testAnnouncement.getReceiverIds()).isEqualTo(UPDATED_RECEIVER_IDS);
+        assertThat(testAnnouncement.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testAnnouncement.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
-        assertThat(testAnnouncement.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testAnnouncement.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testAnnouncement.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
     }
 

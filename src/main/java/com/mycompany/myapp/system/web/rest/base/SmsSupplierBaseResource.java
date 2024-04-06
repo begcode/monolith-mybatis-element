@@ -87,8 +87,7 @@ public class SmsSupplierBaseResource {
             throw new BadRequestAlertException("A new smsSupplier cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SmsSupplierDTO result = smsSupplierService.save(smsSupplierDTO);
-        return ResponseEntity
-            .created(new URI("/api/sms-suppliers/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/sms-suppliers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class SmsSupplierBaseResource {
         } else {
             result = smsSupplierService.update(smsSupplierDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, smsSupplierDTO.getId().toString()))
             .body(result);
     }
@@ -272,8 +270,7 @@ public class SmsSupplierBaseResource {
         log.debug("REST request to delete SmsSupplier : {}", id);
 
         smsSupplierService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -332,8 +329,7 @@ public class SmsSupplierBaseResource {
         if (ids != null) {
             ids.forEach(smsSupplierService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

@@ -93,8 +93,7 @@ public class PositionBaseResource {
             throw new BadRequestAlertException("A new position cannot already have an ID", ENTITY_NAME, "idexists");
         }
         PositionDTO result = positionService.save(positionDTO);
-        return ResponseEntity
-            .created(new URI("/api/positions/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/positions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -140,8 +139,7 @@ public class PositionBaseResource {
         } else {
             result = positionService.update(positionDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, positionDTO.getId().toString()))
             .body(result);
     }
@@ -311,8 +309,7 @@ public class PositionBaseResource {
         log.debug("REST request to delete Position : {}", id);
 
         positionService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -367,8 +364,7 @@ public class PositionBaseResource {
         if (ids != null) {
             ids.forEach(positionService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

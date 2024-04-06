@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.system.domain.AnnouncementRecord;
 import com.mycompany.myapp.system.repository.AnnouncementRecordRepository;
 import com.mycompany.myapp.system.service.dto.AnnouncementRecordDTO;
@@ -26,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class AnnouncementRecordResourceIT {
 
     private static final Long DEFAULT_ANNT_ID = 1L;
@@ -989,10 +989,12 @@ public class AnnouncementRecordResourceIT {
         partialUpdatedAnnouncementRecord.setId(announcementRecord.getId());
 
         partialUpdatedAnnouncementRecord
+            .anntId(UPDATED_ANNT_ID)
             .userId(UPDATED_USER_ID)
+            .hasRead(UPDATED_HAS_READ)
             .readTime(UPDATED_READ_TIME)
             .createdBy(UPDATED_CREATED_BY)
-            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY);
+            .createdDate(UPDATED_CREATED_DATE);
 
         restAnnouncementRecordMockMvc
             .perform(
@@ -1006,13 +1008,13 @@ public class AnnouncementRecordResourceIT {
         List<AnnouncementRecord> announcementRecordList = announcementRecordRepository.findAll();
         assertThat(announcementRecordList).hasSize(databaseSizeBeforeUpdate);
         AnnouncementRecord testAnnouncementRecord = announcementRecordList.get(announcementRecordList.size() - 1);
-        assertThat(testAnnouncementRecord.getAnntId()).isEqualTo(DEFAULT_ANNT_ID);
+        assertThat(testAnnouncementRecord.getAnntId()).isEqualTo(UPDATED_ANNT_ID);
         assertThat(testAnnouncementRecord.getUserId()).isEqualTo(UPDATED_USER_ID);
-        assertThat(testAnnouncementRecord.getHasRead()).isEqualTo(DEFAULT_HAS_READ);
+        assertThat(testAnnouncementRecord.getHasRead()).isEqualTo(UPDATED_HAS_READ);
         assertThat(testAnnouncementRecord.getReadTime()).isEqualTo(UPDATED_READ_TIME);
         assertThat(testAnnouncementRecord.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
-        assertThat(testAnnouncementRecord.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
-        assertThat(testAnnouncementRecord.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testAnnouncementRecord.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
+        assertThat(testAnnouncementRecord.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testAnnouncementRecord.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
     }
 

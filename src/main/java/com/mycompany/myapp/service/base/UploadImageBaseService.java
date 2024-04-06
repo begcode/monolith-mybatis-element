@@ -3,7 +3,7 @@ package com.mycompany.myapp.service.base;
 import cn.hutool.core.bean.BeanUtil;
 import cn.xuyanwu.spring.file.storage.FileInfo;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -117,8 +117,7 @@ public class UploadImageBaseService<R extends UploadImageRepository, E extends U
      */
     public Optional<UploadImageDTO> findOne(Long id) {
         log.debug("Request to get UploadImage : {}", id);
-        return Optional
-            .ofNullable(uploadImageRepository.selectById(id))
+        return Optional.ofNullable(uploadImageRepository.selectById(id))
             .map(uploadImage -> {
                 Binder.bindRelations(uploadImage);
                 return uploadImage;
@@ -175,23 +174,25 @@ public class UploadImageBaseService<R extends UploadImageRepository, E extends U
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<UploadImage> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeUploadImageDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeUploadImageDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<UploadImage> uploadImageList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(uploadImageList)) {
                 uploadImageList.forEach(uploadImage -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            uploadImage,
-                            relationName,
-                            BeanUtil.getFieldValue(uploadImageMapper.toEntity(changeUploadImageDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                uploadImage,
+                                relationName,
+                                BeanUtil.getFieldValue(uploadImageMapper.toEntity(changeUploadImageDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(uploadImage, relationshipNames);
                 });

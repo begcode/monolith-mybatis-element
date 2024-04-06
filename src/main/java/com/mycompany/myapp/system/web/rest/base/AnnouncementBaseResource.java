@@ -108,8 +108,7 @@ public class AnnouncementBaseResource {
             throw new BadRequestAlertException("A new announcement cannot already have an ID", ENTITY_NAME, "idexists");
         }
         AnnouncementDTO result = announcementService.save(announcementDTO);
-        return ResponseEntity
-            .created(new URI("/api/announcements/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/announcements/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -155,8 +154,7 @@ public class AnnouncementBaseResource {
         } else {
             result = announcementService.update(announcementDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, announcementDTO.getId().toString()))
             .body(result);
     }
@@ -290,8 +288,7 @@ public class AnnouncementBaseResource {
         log.debug("REST request to delete Announcement : {}", id);
 
         announcementService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -346,8 +343,7 @@ public class AnnouncementBaseResource {
         if (ids != null) {
             ids.forEach(announcementService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

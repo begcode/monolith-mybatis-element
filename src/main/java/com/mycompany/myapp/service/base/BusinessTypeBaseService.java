@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -118,8 +118,7 @@ public class BusinessTypeBaseService<R extends BusinessTypeRepository, E extends
      */
     public Optional<BusinessTypeDTO> findOne(Long id) {
         log.debug("Request to get BusinessType : {}", id);
-        return Optional
-            .ofNullable(businessTypeRepository.selectById(id))
+        return Optional.ofNullable(businessTypeRepository.selectById(id))
             .map(businessType -> {
                 Binder.bindRelations(businessType);
                 return businessType;
@@ -149,23 +148,25 @@ public class BusinessTypeBaseService<R extends BusinessTypeRepository, E extends
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<BusinessType> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeBusinessTypeDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeBusinessTypeDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<BusinessType> businessTypeList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(businessTypeList)) {
                 businessTypeList.forEach(businessType -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            businessType,
-                            relationName,
-                            BeanUtil.getFieldValue(businessTypeMapper.toEntity(changeBusinessTypeDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                businessType,
+                                relationName,
+                                BeanUtil.getFieldValue(businessTypeMapper.toEntity(changeBusinessTypeDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(businessType, relationshipNames);
                 });

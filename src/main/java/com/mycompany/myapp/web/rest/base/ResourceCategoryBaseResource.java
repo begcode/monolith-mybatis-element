@@ -90,8 +90,7 @@ public class ResourceCategoryBaseResource {
             throw new BadRequestAlertException("A new resourceCategory cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ResourceCategoryDTO result = resourceCategoryService.save(resourceCategoryDTO);
-        return ResponseEntity
-            .created(new URI("/api/resource-categories/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/resource-categories/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -137,8 +136,7 @@ public class ResourceCategoryBaseResource {
         } else {
             result = resourceCategoryService.update(resourceCategoryDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, resourceCategoryDTO.getId().toString()))
             .body(result);
     }
@@ -272,8 +270,7 @@ public class ResourceCategoryBaseResource {
         log.debug("REST request to delete ResourceCategory : {}", id);
 
         resourceCategoryService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -364,8 +361,7 @@ public class ResourceCategoryBaseResource {
         if (ids != null) {
             ids.forEach(resourceCategoryService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

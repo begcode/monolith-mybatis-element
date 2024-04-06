@@ -1,6 +1,6 @@
 # testElement
 
-本应用程序由BegCode8.1.0-beta.0生成, 你可以在 [https://www.begcode.com/documentation-archive/v8.1.0-beta.0](https://www.begcode.com/documentation-archive/v8.1.0-beta.0) 找到文档和帮助。
+本应用程序由BegCode8.1.10生成, 你可以在 [https://www.begcode.com](https://www.begcode.com) 找到文档和帮助。
 
 ## 项目结构
 
@@ -93,7 +93,7 @@ Then you would import the JS and CSS files specified in library's installation i
 要优化testElement应用程序创建Jar包并进行生产部署，请运行：
 
 ```
-./mvnw -Pprod clean verify
+./mvnw package -Pprod clean verify -DskipTests
 ```
 
 这将压缩客户端和重新打包CSS和JavaScript文件。 它还将修改`index.html`，以便引用这些新文件。
@@ -112,7 +112,7 @@ Refer to [Using JHipster in production][] for more details.
 要将您的应用程序打包为 war 以便将其部署到应用程序服务器，请运行：
 
 ```
-./mvnw -Pprod,war clean verify
+./mvnw package -Pprod,war clean verify
 ```
 
 ### JHipster Control Center
@@ -219,14 +219,7 @@ For more information refer to [Using Docker and Docker-Compose][], this page als
 
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
 
-[JHipster官网和最新文档]: https://www.begcode.com
-[JHipster 8.1.0-beta.0 archive]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0
-[Using JHipster in development]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/development/
-[Using Docker and Docker-Compose]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/docker-compose
-[Using JHipster in production]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/production/
-[Running tests page]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/running-tests/
-[Code quality page]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/code-quality/
-[Setting up Continuous Integration]: https://www.begcode.com/documentation-archive/v8.1.0-beta.0/setting-up-ci/
+[BegCode最新文档]: https://www.begcode.com
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/
 [Webpack]: https://webpack.github.io/

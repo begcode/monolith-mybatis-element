@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.xuyanwu.spring.file.storage.FileStorageService;
 import cn.xuyanwu.spring.file.storage.platform.*;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -134,8 +134,7 @@ public class OssConfigBaseService<R extends OssConfigRepository, E extends OssCo
      */
     public Optional<OssConfigDTO> findOne(Long id) {
         log.debug("Request to get OssConfig : {}", id);
-        return Optional
-            .ofNullable(ossConfigRepository.selectById(id))
+        return Optional.ofNullable(ossConfigRepository.selectById(id))
             .map(ossConfig -> {
                 Binder.bindRelations(ossConfig);
                 return ossConfig;
@@ -241,23 +240,25 @@ public class OssConfigBaseService<R extends OssConfigRepository, E extends OssCo
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<OssConfig> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeOssConfigDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeOssConfigDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<OssConfig> ossConfigList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(ossConfigList)) {
                 ossConfigList.forEach(ossConfig -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            ossConfig,
-                            relationName,
-                            BeanUtil.getFieldValue(ossConfigMapper.toEntity(changeOssConfigDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                ossConfig,
+                                relationName,
+                                BeanUtil.getFieldValue(ossConfigMapper.toEntity(changeOssConfigDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(ossConfig, relationshipNames);
                 });

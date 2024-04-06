@@ -92,8 +92,7 @@ public class CommonFieldDataBaseResource {
             throw new BadRequestAlertException("A new commonFieldData cannot already have an ID", ENTITY_NAME, "idexists");
         }
         CommonFieldDataDTO result = commonFieldDataService.save(commonFieldDataDTO);
-        return ResponseEntity
-            .created(new URI("/api/common-field-data/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/common-field-data/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -139,8 +138,7 @@ public class CommonFieldDataBaseResource {
         } else {
             result = commonFieldDataService.update(commonFieldDataDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, commonFieldDataDTO.getId().toString()))
             .body(result);
     }
@@ -313,8 +311,7 @@ public class CommonFieldDataBaseResource {
         log.debug("REST request to delete CommonFieldData : {}", id);
 
         commonFieldDataService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -373,8 +370,7 @@ public class CommonFieldDataBaseResource {
         if (ids != null) {
             ids.forEach(commonFieldDataService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

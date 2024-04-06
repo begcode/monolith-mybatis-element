@@ -29,7 +29,8 @@ const Group = defineComponent({
       const getPropsSlot = (slots: any, props: any, prop = 'default') => {
         return props[prop] ?? slots[prop]?.();
       };
-      const children = getPropsSlot(slots, props);
+      const child = getPropsSlot(slots, props);
+      const children = child?.length ? child[0].children : [];
       const cloneElement = (vnode, nodeProps = {}, override = true, mergeRef = false) => {
         let ele = vnode;
         if (Array.isArray(vnode)) {
@@ -61,7 +62,7 @@ const Group = defineComponent({
           </ElPopover>,
         );
         return (
-          <div {...attrs} style={attrs.style as CSSProperties}>
+          <div class="bc-avatar-group" {...attrs} style={attrs.style as CSSProperties}>
             {childrenShow}
           </div>
         );

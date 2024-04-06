@@ -3,10 +3,10 @@ import type { FileBasicColumn, FileItem, PreviewFileItem } from './typing';
 import { UploadResultStatus } from './typing';
 
 import { ElButton, ElButtonGroup, ElProgress, ElTag, ElText } from 'element-plus';
+import { Icon } from '@/components/Icon';
 
 import { isImgTypeByName } from './helper';
 import UploadThumb from './components/UploadThumb.vue';
-import { Icon } from '@/components/Icon';
 
 /**
  * 创建上传列
@@ -36,7 +36,7 @@ export function createTableColumns(): FileBasicColumn[] {
           if (errorMsg) {
             errorMsg = (
               <ElText class="mt-1" type="error" truncated>
-                <Icon icon={'ep:warning'} style="width: 1em;height: 1em;vertical-align: middle;margin-right: 4px;display: inline-block;" />
+                <Icon icon="ep:warning" style="width: 1em;height: 1em;vertical-align: middle;margin-right: 4px;display: inline-block;" />
                 {errorMsg}
               </ElText>
             );

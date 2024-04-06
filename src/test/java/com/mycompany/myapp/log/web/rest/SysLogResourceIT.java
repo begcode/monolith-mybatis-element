@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.LogType;
 import com.mycompany.myapp.domain.enumeration.OperateType;
 import com.mycompany.myapp.log.domain.SysLog;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SysLogResourceIT {
 
     private static final LogType DEFAULT_LOG_TYPE = LogType.LOGIN;
@@ -1362,13 +1362,13 @@ public class SysLogResourceIT {
         partialUpdatedSysLog.setId(sysLog.getId());
 
         partialUpdatedSysLog
-            .logType(UPDATED_LOG_TYPE)
-            .logContent(UPDATED_LOG_CONTENT)
+            .operateType(UPDATED_OPERATE_TYPE)
             .userid(UPDATED_USERID)
-            .username(UPDATED_USERNAME)
             .ip(UPDATED_IP)
             .method(UPDATED_METHOD)
-            .requestType(UPDATED_REQUEST_TYPE);
+            .requestType(UPDATED_REQUEST_TYPE)
+            .costTime(UPDATED_COST_TIME)
+            .createdBy(UPDATED_CREATED_BY);
 
         restSysLogMockMvc
             .perform(
@@ -1382,18 +1382,18 @@ public class SysLogResourceIT {
         List<SysLog> sysLogList = sysLogRepository.findAll();
         assertThat(sysLogList).hasSize(databaseSizeBeforeUpdate);
         SysLog testSysLog = sysLogList.get(sysLogList.size() - 1);
-        assertThat(testSysLog.getLogType()).isEqualTo(UPDATED_LOG_TYPE);
-        assertThat(testSysLog.getLogContent()).isEqualTo(UPDATED_LOG_CONTENT);
-        assertThat(testSysLog.getOperateType()).isEqualTo(DEFAULT_OPERATE_TYPE);
+        assertThat(testSysLog.getLogType()).isEqualTo(DEFAULT_LOG_TYPE);
+        assertThat(testSysLog.getLogContent()).isEqualTo(DEFAULT_LOG_CONTENT);
+        assertThat(testSysLog.getOperateType()).isEqualTo(UPDATED_OPERATE_TYPE);
         assertThat(testSysLog.getUserid()).isEqualTo(UPDATED_USERID);
-        assertThat(testSysLog.getUsername()).isEqualTo(UPDATED_USERNAME);
+        assertThat(testSysLog.getUsername()).isEqualTo(DEFAULT_USERNAME);
         assertThat(testSysLog.getIp()).isEqualTo(UPDATED_IP);
         assertThat(testSysLog.getMethod()).isEqualTo(UPDATED_METHOD);
         assertThat(testSysLog.getRequestUrl()).isEqualTo(DEFAULT_REQUEST_URL);
         assertThat(testSysLog.getRequestParam()).isEqualTo(DEFAULT_REQUEST_PARAM);
         assertThat(testSysLog.getRequestType()).isEqualTo(UPDATED_REQUEST_TYPE);
-        assertThat(testSysLog.getCostTime()).isEqualTo(DEFAULT_COST_TIME);
-        assertThat(testSysLog.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
+        assertThat(testSysLog.getCostTime()).isEqualTo(UPDATED_COST_TIME);
+        assertThat(testSysLog.getCreatedBy()).isEqualTo(UPDATED_CREATED_BY);
         assertThat(testSysLog.getCreatedDate()).isEqualTo(DEFAULT_CREATED_DATE);
         assertThat(testSysLog.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
         assertThat(testSysLog.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);

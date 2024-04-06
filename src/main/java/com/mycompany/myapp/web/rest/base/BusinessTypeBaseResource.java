@@ -87,8 +87,7 @@ public class BusinessTypeBaseResource {
             throw new BadRequestAlertException("A new businessType cannot already have an ID", ENTITY_NAME, "idexists");
         }
         BusinessTypeDTO result = businessTypeService.save(businessTypeDTO);
-        return ResponseEntity
-            .created(new URI("/api/business-types/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/business-types/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -134,8 +133,7 @@ public class BusinessTypeBaseResource {
         } else {
             result = businessTypeService.update(businessTypeDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, businessTypeDTO.getId().toString()))
             .body(result);
     }
@@ -269,8 +267,7 @@ public class BusinessTypeBaseResource {
         log.debug("REST request to delete BusinessType : {}", id);
 
         businessTypeService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -325,8 +322,7 @@ public class BusinessTypeBaseResource {
         if (ids != null) {
             ids.forEach(businessTypeService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

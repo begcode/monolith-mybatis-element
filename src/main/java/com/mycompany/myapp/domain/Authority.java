@@ -14,14 +14,12 @@ import lombok.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-@ToString
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Authority implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    @TableField(value = "id")
     private Long id;
 
     /**
@@ -179,6 +177,11 @@ public class Authority implements Serializable {
         return this;
     }
 
+    public Authority parentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
     public Authority users(List<User> users) {
         this.users = users;
         return this;
@@ -206,5 +209,18 @@ public class Authority implements Serializable {
     public int hashCode() {
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
+    }
+
+    // prettier-ignore
+    @Override
+    public String toString() {
+        return "Authority{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", code='" + getCode() + "'" +
+            ", info='" + getInfo() + "'" +
+            ", order=" + getOrder() +
+            ", display='" + getDisplay() + "'" +
+            "}";
     }
 }

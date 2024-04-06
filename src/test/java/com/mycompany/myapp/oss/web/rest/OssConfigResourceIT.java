@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.OssProvider;
 import com.mycompany.myapp.oss.domain.OssConfig;
 import com.mycompany.myapp.oss.repository.OssConfigRepository;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class OssConfigResourceIT {
 
     private static final OssProvider DEFAULT_PROVIDER = OssProvider.LOCAL;
@@ -670,11 +670,7 @@ public class OssConfigResourceIT {
         OssConfig partialUpdatedOssConfig = new OssConfig();
         partialUpdatedOssConfig.setId(ossConfig.getId());
 
-        partialUpdatedOssConfig
-            .provider(UPDATED_PROVIDER)
-            .platform(UPDATED_PLATFORM)
-            .remark(UPDATED_REMARK)
-            .configData(UPDATED_CONFIG_DATA);
+        partialUpdatedOssConfig.platform(UPDATED_PLATFORM).remark(UPDATED_REMARK);
 
         restOssConfigMockMvc
             .perform(
@@ -688,11 +684,11 @@ public class OssConfigResourceIT {
         List<OssConfig> ossConfigList = ossConfigRepository.findAll();
         assertThat(ossConfigList).hasSize(databaseSizeBeforeUpdate);
         OssConfig testOssConfig = ossConfigList.get(ossConfigList.size() - 1);
-        assertThat(testOssConfig.getProvider()).isEqualTo(UPDATED_PROVIDER);
+        assertThat(testOssConfig.getProvider()).isEqualTo(DEFAULT_PROVIDER);
         assertThat(testOssConfig.getPlatform()).isEqualTo(UPDATED_PLATFORM);
         assertThat(testOssConfig.getEnabled()).isEqualTo(DEFAULT_ENABLED);
         assertThat(testOssConfig.getRemark()).isEqualTo(UPDATED_REMARK);
-        assertThat(testOssConfig.getConfigData()).isEqualTo(UPDATED_CONFIG_DATA);
+        assertThat(testOssConfig.getConfigData()).isEqualTo(DEFAULT_CONFIG_DATA);
     }
 
     @Test

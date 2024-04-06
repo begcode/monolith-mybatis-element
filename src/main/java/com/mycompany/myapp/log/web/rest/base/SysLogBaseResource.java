@@ -83,8 +83,7 @@ public class SysLogBaseResource {
             throw new BadRequestAlertException("A new sysLog cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SysLogDTO result = sysLogService.save(sysLogDTO);
-        return ResponseEntity
-            .created(new URI("/api/sys-logs/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/sys-logs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -130,8 +129,7 @@ public class SysLogBaseResource {
         } else {
             result = sysLogService.update(sysLogDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, sysLogDTO.getId().toString()))
             .body(result);
     }
@@ -265,8 +263,7 @@ public class SysLogBaseResource {
         log.debug("REST request to delete SysLog : {}", id);
 
         sysLogService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -321,8 +318,7 @@ public class SysLogBaseResource {
         if (ids != null) {
             ids.forEach(sysLogService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

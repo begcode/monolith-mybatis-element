@@ -44,6 +44,16 @@
     "refresh": "刷新",
     "fullscreen": "全屏",
     "size": "尺寸",
-    "columnSetting": "列设置"
+    "columnSetting": "列设置",
+    "lengthRange": "长度在 {min} 到 {max} 个字符",
+    "notSpace": "不能包含空格",
+    "notSpecialCharacters": "不能包含特殊字符",
+    "isEqual": "两次输入不一致",
+    "setting": "设置"
+  },
+  "guideDemo": {
+    "guide": "引导页",
+    "start": "开始",
+    "message": "引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。引导页基于 driver.js"
   }
 }

@@ -37,7 +37,7 @@ export function useColumns() {
       slots: {
         default: () => {
           return (
-            <a href="https://github.com/begcode/monolith-mybatis-element" target="_blank">
+            <a href="https://github.com/pure-admin/vue-pure-admin" target="_blank">
               <span style="color: var(--el-color-primary)">Github</span>
             </a>
           );

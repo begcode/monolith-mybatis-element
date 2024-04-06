@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.SmsProvider;
 import com.mycompany.myapp.system.domain.SmsSupplier;
 import com.mycompany.myapp.system.repository.SmsSupplierRepository;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class SmsSupplierResourceIT {
 
     private static final SmsProvider DEFAULT_PROVIDER = SmsProvider.ALIBABA;
@@ -638,12 +638,7 @@ public class SmsSupplierResourceIT {
         SmsSupplier partialUpdatedSmsSupplier = new SmsSupplier();
         partialUpdatedSmsSupplier.setId(smsSupplier.getId());
 
-        partialUpdatedSmsSupplier
-            .provider(UPDATED_PROVIDER)
-            .configData(UPDATED_CONFIG_DATA)
-            .signName(UPDATED_SIGN_NAME)
-            .remark(UPDATED_REMARK)
-            .enabled(UPDATED_ENABLED);
+        partialUpdatedSmsSupplier.provider(UPDATED_PROVIDER).configData(UPDATED_CONFIG_DATA).signName(UPDATED_SIGN_NAME);
 
         restSmsSupplierMockMvc
             .perform(
@@ -660,8 +655,8 @@ public class SmsSupplierResourceIT {
         assertThat(testSmsSupplier.getProvider()).isEqualTo(UPDATED_PROVIDER);
         assertThat(testSmsSupplier.getConfigData()).isEqualTo(UPDATED_CONFIG_DATA);
         assertThat(testSmsSupplier.getSignName()).isEqualTo(UPDATED_SIGN_NAME);
-        assertThat(testSmsSupplier.getRemark()).isEqualTo(UPDATED_REMARK);
-        assertThat(testSmsSupplier.getEnabled()).isEqualTo(UPDATED_ENABLED);
+        assertThat(testSmsSupplier.getRemark()).isEqualTo(DEFAULT_REMARK);
+        assertThat(testSmsSupplier.getEnabled()).isEqualTo(DEFAULT_ENABLED);
     }
 
     @Test

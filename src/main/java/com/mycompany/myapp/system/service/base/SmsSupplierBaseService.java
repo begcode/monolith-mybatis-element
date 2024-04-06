@@ -6,7 +6,7 @@ import com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListResponseBody;
 import com.aliyun.tea.TeaException;
 import com.aliyun.teaopenapi.models.Config;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -23,7 +23,7 @@ import com.mycompany.myapp.system.repository.SmsSupplierRepository;
 import com.mycompany.myapp.system.service.dto.SmsSupplierDTO;
 import com.mycompany.myapp.system.service.mapper.SmsSupplierMapper;
 import java.util.*;
-import java.util.Map;
+import java.util.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dromara.sms4j.aliyun.config.AlibabaConfig;
@@ -139,8 +139,7 @@ public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends S
      */
     public Optional<SmsSupplierDTO> findOne(Long id) {
         log.debug("Request to get SmsSupplier : {}", id);
-        return Optional
-            .ofNullable(smsSupplierRepository.selectById(id))
+        return Optional.ofNullable(smsSupplierRepository.selectById(id))
             .map(smsSupplier -> {
                 Binder.bindRelations(smsSupplier);
                 return smsSupplier;
@@ -174,10 +173,11 @@ public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends S
     @Override
     public BaseConfig getSupplierConfig(String s) {
         Optional<SmsSupplier> smsSupplierOptional = smsSupplierRepository.findById(Long.parseLong(s));
+
         if (smsSupplierOptional.isEmpty()) {
             return null;
         }
-        SmsSupplier smsSupplier = smsSupplierOptional.get();
+        SmsSupplier smsSupplier = smsSupplierOptional.orElseThrow();
         ObjectMapper objectMapper = new ObjectMapper();
         switch (smsSupplier.getProvider()) {
             case ALIBABA:
@@ -307,45 +307,44 @@ public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends S
             return new ArrayList<>();
         }
         switch (smsSupplier.getProvider()) {
-            case ALIBABA:
-                {
-                    AlibabaConfig alibabaConfig = (AlibabaConfig) supplierConfig;
-                    Config config = new Config()
-                        // 必填，您的 AccessKey ID
-                        .setAccessKeyId(alibabaConfig.getAccessKeyId())
-                        // 必填，您的 AccessKey Secret
-                        .setAccessKeySecret(alibabaConfig.getAccessKeySecret());
-                    // Endpoint 请参考 https://api.aliyun.com/product/Dysmsapi
-                    config.endpoint = alibabaConfig.getRequestUrl() != null ? alibabaConfig.getRequestUrl() : "dysmsapi.aliyuncs.com";
-                    com.aliyun.dysmsapi20170525.Client client = new com.aliyun.dysmsapi20170525.Client(config);
-                    com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest querySmsTemplateListRequest =
-                        new com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest().setPageIndex(1).setPageSize(15);
-                    com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
-                    try {
-                        // 复制代码运行请自行打印 API 的返回值
-                        QuerySmsTemplateListResponse querySmsTemplateListResponse = client.querySmsTemplateListWithOptions(
-                            querySmsTemplateListRequest,
-                            runtime
-                        );
-                        List<QuerySmsTemplateListResponseBody.QuerySmsTemplateListResponseBodySmsTemplateList> smsTemplateList =
-                            querySmsTemplateListResponse.getBody().getSmsTemplateList();
-                        return transformAliyun(smsTemplateList);
-                    } catch (TeaException error) {
-                        // 错误 message
-                        System.out.println(error.getMessage());
-                        // 诊断地址
-                        System.out.println(error.getData().get("Recommend"));
-                        com.aliyun.teautil.Common.assertAsString(error.message);
-                    } catch (Exception _error) {
-                        TeaException error = new TeaException(_error.getMessage(), _error);
-                        // 错误 message
-                        System.out.println(error.getMessage());
-                        // 诊断地址
-                        System.out.println(error.getData().get("Recommend"));
-                        com.aliyun.teautil.Common.assertAsString(error.message);
-                    }
-                    return new ArrayList<>();
+            case ALIBABA: {
+                AlibabaConfig alibabaConfig = (AlibabaConfig) supplierConfig;
+                Config config = new Config()
+                    // 必填，您的 AccessKey ID
+                    .setAccessKeyId(alibabaConfig.getAccessKeyId())
+                    // 必填，您的 AccessKey Secret
+                    .setAccessKeySecret(alibabaConfig.getAccessKeySecret());
+                // Endpoint 请参考 https://api.aliyun.com/product/Dysmsapi
+                config.endpoint = alibabaConfig.getRequestUrl() != null ? alibabaConfig.getRequestUrl() : "dysmsapi.aliyuncs.com";
+                com.aliyun.dysmsapi20170525.Client client = new com.aliyun.dysmsapi20170525.Client(config);
+                com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest querySmsTemplateListRequest =
+                    new com.aliyun.dysmsapi20170525.models.QuerySmsTemplateListRequest().setPageIndex(1).setPageSize(15);
+                com.aliyun.teautil.models.RuntimeOptions runtime = new com.aliyun.teautil.models.RuntimeOptions();
+                try {
+                    // 复制代码运行请自行打印 API 的返回值
+                    QuerySmsTemplateListResponse querySmsTemplateListResponse = client.querySmsTemplateListWithOptions(
+                        querySmsTemplateListRequest,
+                        runtime
+                    );
+                    List<QuerySmsTemplateListResponseBody.QuerySmsTemplateListResponseBodySmsTemplateList> smsTemplateList =
+                        querySmsTemplateListResponse.getBody().getSmsTemplateList();
+                    return transformAliyun(smsTemplateList);
+                } catch (TeaException error) {
+                    // 错误 message
+                    System.out.println(error.getMessage());
+                    // 诊断地址
+                    System.out.println(error.getData().get("Recommend"));
+                    com.aliyun.teautil.Common.assertAsString(error.message);
+                } catch (Exception _error) {
+                    TeaException error = new TeaException(_error.getMessage(), _error);
+                    // 错误 message
+                    System.out.println(error.getMessage());
+                    // 诊断地址
+                    System.out.println(error.getData().get("Recommend"));
+                    com.aliyun.teautil.Common.assertAsString(error.message);
                 }
+                return new ArrayList<>();
+            }
             case YUNPIAN:
                 return new ArrayList<>();
             default:
@@ -432,23 +431,25 @@ public class SmsSupplierBaseService<R extends SmsSupplierRepository, E extends S
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<SmsSupplier> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeSmsSupplierDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeSmsSupplierDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<SmsSupplier> smsSupplierList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(smsSupplierList)) {
                 smsSupplierList.forEach(smsSupplier -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            smsSupplier,
-                            relationName,
-                            BeanUtil.getFieldValue(smsSupplierMapper.toEntity(changeSmsSupplierDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                smsSupplier,
+                                relationName,
+                                BeanUtil.getFieldValue(smsSupplierMapper.toEntity(changeSmsSupplierDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(smsSupplier, relationshipNames);
                 });

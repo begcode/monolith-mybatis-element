@@ -19,7 +19,7 @@ export const uploadProps = {
   uploadName: {
     type: String,
     default: 'file',
-    required: false,
+    required: true,
   },
   /**
    * 上传按钮左侧用户提示文本

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.Position;
 import com.mycompany.myapp.repository.PositionRepository;
 import com.mycompany.myapp.service.dto.PositionDTO;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @IntegrationTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class PositionResourceIT {
 
     private static final String DEFAULT_CODE = "AAAAAAAAAA";
@@ -658,7 +658,7 @@ public class PositionResourceIT {
         Position partialUpdatedPosition = new Position();
         partialUpdatedPosition.setId(position.getId());
 
-        partialUpdatedPosition.sortNo(UPDATED_SORT_NO);
+        partialUpdatedPosition.name(UPDATED_NAME);
 
         restPositionMockMvc
             .perform(
@@ -673,8 +673,8 @@ public class PositionResourceIT {
         assertThat(positionList).hasSize(databaseSizeBeforeUpdate);
         Position testPosition = positionList.get(positionList.size() - 1);
         assertThat(testPosition.getCode()).isEqualTo(DEFAULT_CODE);
-        assertThat(testPosition.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testPosition.getSortNo()).isEqualTo(UPDATED_SORT_NO);
+        assertThat(testPosition.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testPosition.getSortNo()).isEqualTo(DEFAULT_SORT_NO);
         assertThat(testPosition.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
     }
 

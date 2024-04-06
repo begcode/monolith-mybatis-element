@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.ResourceCategory;
 import com.mycompany.myapp.domain.UploadFile;
 import com.mycompany.myapp.repository.UploadFileRepository;
@@ -32,7 +33,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class UploadFileResourceIT {
 
     private static final String DEFAULT_URL = "AAAAAAAAAA";
@@ -2004,14 +2004,16 @@ public class UploadFileResourceIT {
         partialUpdatedUploadFile.setId(uploadFile.getId());
 
         partialUpdatedUploadFile
-            .url(UPDATED_URL)
-            .fullName(UPDATED_FULL_NAME)
-            .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
+            .folder(UPDATED_FOLDER)
             .ownerEntityName(UPDATED_OWNER_ENTITY_NAME)
             .businessTitle(UPDATED_BUSINESS_TITLE)
             .businessStatus(UPDATED_BUSINESS_STATUS)
-            .createdDate(UPDATED_CREATED_DATE);
+            .createAt(UPDATED_CREATE_AT)
+            .fileSize(UPDATED_FILE_SIZE)
+            .createdDate(UPDATED_CREATED_DATE)
+            .lastModifiedBy(UPDATED_LAST_MODIFIED_BY)
+            .lastModifiedDate(UPDATED_LAST_MODIFIED_DATE);
 
         restUploadFileMockMvc
             .perform(
@@ -2025,26 +2027,26 @@ public class UploadFileResourceIT {
         List<UploadFile> uploadFileList = uploadFileRepository.findAll();
         assertThat(uploadFileList).hasSize(databaseSizeBeforeUpdate);
         UploadFile testUploadFile = uploadFileList.get(uploadFileList.size() - 1);
-        assertThat(testUploadFile.getUrl()).isEqualTo(UPDATED_URL);
-        assertThat(testUploadFile.getFullName()).isEqualTo(UPDATED_FULL_NAME);
-        assertThat(testUploadFile.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testUploadFile.getUrl()).isEqualTo(DEFAULT_URL);
+        assertThat(testUploadFile.getFullName()).isEqualTo(DEFAULT_FULL_NAME);
+        assertThat(testUploadFile.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testUploadFile.getThumb()).isEqualTo(DEFAULT_THUMB);
         assertThat(testUploadFile.getExt()).isEqualTo(DEFAULT_EXT);
         assertThat(testUploadFile.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testUploadFile.getPath()).isEqualTo(DEFAULT_PATH);
-        assertThat(testUploadFile.getFolder()).isEqualTo(DEFAULT_FOLDER);
+        assertThat(testUploadFile.getFolder()).isEqualTo(UPDATED_FOLDER);
         assertThat(testUploadFile.getOwnerEntityName()).isEqualTo(UPDATED_OWNER_ENTITY_NAME);
         assertThat(testUploadFile.getOwnerEntityId()).isEqualTo(DEFAULT_OWNER_ENTITY_ID);
         assertThat(testUploadFile.getBusinessTitle()).isEqualTo(UPDATED_BUSINESS_TITLE);
         assertThat(testUploadFile.getBusinessDesc()).isEqualTo(DEFAULT_BUSINESS_DESC);
         assertThat(testUploadFile.getBusinessStatus()).isEqualTo(UPDATED_BUSINESS_STATUS);
-        assertThat(testUploadFile.getCreateAt()).isEqualTo(DEFAULT_CREATE_AT);
-        assertThat(testUploadFile.getFileSize()).isEqualTo(DEFAULT_FILE_SIZE);
+        assertThat(testUploadFile.getCreateAt()).isEqualTo(UPDATED_CREATE_AT);
+        assertThat(testUploadFile.getFileSize()).isEqualTo(UPDATED_FILE_SIZE);
         assertThat(testUploadFile.getReferenceCount()).isEqualTo(DEFAULT_REFERENCE_COUNT);
         assertThat(testUploadFile.getCreatedBy()).isEqualTo(DEFAULT_CREATED_BY);
         assertThat(testUploadFile.getCreatedDate()).isEqualTo(UPDATED_CREATED_DATE);
-        assertThat(testUploadFile.getLastModifiedBy()).isEqualTo(DEFAULT_LAST_MODIFIED_BY);
-        assertThat(testUploadFile.getLastModifiedDate()).isEqualTo(DEFAULT_LAST_MODIFIED_DATE);
+        assertThat(testUploadFile.getLastModifiedBy()).isEqualTo(UPDATED_LAST_MODIFIED_BY);
+        assertThat(testUploadFile.getLastModifiedDate()).isEqualTo(UPDATED_LAST_MODIFIED_DATE);
     }
 
     @Test

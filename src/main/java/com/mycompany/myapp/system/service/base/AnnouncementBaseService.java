@@ -1,7 +1,7 @@
 package com.mycompany.myapp.system.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -134,8 +134,7 @@ public class AnnouncementBaseService<R extends AnnouncementRepository, E extends
      */
     public Optional<AnnouncementDTO> findOne(Long id) {
         log.debug("Request to get Announcement : {}", id);
-        return Optional
-            .ofNullable(announcementRepository.selectById(id))
+        return Optional.ofNullable(announcementRepository.selectById(id))
             .map(announcement -> {
                 Binder.bindRelations(announcement);
                 return announcement;
@@ -165,9 +164,9 @@ public class AnnouncementBaseService<R extends AnnouncementRepository, E extends
             Long[] userIds = {};
             UserCriteria criteria = new UserCriteria();
             List<Long> receiverIds = new ArrayList<>();
-            Optional
-                .ofNullable(announcement.getReceiverIds())
-                .ifPresent(receiverIdData -> receiverIds.addAll(Arrays.stream((receiverIdData.split(","))).map(Long::valueOf).toList()));
+            Optional.ofNullable(announcement.getReceiverIds()).ifPresent(
+                receiverIdData -> receiverIds.addAll(Arrays.stream((receiverIdData.split(","))).map(Long::valueOf).toList())
+            );
             switch (announcement.getReceiverType()) {
                 case ALL:
                     userIds = userIds;
@@ -211,23 +210,25 @@ public class AnnouncementBaseService<R extends AnnouncementRepository, E extends
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<Announcement> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeAnnouncementDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeAnnouncementDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<Announcement> announcementList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(announcementList)) {
                 announcementList.forEach(announcement -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            announcement,
-                            relationName,
-                            BeanUtil.getFieldValue(announcementMapper.toEntity(changeAnnouncementDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                announcement,
+                                relationName,
+                                BeanUtil.getFieldValue(announcementMapper.toEntity(changeAnnouncementDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(announcement, relationshipNames);
                 });

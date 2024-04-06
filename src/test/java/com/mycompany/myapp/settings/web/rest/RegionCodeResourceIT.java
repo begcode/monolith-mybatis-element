@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.config.WithMockMyUser;
 import com.mycompany.myapp.domain.enumeration.RegionCodeLevel;
 import com.mycompany.myapp.settings.domain.RegionCode;
 import com.mycompany.myapp.settings.domain.RegionCode;
@@ -30,7 +31,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockMyUser
 public class RegionCodeResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -1066,11 +1066,13 @@ public class RegionCodeResourceIT {
         partialUpdatedRegionCode.setId(regionCode.getId());
 
         partialUpdatedRegionCode
+            .name(UPDATED_NAME)
             .areaCode(UPDATED_AREA_CODE)
             .cityCode(UPDATED_CITY_CODE)
             .mergerName(UPDATED_MERGER_NAME)
+            .shortName(UPDATED_SHORT_NAME)
             .zipCode(UPDATED_ZIP_CODE)
-            .level(UPDATED_LEVEL);
+            .lat(UPDATED_LAT);
 
         restRegionCodeMockMvc
             .perform(
@@ -1084,15 +1086,15 @@ public class RegionCodeResourceIT {
         List<RegionCode> regionCodeList = regionCodeRepository.findAll();
         assertThat(regionCodeList).hasSize(databaseSizeBeforeUpdate);
         RegionCode testRegionCode = regionCodeList.get(regionCodeList.size() - 1);
-        assertThat(testRegionCode.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testRegionCode.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testRegionCode.getAreaCode()).isEqualTo(UPDATED_AREA_CODE);
         assertThat(testRegionCode.getCityCode()).isEqualTo(UPDATED_CITY_CODE);
         assertThat(testRegionCode.getMergerName()).isEqualTo(UPDATED_MERGER_NAME);
-        assertThat(testRegionCode.getShortName()).isEqualTo(DEFAULT_SHORT_NAME);
+        assertThat(testRegionCode.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testRegionCode.getZipCode()).isEqualTo(UPDATED_ZIP_CODE);
-        assertThat(testRegionCode.getLevel()).isEqualTo(UPDATED_LEVEL);
+        assertThat(testRegionCode.getLevel()).isEqualTo(DEFAULT_LEVEL);
         assertThat(testRegionCode.getLng()).isEqualTo(DEFAULT_LNG);
-        assertThat(testRegionCode.getLat()).isEqualTo(DEFAULT_LAT);
+        assertThat(testRegionCode.getLat()).isEqualTo(UPDATED_LAT);
     }
 
     @Test

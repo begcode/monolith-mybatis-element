@@ -91,8 +91,7 @@ public class FillRuleItemBaseResource {
             throw new BadRequestAlertException("A new fillRuleItem cannot already have an ID", ENTITY_NAME, "idexists");
         }
         FillRuleItemDTO result = fillRuleItemService.save(fillRuleItemDTO);
-        return ResponseEntity
-            .created(new URI("/api/fill-rule-items/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/fill-rule-items/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -138,8 +137,7 @@ public class FillRuleItemBaseResource {
         } else {
             result = fillRuleItemService.update(fillRuleItemDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, fillRuleItemDTO.getId().toString()))
             .body(result);
     }
@@ -312,8 +310,7 @@ public class FillRuleItemBaseResource {
         log.debug("REST request to delete FillRuleItem : {}", id);
 
         fillRuleItemService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -372,8 +369,7 @@ public class FillRuleItemBaseResource {
         if (ids != null) {
             ids.forEach(fillRuleItemService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

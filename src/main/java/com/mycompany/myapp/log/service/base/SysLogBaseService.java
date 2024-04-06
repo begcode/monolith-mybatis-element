@@ -1,7 +1,7 @@
 package com.mycompany.myapp.log.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -113,8 +113,7 @@ public class SysLogBaseService<R extends SysLogRepository, E extends SysLog> ext
      */
     public Optional<SysLogDTO> findOne(Long id) {
         log.debug("Request to get SysLog : {}", id);
-        return Optional
-            .ofNullable(sysLogRepository.selectById(id))
+        return Optional.ofNullable(sysLogRepository.selectById(id))
             .map(sysLog -> {
                 Binder.bindRelations(sysLog);
                 return sysLog;
@@ -144,23 +143,25 @@ public class SysLogBaseService<R extends SysLogRepository, E extends SysLog> ext
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<SysLog> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeSysLogDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeSysLogDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<SysLog> sysLogList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(sysLogList)) {
                 sysLogList.forEach(sysLog -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            sysLog,
-                            relationName,
-                            BeanUtil.getFieldValue(sysLogMapper.toEntity(changeSysLogDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                sysLog,
+                                relationName,
+                                BeanUtil.getFieldValue(sysLogMapper.toEntity(changeSysLogDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(sysLog, relationshipNames);
                 });

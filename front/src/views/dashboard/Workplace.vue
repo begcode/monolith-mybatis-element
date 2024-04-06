@@ -4,10 +4,9 @@ import { ElRow, ElCol, ElSkeleton, ElCard, ElDivider, ElLink } from 'element-plu
 import { useI18n } from '@/hooks/web/useI18n';
 import { ref, reactive } from 'vue';
 import { formatTime } from '@/utils';
-import { Echart, CountTo } from '@begcode/components';
+import { Echart, CountTo, Highlight } from '@begcode/components';
 import { EChartsOption } from 'echarts';
 import { radarOption } from './echarts-data';
-import { Highlight } from '@/components/Highlight';
 import { getCountApi, getProjectApi, getDynamicApi, getTeamApi, getRadarApi } from '@/api/dashboard/workplace';
 import type { WorkplaceTotal, Project, Dynamic, Team } from '@/api/dashboard/workplace/types';
 import { set } from 'lodash-es';

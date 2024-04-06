@@ -93,8 +93,7 @@ public class SiteConfigBaseResource {
             throw new BadRequestAlertException("A new siteConfig cannot already have an ID", ENTITY_NAME, "idexists");
         }
         SiteConfigDTO result = siteConfigService.save(siteConfigDTO);
-        return ResponseEntity
-            .created(new URI("/api/site-configs/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/site-configs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
@@ -140,8 +139,7 @@ public class SiteConfigBaseResource {
         } else {
             result = siteConfigService.update(siteConfigDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, siteConfigDTO.getId().toString()))
             .body(result);
     }
@@ -311,8 +309,7 @@ public class SiteConfigBaseResource {
         log.debug("REST request to delete SiteConfig : {}", id);
 
         siteConfigService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -367,8 +364,7 @@ public class SiteConfigBaseResource {
         if (ids != null) {
             ids.forEach(siteConfigService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }

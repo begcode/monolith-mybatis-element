@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -118,8 +118,7 @@ public class UReportFileBaseService<R extends UReportFileRepository, E extends U
      */
     public Optional<UReportFileDTO> findOne(Long id) {
         log.debug("Request to get UReportFile : {}", id);
-        return Optional
-            .ofNullable(uReportFileRepository.selectById(id))
+        return Optional.ofNullable(uReportFileRepository.selectById(id))
             .map(uReportFile -> {
                 Binder.bindRelations(uReportFile);
                 return uReportFile;
@@ -169,23 +168,25 @@ public class UReportFileBaseService<R extends UReportFileRepository, E extends U
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<UReportFile> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeUReportFileDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeUReportFileDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<UReportFile> uReportFileList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(uReportFileList)) {
                 uReportFileList.forEach(uReportFile -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            uReportFile,
-                            relationName,
-                            BeanUtil.getFieldValue(uReportFileMapper.toEntity(changeUReportFileDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                uReportFile,
+                                relationName,
+                                BeanUtil.getFieldValue(uReportFileMapper.toEntity(changeUReportFileDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(uReportFile, relationshipNames);
                 });

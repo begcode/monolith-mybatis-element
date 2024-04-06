@@ -1,7 +1,7 @@
 package com.mycompany.myapp.service.base;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
@@ -130,8 +130,7 @@ public class ResourceCategoryBaseService<R extends ResourceCategoryRepository, E
      */
     public Optional<ResourceCategoryDTO> findOne(Long id) {
         log.debug("Request to get ResourceCategory : {}", id);
-        return Optional
-            .ofNullable(resourceCategoryRepository.selectById(id))
+        return Optional.ofNullable(resourceCategoryRepository.selectById(id))
             .map(resourceCategory -> {
                 Binder.bindRelations(resourceCategory);
                 return resourceCategory;
@@ -167,23 +166,25 @@ public class ResourceCategoryBaseService<R extends ResourceCategoryRepository, E
         if (CollectionUtils.isNotEmpty(fieldNames)) {
             UpdateWrapper<ResourceCategory> updateWrapper = new UpdateWrapper<>();
             updateWrapper.in("id", ids);
-            fieldNames.forEach(fieldName ->
-                updateWrapper.set(
-                    CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
-                    BeanUtil.getFieldValue(changeResourceCategoryDTO, fieldName)
-                )
+            fieldNames.forEach(
+                fieldName ->
+                    updateWrapper.set(
+                        CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName),
+                        BeanUtil.getFieldValue(changeResourceCategoryDTO, fieldName)
+                    )
             );
             this.update(updateWrapper);
         } else if (CollectionUtils.isNotEmpty(relationshipNames)) {
             List<ResourceCategory> resourceCategoryList = this.listByIds(ids);
             if (CollectionUtils.isNotEmpty(resourceCategoryList)) {
                 resourceCategoryList.forEach(resourceCategory -> {
-                    relationshipNames.forEach(relationName ->
-                        BeanUtil.setFieldValue(
-                            resourceCategory,
-                            relationName,
-                            BeanUtil.getFieldValue(resourceCategoryMapper.toEntity(changeResourceCategoryDTO), relationName)
-                        )
+                    relationshipNames.forEach(
+                        relationName ->
+                            BeanUtil.setFieldValue(
+                                resourceCategory,
+                                relationName,
+                                BeanUtil.getFieldValue(resourceCategoryMapper.toEntity(changeResourceCategoryDTO), relationName)
+                            )
                     );
                     this.createOrUpdateAndRelatedRelations(resourceCategory, relationshipNames);
                 });

@@ -4,6 +4,7 @@ import static com.mycompany.myapp.oss.domain.OssConfigTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.web.rest.TestUtil;
+import java.util.*;
 import org.junit.jupiter.api.Test;
 
 class OssConfigTest {

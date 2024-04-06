@@ -114,8 +114,7 @@ public class UploadImageBaseResource {
         } else {
             result = uploadImageService.update(uploadImageDTO);
         }
-        return ResponseEntity
-            .ok()
+        return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, uploadImageDTO.getId().toString()))
             .body(result);
     }
@@ -249,8 +248,7 @@ public class UploadImageBaseResource {
         log.debug("REST request to delete UploadImage : {}", id);
 
         uploadImageService.delete(id);
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
@@ -305,8 +303,7 @@ public class UploadImageBaseResource {
         if (ids != null) {
             ids.forEach(uploadImageService::delete);
         }
-        return ResponseEntity
-            .noContent()
+        return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, (ids != null ? ids.toString() : "NoIds")))
             .build();
     }
@@ -347,8 +344,7 @@ public class UploadImageBaseResource {
         } catch (Exception e) {
             throw new BadRequestAlertException("UploadImageError", ENTITY_NAME, "fileError");
         }
-        return ResponseEntity
-            .created(new URI("/api/upload-images/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/upload-images/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
