@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
 import com.diboot.core.binding.query.dynamic.DynamicJoinQueryWrapper;
-import com.mycompany.myapp.taskjob.domain.*; // for static metamodels
 import com.mycompany.myapp.taskjob.domain.TaskJobConfig;
 import com.mycompany.myapp.taskjob.repository.TaskJobConfigRepository;
 import com.mycompany.myapp.taskjob.service.criteria.TaskJobConfigCriteria;

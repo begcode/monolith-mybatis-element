@@ -1,0 +1,535 @@
+import { AutocompleteProps, InputNumberProps, CascaderProps, CascaderNode, CascaderValue, SwitchProps, ComponentSize, InputProps, RateProps, ColorPickerProps, TransferProps, RadioGroupProps, RadioButtonProps, CheckboxGroupProps, DividerProps, DatePickerProps, FormItemProps as ElFormItemProps, FormProps as ElFormProps, ISelectProps, UploadProps } from 'element-plus';
+import { IEditorConfig } from '@wangeditor/editor';
+import { CSSProperties, VNode } from 'vue';
+import type { ElementPlusInfoType, Recordable } from '../../../../types/global.d';
+export interface PlaceholderModel {
+    placeholder?: string;
+    startPlaceholder?: string;
+    endPlaceholder?: string;
+    rangeSeparator?: string;
+}
+export declare enum ComponentNameEnum {
+    RADIO_GROUP = "RadioGroup",
+    RADIO_BUTTON = "RadioButton",
+    RADIO_BUTTON_GROUP = "RadioButtonGroup",
+    CHECKBOX_GROUP = "CheckboxGroup",
+    CHECKBOX_BUTTON = "CheckboxButton",
+    INPUT = "Input",
+    AUTOCOMPLETE = "Autocomplete",
+    INPUT_NUMBER = "InputNumber",
+    SELECT = "Select",
+    CASCADER = "Cascader",
+    SWITCH = "Switch",
+    SLIDER = "Slider",
+    TIME_PICKER = "TimePicker",
+    DATE_PICKER = "DatePicker",
+    RATE = "Rate",
+    COLOR_PICKER = "ColorPicker",
+    TRANSFER = "Transfer",
+    DIVIDER = "Divider",
+    TIME_SELECT = "TimeSelect",
+    SELECT_V2 = "SelectV2",
+    INPUT_PASSWORD = "InputPassword",
+    EDITOR = "Editor",
+    TREE_SELECT = "TreeSelect",
+    UPLOAD = "Upload",
+    JSON_EDITOR = "JsonEditor",
+    ICON_PICKER = "IconPicker",
+    CODE_EDITOR = "CodeEditor",
+    SELECT_FILE = "SelectFile"
+}
+type CamelCaseComponentName = keyof typeof ComponentNameEnum extends infer K ? K extends string ? K extends `${infer A}_${infer B}` ? `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}` : Capitalize<Lowercase<K>> : never : never;
+export type ComponentName = CamelCaseComponentName;
+export interface InputPasswordComponentProps {
+    strength?: boolean;
+    style?: CSSProperties;
+}
+export interface InputComponentProps extends Partial<InputProps> {
+    rows?: number;
+    on?: {
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        change?: (value: string | number) => void;
+        clear?: () => void;
+        input?: (value: string | number) => void;
+    };
+    slots?: {
+        prefix?: (...args: any[]) => VNode | null;
+        suffix?: (...args: any[]) => VNode | null;
+        prepend?: (...args: any[]) => VNode | null;
+        append?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface AutocompleteComponentProps extends Partial<AutocompleteProps> {
+    on?: {
+        select?: (item: any) => void;
+        change?: (value: string | number) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        prefix?: (...args: any[]) => VNode | null;
+        suffix?: (...args: any[]) => VNode | null;
+        prepend?: (...args: any[]) => VNode | null;
+        append?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface InputNumberComponentProps extends Partial<InputNumberProps> {
+    on?: {
+        change?: (currentValue: number | undefined, oldValue: number | undefined) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+    };
+    style?: CSSProperties;
+}
+export interface SelectOption {
+    label?: string;
+    disabled?: boolean;
+    value?: any;
+    key?: string | number;
+    options?: SelectOption[];
+    [key: string]: any;
+}
+export interface SelectComponentProps extends Omit<Partial<ISelectProps>, 'options'> {
+    props?: {
+        key?: string;
+        value?: string;
+        label?: string;
+        children?: string;
+    };
+    on?: {
+        change?: (value: string | number | boolean | Object) => void;
+        visibleChange?: (visible: boolean) => void;
+        removeTag?: (tag: any) => void;
+        clear?: () => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+    };
+    slots?: {
+        default?: (options: SelectOption[]) => VNode[] | null;
+        optionGroupDefault?: (item: SelectOption) => VNode;
+        optionDefault?: (option: SelectOption) => VNode | null;
+        prefix?: (...args: any[]) => VNode | null;
+        empty?: (...args: any[]) => VNode | null;
+    };
+    options?: SelectOption[];
+    style?: CSSProperties;
+}
+export interface SelectV2ComponentProps {
+    multiple?: boolean;
+    disabled?: boolean;
+    valueKey?: string;
+    size?: ComponentSize;
+    clearable?: boolean;
+    clearIcon?: string | VNode | null;
+    collapseTags?: boolean;
+    multipleLimit?: number;
+    name?: string;
+    effect?: string;
+    autocomplete?: string;
+    placeholder?: string;
+    filterable?: boolean;
+    allowCreate?: boolean;
+    reserveKeyword?: boolean;
+    noDataText?: string;
+    popperClass?: string;
+    teleported?: boolean;
+    persistent?: boolean;
+    popperOptions?: any;
+    automaticDropdown?: boolean;
+    height?: number;
+    scrollbarAlwaysOn?: boolean;
+    remote?: boolean;
+    remoteMethod?: (query: string) => void;
+    validateEvent?: boolean;
+    placement?: AutocompleteProps['placement'];
+    collapseTagsTooltip?: boolean;
+    on?: {
+        change?: (value: string | number | boolean | Object) => void;
+        visibleChange?: (visible: boolean) => void;
+        removeTag?: (tag: any) => void;
+        clear?: () => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+    };
+    options?: SelectOption[];
+    slots?: {
+        default?: (option: SelectOption) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface CascaderComponentProps {
+    options?: Record<string, unknown>[];
+    props?: CascaderProps;
+    size?: ComponentSize;
+    placeholder?: string;
+    disabled?: boolean;
+    clearable?: boolean;
+    showAllLevels?: boolean;
+    collapseTags?: boolean;
+    collapseTagsTooltip?: boolean;
+    separator?: string;
+    filterable?: boolean;
+    filterMethod?: (node: CascaderNode, keyword: string) => boolean;
+    debounce?: number;
+    beforeFilter?: (value: string) => boolean;
+    popperClass?: string;
+    teleported?: boolean;
+    tagType?: ElementPlusInfoType;
+    validateEvent?: boolean;
+    on?: {
+        change?: (value: CascaderValue) => void;
+        expandChange?: (value: CascaderValue) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        visibleChange?: (value: boolean) => void;
+        removeTag?: (value: CascaderNode['valueByOption']) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        empty?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface SwitchComponentProps extends Partial<SwitchProps> {
+    on?: {
+        change?: (value: boolean | string | number) => void;
+    };
+    style?: CSSProperties;
+}
+export interface RateComponentProps extends Partial<RateProps> {
+    on?: {
+        change?: (value: number) => void;
+    };
+    style?: CSSProperties;
+}
+export interface ColorPickerComponentProps extends Partial<ColorPickerProps> {
+    on?: {
+        change?: (value: string) => void;
+        activeChange?: (value: string) => void;
+    };
+    style?: CSSProperties;
+}
+export interface TransferComponentProps extends Partial<TransferProps> {
+    on?: {
+        change?: (value: number | string, direction: 'left' | 'right', movedKeys: string[] | number[]) => void;
+        leftCheckChange?: (value: any[]) => void;
+        rightCheckChange?: (value: any[]) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        leftFooter?: (...args: any[]) => VNode | null;
+        rightFooter?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface RadioOption {
+    label?: string;
+    value?: string | number | boolean;
+    disabled?: boolean;
+    border?: boolean;
+    size?: ComponentSize;
+    name?: string;
+    [key: string]: any;
+}
+export interface RadioGroupComponentProps extends Partial<RadioGroupProps> {
+    options?: RadioOption[];
+    props?: {
+        label?: string;
+        value?: string;
+        disabled?: string;
+    };
+    on?: {
+        change?: (value: string | number | boolean) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode[] | null;
+    };
+    style?: CSSProperties;
+}
+export interface RadioButtonComponentProps extends Partial<RadioButtonProps> {
+    options?: RadioOption[];
+    props?: {
+        label?: string;
+        value?: string;
+        disabled?: string;
+    };
+    on?: {
+        change?: (value: string | number | boolean) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode[] | null;
+    };
+    style?: CSSProperties;
+}
+export interface CheckboxOption {
+    label?: string;
+    value?: string | number | boolean;
+    disabled?: boolean;
+    trueLabel?: string | number;
+    falseLabel?: string | number;
+    border?: boolean;
+    size?: ComponentSize;
+    name?: string;
+    checked?: boolean;
+    indeterminate?: boolean;
+    validateEvent?: boolean;
+    tabindex?: number | string;
+    id?: string;
+    controls?: boolean;
+    [key: string]: any;
+}
+export interface CheckboxGroupComponentProps extends Partial<CheckboxGroupProps> {
+    options?: CheckboxOption[];
+    props?: {
+        label?: string;
+        value?: string;
+        disabled?: string;
+    };
+    on?: {
+        change?: (value: string | number | boolean) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode[] | null;
+    };
+    style?: CSSProperties;
+}
+export interface DividerComponentProps extends Partial<DividerProps> {
+    on?: {
+        change?: (value: number) => void;
+        input?: (value: number) => void;
+    };
+    style?: CSSProperties;
+}
+export interface DatePickerComponentProps extends Partial<DatePickerProps> {
+    on?: {
+        change?: (value: string | Date | number | string[]) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        calendarChange?: (val: [Date, Date]) => void;
+        panelChange?: (date: any, mode: any, view: any) => void;
+        visibleChange?: (visibility: boolean) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        rangeSeparator?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface DateTimePickerComponentProps {
+    readonly?: boolean;
+    disabled?: boolean;
+    editable?: boolean;
+    clearable?: boolean;
+    size?: ComponentSize;
+    placeholder?: string;
+    startPlaceholder?: string;
+    endPlaceholder?: string;
+    timeArrowControl?: boolean;
+    type?: 'year' | 'month' | 'date' | 'datetime' | 'datetimerange' | 'daterange' | 'week';
+    format?: string;
+    popperClass?: string;
+    rangeSeparator?: string;
+    defaultValue?: Date | [Date, Date];
+    defaultTime?: Date | [Date, Date];
+    valueFormat?: string;
+    id?: string;
+    name?: string;
+    unlinkPanels?: boolean;
+    prefixIcon?: string | VNode;
+    clearIcon?: string | VNode;
+    shortcuts?: Array<{
+        text: string;
+        value: Date | Function;
+    }>;
+    disabledDate?: (date: Date) => boolean;
+    cellClassName?: string | ((date: Date) => string | undefined);
+    teleported?: boolean;
+    on?: {
+        change?: (value: string | Date | number | string[]) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        calendarChange?: (val: [Date, Date]) => void;
+        visibleChange?: (visibility: boolean) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        rangeSeparator?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface TimePickerComponentProps {
+    readonly?: boolean;
+    disabled?: boolean;
+    editable?: boolean;
+    clearable?: boolean;
+    size?: ComponentSize;
+    placeholder?: string;
+    startPlaceholder?: string;
+    endPlaceholder?: string;
+    isRange?: boolean;
+    arrowControl?: boolean;
+    popperClass?: string;
+    rangeSeparator?: string;
+    format?: string;
+    defaultValue?: Date | [Date, Date];
+    id?: string;
+    name?: string;
+    label?: string;
+    prefixIcon?: string | VNode;
+    clearIcon?: string | VNode;
+    disabledHours?: (role: string, comparingDate?: any) => number[];
+    disabledMinutes?: (hour: number, role: string, comparingDate?: any) => number[];
+    disabledSeconds?: (hour: number, minute: number, role: string, comparingDate?: any) => number[];
+    teleported?: boolean;
+    tabindex?: number | string;
+    on?: {
+        change: (val: number | string | Date | [number, number] | [string, string] | [Date, Date]) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        visibleChange?: (visibility: boolean) => void;
+    };
+    style?: CSSProperties;
+}
+export interface TimeSelectComponentProps {
+    disabled?: boolean;
+    editable?: boolean;
+    clearable?: boolean;
+    size?: ComponentSize;
+    placeholder?: string;
+    name?: string;
+    effect?: string;
+    prefixIcon?: string | VNode;
+    clearIcon?: string | VNode;
+    start?: string;
+    end?: string;
+    step?: string;
+    minTime?: string;
+    maxTime?: string;
+    format?: string;
+    on?: {
+        change?: (val: string) => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+    };
+    style?: CSSProperties;
+}
+export interface EditorComponentProps {
+    editorConfig?: IEditorConfig;
+    style?: CSSProperties;
+}
+export interface ColProps {
+    span?: number;
+    xs?: number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+    tag?: string;
+}
+export interface FormSetProps {
+    field: string;
+    path: string;
+    value: any;
+}
+export interface FormItemProps extends Partial<ElFormItemProps> {
+    style?: CSSProperties;
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        label?: (...args: any[]) => VNode | null;
+        error?: (...args: any[]) => VNode | null;
+    };
+}
+export interface UploadComponentProps extends Partial<UploadProps> {
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        trigger?: (...args: any[]) => VNode | null;
+        tip?: (...args: any[]) => VNode | null;
+        file?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface TreeSelectComponentProps extends Omit<Partial<SelectComponentProps>, 'props' | 'on' | 'slots'> {
+    data?: any[];
+    emptyText?: string;
+    nodeKey?: string;
+    props?: {
+        children?: string;
+        label?: string | ((...args: any[]) => string);
+        disabled?: string | ((...args: any[]) => string);
+        isLeaf?: string | ((...args: any[]) => string);
+        class?: string | ((...args: any[]) => string);
+    };
+    renderAfterExpand?: boolean;
+    load?: (...args: any[]) => Promise<any>;
+    renderContent?: (...args: any[]) => VNode | null;
+    highlightCurrent?: boolean;
+    defaultExpandAll?: boolean;
+    expandOnClickNode?: boolean;
+    checkOnClickNode?: boolean;
+    autoExpandParent?: boolean;
+    defaultExpandedKeys?: any[];
+    showCheckbox?: boolean;
+    checkStrictly?: boolean;
+    defaultCheckedKeys?: any[];
+    currentNodeKey?: string | number;
+    filterNodeMethod?: (...args: any[]) => boolean;
+    accordion?: boolean;
+    indent?: number;
+    icon?: string | ((...args: any[]) => VNode | null);
+    lazy?: boolean;
+    draggable?: boolean;
+    allowDrag?: (...args: any[]) => boolean;
+    allowDrop?: (...args: any[]) => boolean;
+    on?: {
+        change?: (value: string | number | boolean | Object) => void;
+        visibleChange?: (visible: boolean) => void;
+        removeTag?: (tag: any) => void;
+        clear?: () => void;
+        blur?: (event: FocusEvent) => void;
+        focus?: (event: FocusEvent) => void;
+        nodeClick?: (...args: any[]) => void;
+        nodeContextMenu?: (...args: any[]) => void;
+        checkChange?: (...args: any[]) => void;
+        check?: (...args: any[]) => void;
+        currentChange?: (...args: any[]) => void;
+        nodeExpand?: (...args: any[]) => void;
+        nodeCollapse?: (...args: any[]) => void;
+        nodeDragStart?: (...args: any[]) => void;
+        nodeDragEnter?: (...args: any[]) => void;
+        nodeDragLeave?: (...args: any[]) => void;
+        nodeDragOver?: (...args: any[]) => void;
+        nodeDragEnd?: (...args: any[]) => void;
+        nodeDrop?: (...args: any[]) => void;
+    };
+    slots?: {
+        default?: (...args: any[]) => VNode | null;
+        optionGroupDefault?: (item: SelectOption) => VNode;
+        optionDefault?: (option: SelectOption) => VNode | null;
+        prefix?: (...args: any[]) => VNode | null;
+        empty?: (...args: any[]) => VNode | null;
+    };
+    style?: CSSProperties;
+}
+export interface FormSchema {
+    field: string;
+    label?: string;
+    colProps?: ColProps;
+    componentProps?: InputComponentProps | AutocompleteComponentProps | InputNumberComponentProps | SelectComponentProps | SelectV2ComponentProps | CascaderComponentProps | SwitchComponentProps | RateComponentProps | ColorPickerComponentProps | TransferComponentProps | RadioGroupComponentProps | RadioButtonComponentProps | DividerComponentProps | DatePickerComponentProps | DateTimePickerComponentProps | TimePickerComponentProps | InputPasswordComponentProps | TreeSelectComponentProps | UploadComponentProps | any;
+    formItemProps?: FormItemProps;
+    component?: ComponentName;
+    value?: any;
+    remove?: boolean;
+    hidden?: boolean;
+    optionApi?: any;
+}
+export interface FormProps extends Partial<ElFormProps> {
+    schema?: FormSchema[];
+    isCol?: boolean;
+    model?: Recordable;
+    autoSetPlaceholder?: boolean;
+    isCustom?: boolean;
+    [key: string]: any;
+}
+export {};

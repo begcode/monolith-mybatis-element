@@ -12,7 +12,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
 import com.diboot.core.binding.query.dynamic.DynamicJoinQueryWrapper;
 import com.mycompany.myapp.domain.enumeration.LogType;
-import com.mycompany.myapp.log.domain.*; // for static metamodels
 import com.mycompany.myapp.log.domain.SysLog;
 import com.mycompany.myapp.log.repository.SysLogRepository;
 import com.mycompany.myapp.log.service.criteria.SysLogCriteria;

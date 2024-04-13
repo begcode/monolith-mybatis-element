@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.diboot.core.binding.Binder;
 import com.diboot.core.binding.query.dynamic.DynamicJoinQueryWrapper;
-import com.mycompany.myapp.domain.*; // for static metamodels
 import com.mycompany.myapp.domain.UReportFile;
 import com.mycompany.myapp.repository.UReportFileRepository;
 import com.mycompany.myapp.service.criteria.UReportFileCriteria;

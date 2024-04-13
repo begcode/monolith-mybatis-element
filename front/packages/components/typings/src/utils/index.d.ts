@@ -1,0 +1,22 @@
+import { Recordable } from '../types/utils.d';
+import { TargetContext } from '../types/types.d';
+export declare const withInstall: <T>(component: T, alias?: string) => T & Plugin;
+export declare const getCssVar: (prop: string, dom?: HTMLElement) => string;
+export declare const humpToUnderline: (str: string) => string;
+export declare const underlineToHump: (str: string) => string;
+export declare const humpToDash: (str: string) => string;
+export declare const setCssVar: (prop: string, val: any, dom?: HTMLElement) => void;
+export declare const findIndex: <T = Recordable>(ary: T[], fn: Fn) => number;
+export declare const trim: (str: string) => string;
+export declare function formatTime(time: Date | number | string, fmt: string): string;
+export declare function toAnyString(): string;
+export declare function firstUpperCase(str: string): string;
+export declare function objToFormData(obj: Recordable): FormData;
+export declare function simpleDebounce(fn: any, delay?: number): () => void;
+export declare function dateFormat(date: any, block: any): any;
+export declare function openWindow(url: string, opt?: {
+    target?: TargetContext | string;
+    noopener?: boolean;
+    noreferrer?: boolean;
+}): void;
+export declare function deviceDetection(): boolean;
